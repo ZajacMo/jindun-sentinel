@@ -1,0 +1,37 @@
+# Euro area configuration.
+#
+# The euro area is monitored through the official ECB composite indicator of
+# systemic stress for the euro area as a whole (`SS_CIN.IDX`, reference area
+# `U2`).  This is the only reference area for which the ECB also publishes the
+# five sub-stresses (equity, bond, foreign exchange, credit, monetary), so the
+# euro area is the one economy in this release whose stress can be decomposed
+# into its components — the components are fetched by the euro area detail
+# view, not mixed into the country composite.
+#
+# The rationale for using an official index rather than the MBSED composite is
+# the one documented in `us.yaml`.
+
+code: EU
+name_en: Euro Area
+name_local: 欧元区
+currency: EUR
+timezone: Europe/Frankfurt
+locale: en-US
+ciss_area: U2
+official_index_ref: ECB_CISS_SS_CIN_U2
+profile: official_index
+methodology_ref: default
+enabled: true
+
+markets:
+  - code: systemic
+    label_key: index.official
+    weight: 1.0
+    indicators:
+      - code: ciss_composite
+        label_key: indicator.official_index
+        direction: same
+        unit: index
+        source_adapter: ecb_ciss
+        source_series_id: ecb_ciss.composite
+        weight: 1.0

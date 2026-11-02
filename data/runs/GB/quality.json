@@ -1,0 +1,72 @@
+{
+  "generated_at": "2026-11-02T20:10:15.235151+00:00",
+  "passed": true,
+  "counts": {
+    "total": 1,
+    "ok": 1,
+    "warning": 0,
+    "failure": 0
+  },
+  "series": [
+    {
+      "series_id": "ecb_ciss.ss_cin.gb",
+      "adapter": "ecb_ciss",
+      "country_code": "GB",
+      "severity": "ok",
+      "passed": true,
+      "observations": 12226,
+      "first_date": "1980-01-02",
+      "last_date": "2026-10-30",
+      "checks": [
+        {
+          "name": "has_observations",
+          "passed": true,
+          "severity": "ok",
+          "measured": 12226,
+          "threshold": 60,
+          "message": ""
+        },
+        {
+          "name": "unique_dates",
+          "passed": true,
+          "severity": "ok",
+          "measured": 0,
+          "threshold": null,
+          "message": ""
+        },
+        {
+          "name": "ordered_dates",
+          "passed": true,
+          "severity": "ok",
+          "measured": null,
+          "threshold": null,
+          "message": ""
+        },
+        {
+          "name": "completeness",
+          "passed": true,
+          "severity": "ok",
+          "measured": 1.0007,
+          "threshold": 0.9,
+          "message": ""
+        },
+        {
+          "name": "max_gap",
+          "passed": true,
+          "severity": "ok",
+          "measured": 3,
+          "threshold": 15,
+          "message": ""
+        },
+        {
+          "name": "freshness",
+          "passed": true,
+          "severity": "ok",
+          "measured": 4,
+          "threshold": 5,
+          "message": ""
+        }
+      ]
+    }
+  ]
+}

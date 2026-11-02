@@ -1,0 +1,52 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "jindun-agent"
+version = "0.1.0"
+description = "JinDun Sentinel analyst agent: localised answers over the published run artefacts"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "Apache-2.0" }
+authors = [{ name = "JinDun Sentinel contributors" }]
+keywords = ["financial-stability", "systemic-risk", "agent", "i18n"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Financial and Insurance Industry",
+  "Intended Audience :: Science/Research",
+  "License :: OSI Approved :: Apache Software License",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Scientific/Engineering :: Information Analysis",
+]
+dependencies = [
+  "jindun-pipeline",
+  "pydantic>=2.7",
+]
+
+[project.optional-dependencies]
+llm = ["httpx>=0.27"]
+dev = [
+  "pytest>=8.0",
+  "httpx>=0.27",
+  "ruff>=0.6",
+]
+
+[project.scripts]
+jindun-agent = "jindun_agent.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/jindun_agent"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+ignore = ["E501"]

@@ -1,0 +1,3742 @@
+{
+  "as_of": "2026-Q2",
+  "edges": [
+    {
+      "source": "AU",
+      "target": "BR",
+      "claims": 109270000.0,
+      "liabilities": 140233000.0,
+      "net": -30963000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "AU",
+      "target": "CA",
+      "claims": 14134942000.0,
+      "liabilities": 5534515000.0,
+      "net": 8600427000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "AU",
+      "target": "CH",
+      "claims": 5736298000.0,
+      "liabilities": 14386091000.0,
+      "net": -8649793000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "AU",
+      "target": "CN",
+      "claims": 23501789000.0,
+      "liabilities": 17168504000.0,
+      "net": 6333285000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "AU",
+      "target": "DK",
+      "claims": 62796000.0,
+      "liabilities": 431615000.0,
+      "net": -368819000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "AU",
+      "target": "GB",
+      "claims": 114696793000.0,
+      "liabilities": 251176123000.0,
+      "net": -136479330000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "AU",
+      "target": "HK",
+      "claims": 29036971000.0,
+      "liabilities": 67561282000.0,
+      "net": -38524311000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "AU",
+      "target": "ID",
+      "claims": 767661000.0,
+      "liabilities": 738142000.0,
+      "net": 29519000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "AU",
+      "target": "IN",
+      "claims": 2655792000.0,
+      "liabilities": 6779835000.0,
+      "net": -4124043000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "AU",
+      "target": "JP",
+      "claims": 39964857000.0,
+      "liabilities": 17236966000.0,
+      "net": 22727891000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "AU",
+      "target": "KR",
+      "claims": 5085712000.0,
+      "liabilities": 3611211000.0,
+      "net": 1474501000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "AU",
+      "target": "MX",
+      "claims": 16952000.0,
+      "liabilities": 2921594000.0,
+      "net": -2904642000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "AU",
+      "target": "MY",
+      "claims": 1706341000.0,
+      "liabilities": 2141240000.0,
+      "net": -434899000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "AU",
+      "target": "NO",
+      "claims": 1598945000.0,
+      "liabilities": 319972000.0,
+      "net": 1278973000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "AU",
+      "target": "NZ",
+      "claims": 32803174000.0,
+      "liabilities": 19672416000.0,
+      "net": 13130758000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "AU",
+      "target": "PL",
+      "claims": 4502000.0,
+      "liabilities": 3179056000.0,
+      "net": -3174554000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "AU",
+      "target": "RU",
+      "claims": 27642000.0,
+      "liabilities": 43137000.0,
+      "net": -15495000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "AU",
+      "target": "SA",
+      "claims": 464245000.0,
+      "liabilities": 381567000.0,
+      "net": 82678000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "AU",
+      "target": "SE",
+      "claims": -736184000.0,
+      "liabilities": 455819000.0,
+      "net": -1192003000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "AU",
+      "target": "SG",
+      "claims": 48036830000.0,
+      "liabilities": 31762515000.0,
+      "net": 16274315000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "AU",
+      "target": "TH",
+      "claims": 680157000.0,
+      "liabilities": 872062000.0,
+      "net": -191905000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "AU",
+      "target": "TR",
+      "claims": 6493000.0,
+      "liabilities": 16002000.0,
+      "net": -9509000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "AU",
+      "target": "TW",
+      "claims": 6922872000.0,
+      "liabilities": 9950896000.0,
+      "net": -3028024000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "AU",
+      "target": "US",
+      "claims": 178502133000.0,
+      "liabilities": 283778148000.0,
+      "net": -105276015000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "AU",
+      "target": "VN",
+      "claims": 382398000.0,
+      "liabilities": 749630000.0,
+      "net": -367232000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "AU",
+      "target": "XM",
+      "claims": 50558005000.0,
+      "liabilities": 74316495000.0,
+      "net": -23758490000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "AU",
+      "target": "ZA",
+      "claims": 177049000.0,
+      "liabilities": 606787000.0,
+      "net": -429738000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "BR",
+      "target": "AU",
+      "claims": 3701000.0,
+      "liabilities": 1802000.0,
+      "net": 1899000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "BR",
+      "target": "CA",
+      "claims": 20539000.0,
+      "liabilities": 1564071000.0,
+      "net": -1543532000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "BR",
+      "target": "CH",
+      "claims": 77996000.0,
+      "liabilities": 1131007000.0,
+      "net": -1053011000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "BR",
+      "target": "CN",
+      "claims": 265219000.0,
+      "liabilities": 4344144000.0,
+      "net": -4078925000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "BR",
+      "target": "DK",
+      "claims": 2661000.0,
+      "liabilities": 1686000.0,
+      "net": 975000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "BR",
+      "target": "GB",
+      "claims": 756628000.0,
+      "liabilities": 11254544000.0,
+      "net": -10497916000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "BR",
+      "target": "HK",
+      "claims": 34696000.0,
+      "liabilities": 1924227000.0,
+      "net": -1889531000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "BR",
+      "target": "ID",
+      "claims": 39000.0,
+      "liabilities": 785000.0,
+      "net": -746000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "BR",
+      "target": "IN",
+      "claims": 133209000.0,
+      "liabilities": 160940000.0,
+      "net": -27731000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "BR",
+      "target": "JP",
+      "claims": 465932000.0,
+      "liabilities": 3178769000.0,
+      "net": -2712837000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "BR",
+      "target": "KR",
+      "claims": 6915349000.0,
+      "liabilities": 913819000.0,
+      "net": 6001530000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "BR",
+      "target": "MX",
+      "claims": 6710900000.0,
+      "liabilities": 529238000.0,
+      "net": 6181662000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "BR",
+      "target": "MY",
+      "claims": 15000.0,
+      "liabilities": 1024000.0,
+      "net": -1009000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "BR",
+      "target": "NO",
+      "claims": 7680000.0,
+      "liabilities": 474000.0,
+      "net": 7206000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "BR",
+      "target": "NZ",
+      "claims": 1032000.0,
+      "liabilities": 270000.0,
+      "net": 762000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "BR",
+      "target": "PL",
+      "claims": 691000.0,
+      "liabilities": 172000.0,
+      "net": 519000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "BR",
+      "target": "RU",
+      "claims": 0.0,
+      "liabilities": 43000.0,
+      "net": -43000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "BR",
+      "target": "SA",
+      "claims": 104000.0,
+      "liabilities": 6000.0,
+      "net": 98000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "BR",
+      "target": "SE",
+      "claims": 8663000.0,
+      "liabilities": 770304000.0,
+      "net": -761641000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "BR",
+      "target": "SG",
+      "claims": 3901000.0,
+      "liabilities": 642624000.0,
+      "net": -638723000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "BR",
+      "target": "TH",
+      "claims": 107000.0,
+      "liabilities": 805000.0,
+      "net": -698000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "BR",
+      "target": "TR",
+      "claims": 98000.0,
+      "liabilities": 3522000.0,
+      "net": -3424000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "BR",
+      "target": "TW",
+      "claims": 0.0,
+      "liabilities": 7232000.0,
+      "net": -7232000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "BR",
+      "target": "US",
+      "claims": 15514383000.0,
+      "liabilities": 51977108000.0,
+      "net": -36462725000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "BR",
+      "target": "VN",
+      "claims": 7000.0,
+      "liabilities": 535000.0,
+      "net": -528000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "BR",
+      "target": "XM",
+      "claims": 20830543000.0,
+      "liabilities": 29542252000.0,
+      "net": -8711709000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "BR",
+      "target": "ZA",
+      "claims": 8487000.0,
+      "liabilities": 0.0,
+      "net": 8487000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "CA",
+      "target": "AU",
+      "claims": 9298846000.0,
+      "liabilities": 8698936000.0,
+      "net": 599910000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "CA",
+      "target": "BR",
+      "claims": 0.0,
+      "liabilities": 163570000.0,
+      "net": -163570000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "CA",
+      "target": "CH",
+      "claims": 6123871000.0,
+      "liabilities": 14639854000.0,
+      "net": -8515983000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "CA",
+      "target": "CN",
+      "claims": 0.0,
+      "liabilities": 28410214000.0,
+      "net": -28410214000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "CA",
+      "target": "DK",
+      "claims": 634369000.0,
+      "liabilities": 193042000.0,
+      "net": 441327000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "CA",
+      "target": "GB",
+      "claims": 181176303000.0,
+      "liabilities": 329595607000.0,
+      "net": -148419304000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "CA",
+      "target": "HK",
+      "claims": 4331031000.0,
+      "liabilities": 24480414000.0,
+      "net": -20149383000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "CA",
+      "target": "ID",
+      "claims": 36521000.0,
+      "liabilities": 104657000.0,
+      "net": -68136000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "CA",
+      "target": "IN",
+      "claims": 212157000.0,
+      "liabilities": 831699000.0,
+      "net": -619542000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "CA",
+      "target": "JP",
+      "claims": 0.0,
+      "liabilities": 14352714000.0,
+      "net": -14352714000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "CA",
+      "target": "KR",
+      "claims": 589602000.0,
+      "liabilities": 483181000.0,
+      "net": 106421000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "CA",
+      "target": "MX",
+      "claims": 0.0,
+      "liabilities": 18253058000.0,
+      "net": -18253058000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "CA",
+      "target": "MY",
+      "claims": 0.0,
+      "liabilities": 190914000.0,
+      "net": -190914000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "CA",
+      "target": "NO",
+      "claims": 3453365000.0,
+      "liabilities": 8812572000.0,
+      "net": -5359207000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "CA",
+      "target": "NZ",
+      "claims": 548032000.0,
+      "liabilities": 177883000.0,
+      "net": 370149000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "CA",
+      "target": "PL",
+      "claims": 86693000.0,
+      "liabilities": 59205000.0,
+      "net": 27488000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "CA",
+      "target": "RU",
+      "claims": 1979000.0,
+      "liabilities": 53476000.0,
+      "net": -51497000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "CA",
+      "target": "SE",
+      "claims": 2438170000.0,
+      "liabilities": 432796000.0,
+      "net": 2005374000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "CA",
+      "target": "SG",
+      "claims": 21184535000.0,
+      "liabilities": 24637831000.0,
+      "net": -3453296000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "CA",
+      "target": "TH",
+      "claims": 70582000.0,
+      "liabilities": 199299000.0,
+      "net": -128717000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "CA",
+      "target": "TR",
+      "claims": 467360000.0,
+      "liabilities": 272834000.0,
+      "net": 194526000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "CA",
+      "target": "TW",
+      "claims": 1370952000.0,
+      "liabilities": 3467415000.0,
+      "net": -2096463000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "CA",
+      "target": "US",
+      "claims": 1287667425000.0,
+      "liabilities": 900070106000.0,
+      "net": 387597319000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "CA",
+      "target": "VN",
+      "claims": 0.0,
+      "liabilities": 110424000.0,
+      "net": -110424000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "CA",
+      "target": "XM",
+      "claims": 112525591000.0,
+      "liabilities": 77338234000.0,
+      "net": 35187357000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "CA",
+      "target": "ZA",
+      "claims": 29532000.0,
+      "liabilities": 206990000.0,
+      "net": -177458000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "CH",
+      "target": "AU",
+      "claims": 6600812000.0,
+      "liabilities": 4698021000.0,
+      "net": 1902791000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "CH",
+      "target": "BR",
+      "claims": 3664313000.0,
+      "liabilities": 1349142000.0,
+      "net": 2315171000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "CH",
+      "target": "CA",
+      "claims": 11712471000.0,
+      "liabilities": 3757613000.0,
+      "net": 7954858000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "CH",
+      "target": "CN",
+      "claims": 8259801000.0,
+      "liabilities": 8716795000.0,
+      "net": -456994000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "CH",
+      "target": "DK",
+      "claims": 1995820000.0,
+      "liabilities": 3292113000.0,
+      "net": -1296293000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "CH",
+      "target": "GB",
+      "claims": 161186838000.0,
+      "liabilities": 162616393000.0,
+      "net": -1429555000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "CH",
+      "target": "HK",
+      "claims": 9879530000.0,
+      "liabilities": 42750936000.0,
+      "net": -32871406000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "CH",
+      "target": "ID",
+      "claims": 343498000.0,
+      "liabilities": 365583000.0,
+      "net": -22085000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "CH",
+      "target": "IN",
+      "claims": 1057274000.0,
+      "liabilities": 2239379000.0,
+      "net": -1182105000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "CH",
+      "target": "JP",
+      "claims": 15539713000.0,
+      "liabilities": 1992050000.0,
+      "net": 13547663000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "CH",
+      "target": "KR",
+      "claims": 3463490000.0,
+      "liabilities": 331936000.0,
+      "net": 3131554000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "CH",
+      "target": "MX",
+      "claims": 3605471000.0,
+      "liabilities": 16008564000.0,
+      "net": -12403093000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "CH",
+      "target": "MY",
+      "claims": 429805000.0,
+      "liabilities": 753059000.0,
+      "net": -323254000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "CH",
+      "target": "NO",
+      "claims": 3605101000.0,
+      "liabilities": 1128383000.0,
+      "net": 2476718000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "CH",
+      "target": "NZ",
+      "claims": 1566930000.0,
+      "liabilities": 1432778000.0,
+      "net": 134152000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "CH",
+      "target": "PL",
+      "claims": 1689394000.0,
+      "liabilities": 9371756000.0,
+      "net": -7682362000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "CH",
+      "target": "RU",
+      "claims": 1686696000.0,
+      "liabilities": 10163212000.0,
+      "net": -8476516000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "CH",
+      "target": "SA",
+      "claims": 4321437000.0,
+      "liabilities": 10761991000.0,
+      "net": -6440554000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "CH",
+      "target": "SE",
+      "claims": 4685601000.0,
+      "liabilities": 1217527000.0,
+      "net": 3468074000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "CH",
+      "target": "SG",
+      "claims": 35931862000.0,
+      "liabilities": 63396085000.0,
+      "net": -27464223000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "CH",
+      "target": "TH",
+      "claims": 522053000.0,
+      "liabilities": 2995321000.0,
+      "net": -2473268000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "CH",
+      "target": "TR",
+      "claims": 4809692000.0,
+      "liabilities": 7989112000.0,
+      "net": -3179420000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "CH",
+      "target": "TW",
+      "claims": 1531175000.0,
+      "liabilities": 3473182000.0,
+      "net": -1942007000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "CH",
+      "target": "US",
+      "claims": 168555373000.0,
+      "liabilities": 30447554000.0,
+      "net": 138107819000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "CH",
+      "target": "VN",
+      "claims": 217675000.0,
+      "liabilities": 1407645000.0,
+      "net": -1189970000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "CH",
+      "target": "XM",
+      "claims": 306488035000.0,
+      "liabilities": 295505594000.0,
+      "net": 10982441000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "CH",
+      "target": "ZA",
+      "claims": 1511847000.0,
+      "liabilities": 1997165000.0,
+      "net": -485318000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "DK",
+      "target": "AU",
+      "claims": 426377000.0,
+      "liabilities": 530250000.0,
+      "net": -103873000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "DK",
+      "target": "BR",
+      "claims": 18323000.0,
+      "liabilities": 17342000.0,
+      "net": 981000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "DK",
+      "target": "CA",
+      "claims": 650809000.0,
+      "liabilities": 214719000.0,
+      "net": 436090000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "DK",
+      "target": "CH",
+      "claims": 5493818000.0,
+      "liabilities": 1450728000.0,
+      "net": 4043090000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "DK",
+      "target": "CN",
+      "claims": 119622000.0,
+      "liabilities": 79463000.0,
+      "net": 40159000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "DK",
+      "target": "GB",
+      "claims": 19700125000.0,
+      "liabilities": 21565837000.0,
+      "net": -1865712000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "DK",
+      "target": "HK",
+      "claims": 441120000.0,
+      "liabilities": 519006000.0,
+      "net": -77886000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "DK",
+      "target": "ID",
+      "claims": 4193000.0,
+      "liabilities": 13102000.0,
+      "net": -8909000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "DK",
+      "target": "IN",
+      "claims": 12583000.0,
+      "liabilities": 0.0,
+      "net": 12583000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "DK",
+      "target": "JP",
+      "claims": 274696000.0,
+      "liabilities": 168084000.0,
+      "net": 106612000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "DK",
+      "target": "KR",
+      "claims": 24268000.0,
+      "liabilities": 23204000.0,
+      "net": 1064000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "DK",
+      "target": "MX",
+      "claims": 67074000.0,
+      "liabilities": 9555000.0,
+      "net": 57519000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "DK",
+      "target": "MY",
+      "claims": 29469000.0,
+      "liabilities": 41587000.0,
+      "net": -12118000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "DK",
+      "target": "NO",
+      "claims": 32713156000.0,
+      "liabilities": 0.0,
+      "net": 32713156000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "DK",
+      "target": "NZ",
+      "claims": 27634000.0,
+      "liabilities": 8822000.0,
+      "net": 18812000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "DK",
+      "target": "PL",
+      "claims": 1371131000.0,
+      "liabilities": 1974045000.0,
+      "net": -602914000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "DK",
+      "target": "RU",
+      "claims": 5460000.0,
+      "liabilities": 7858000.0,
+      "net": -2398000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "DK",
+      "target": "SA",
+      "claims": 36133000.0,
+      "liabilities": 63282000.0,
+      "net": -27149000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "DK",
+      "target": "SE",
+      "claims": 47328332000.0,
+      "liabilities": 30478568000.0,
+      "net": 16849764000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "DK",
+      "target": "SG",
+      "claims": 303875000.0,
+      "liabilities": 478283000.0,
+      "net": -174408000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "DK",
+      "target": "TH",
+      "claims": 88986000.0,
+      "liabilities": 83225000.0,
+      "net": 5761000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "DK",
+      "target": "TR",
+      "claims": 377919000.0,
+      "liabilities": 0.0,
+      "net": 377919000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "DK",
+      "target": "TW",
+      "claims": 13967000.0,
+      "liabilities": 8230000.0,
+      "net": 5737000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "DK",
+      "target": "US",
+      "claims": 14737738000.0,
+      "liabilities": 4544079000.0,
+      "net": 10193659000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "DK",
+      "target": "VN",
+      "claims": 26358000.0,
+      "liabilities": 9216000.0,
+      "net": 17142000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "DK",
+      "target": "XM",
+      "claims": 129155178000.0,
+      "liabilities": 44194741000.0,
+      "net": 84960437000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "DK",
+      "target": "ZA",
+      "claims": 52018000.0,
+      "liabilities": 0.0,
+      "net": 52018000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "GB",
+      "target": "AU",
+      "claims": 78219000000.0,
+      "liabilities": 80247000000.0,
+      "net": -2028000000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "GB",
+      "target": "BR",
+      "claims": 50147000000.0,
+      "liabilities": 11354000000.0,
+      "net": 38793000000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "GB",
+      "target": "CA",
+      "claims": 347742000000.0,
+      "liabilities": 126500000000.0,
+      "net": 221242000000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "GB",
+      "target": "CH",
+      "claims": 228826000000.0,
+      "liabilities": 244161000000.0,
+      "net": -15335000000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "GB",
+      "target": "CN",
+      "claims": 117213000000.0,
+      "liabilities": 122546000000.0,
+      "net": -5333000000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "GB",
+      "target": "DK",
+      "claims": 11167000000.0,
+      "liabilities": 6944000000.0,
+      "net": 4223000000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "GB",
+      "target": "HK",
+      "claims": 121308000000.0,
+      "liabilities": 176688000000.0,
+      "net": -55380000000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "GB",
+      "target": "ID",
+      "claims": 3562000000.0,
+      "liabilities": 2061000000.0,
+      "net": 1501000000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "GB",
+      "target": "IN",
+      "claims": 35382000000.0,
+      "liabilities": 40107000000.0,
+      "net": -4725000000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "GB",
+      "target": "JP",
+      "claims": 369297000000.0,
+      "liabilities": 175457000000.0,
+      "net": 193840000000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "GB",
+      "target": "KR",
+      "claims": 57838000000.0,
+      "liabilities": 17734000000.0,
+      "net": 40104000000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "GB",
+      "target": "MX",
+      "claims": 7540000000.0,
+      "liabilities": 18228000000.0,
+      "net": -10688000000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "GB",
+      "target": "MY",
+      "claims": 3647000000.0,
+      "liabilities": 5724000000.0,
+      "net": -2077000000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "GB",
+      "target": "NO",
+      "claims": 135739000000.0,
+      "liabilities": 132534000000.0,
+      "net": 3205000000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "GB",
+      "target": "NZ",
+      "claims": 4179000000.0,
+      "liabilities": 8541000000.0,
+      "net": -4362000000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "GB",
+      "target": "PL",
+      "claims": 14467000000.0,
+      "liabilities": 17914000000.0,
+      "net": -3447000000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "GB",
+      "target": "RU",
+      "claims": 4562000000.0,
+      "liabilities": 5873000000.0,
+      "net": -1311000000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "GB",
+      "target": "SA",
+      "claims": 51028000000.0,
+      "liabilities": 67573000000.0,
+      "net": -16545000000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "GB",
+      "target": "SE",
+      "claims": 36344000000.0,
+      "liabilities": 8745000000.0,
+      "net": 27599000000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "GB",
+      "target": "SG",
+      "claims": 119584000000.0,
+      "liabilities": 121370000000.0,
+      "net": -1786000000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "GB",
+      "target": "TH",
+      "claims": 5656000000.0,
+      "liabilities": 7016000000.0,
+      "net": -1360000000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "GB",
+      "target": "TR",
+      "claims": 36963000000.0,
+      "liabilities": 12026000000.0,
+      "net": 24937000000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "GB",
+      "target": "TW",
+      "claims": 46420000000.0,
+      "liabilities": 24082000000.0,
+      "net": 22338000000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "GB",
+      "target": "US",
+      "claims": 2383415000000.0,
+      "liabilities": 1909414000000.0,
+      "net": 474001000000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "GB",
+      "target": "VN",
+      "claims": 1220000000.0,
+      "liabilities": 1205000000.0,
+      "net": 15000000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "GB",
+      "target": "XM",
+      "claims": 1668080000000.0,
+      "liabilities": 1425289000000.0,
+      "net": 242791000000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "GB",
+      "target": "ZA",
+      "claims": 14682000000.0,
+      "liabilities": 19760000000.0,
+      "net": -5078000000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "HK",
+      "target": "AU",
+      "claims": 124488784000.0,
+      "liabilities": 40616262000.0,
+      "net": 83872522000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "HK",
+      "target": "BR",
+      "claims": 8224632000.0,
+      "liabilities": 233172000.0,
+      "net": 7991460000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "HK",
+      "target": "CA",
+      "claims": 42660497000.0,
+      "liabilities": 3552270000.0,
+      "net": 39108227000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "HK",
+      "target": "CH",
+      "claims": 39653618000.0,
+      "liabilities": 14469533000.0,
+      "net": 25184085000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "HK",
+      "target": "CN",
+      "claims": 353129143000.0,
+      "liabilities": 587935492000.0,
+      "net": -234806349000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "HK",
+      "target": "DK",
+      "claims": 373406000.0,
+      "liabilities": 225266000.0,
+      "net": 148140000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "HK",
+      "target": "GB",
+      "claims": 264242347000.0,
+      "liabilities": 175461118000.0,
+      "net": 88781229000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "HK",
+      "target": "ID",
+      "claims": 12607725000.0,
+      "liabilities": 3837965000.0,
+      "net": 8769760000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "HK",
+      "target": "IN",
+      "claims": 25852880000.0,
+      "liabilities": 11824073000.0,
+      "net": 14028807000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "HK",
+      "target": "JP",
+      "claims": 254207291000.0,
+      "liabilities": 55699519000.0,
+      "net": 198507772000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "HK",
+      "target": "KR",
+      "claims": 105436384000.0,
+      "liabilities": 24015930000.0,
+      "net": 81420454000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "HK",
+      "target": "MX",
+      "claims": 698241000.0,
+      "liabilities": 1817441000.0,
+      "net": -1119200000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "HK",
+      "target": "MY",
+      "claims": 20649797000.0,
+      "liabilities": 10037357000.0,
+      "net": 10612440000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "HK",
+      "target": "NO",
+      "claims": 1902728000.0,
+      "liabilities": 54563000.0,
+      "net": 1848165000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "HK",
+      "target": "NZ",
+      "claims": 8428474000.0,
+      "liabilities": 6906298000.0,
+      "net": 1522176000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "HK",
+      "target": "PL",
+      "claims": 510963000.0,
+      "liabilities": 115246000.0,
+      "net": 395717000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "HK",
+      "target": "RU",
+      "claims": 297934000.0,
+      "liabilities": 689061000.0,
+      "net": -391127000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "HK",
+      "target": "SA",
+      "claims": 20876717000.0,
+      "liabilities": 649412000.0,
+      "net": 20227305000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "HK",
+      "target": "SE",
+      "claims": 3152599000.0,
+      "liabilities": 519882000.0,
+      "net": 2632717000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "HK",
+      "target": "SG",
+      "claims": 209602753000.0,
+      "liabilities": 148066425000.0,
+      "net": 61536328000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "HK",
+      "target": "TH",
+      "claims": 16888190000.0,
+      "liabilities": 8122259000.0,
+      "net": 8765931000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "HK",
+      "target": "TR",
+      "claims": 3489672000.0,
+      "liabilities": 78659000.0,
+      "net": 3411013000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "HK",
+      "target": "TW",
+      "claims": 40145717000.0,
+      "liabilities": 89771679000.0,
+      "net": -49625962000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "HK",
+      "target": "US",
+      "claims": 393987634000.0,
+      "liabilities": 69769375000.0,
+      "net": 324218259000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "HK",
+      "target": "VN",
+      "claims": 7710350000.0,
+      "liabilities": 4906806000.0,
+      "net": 2803544000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "HK",
+      "target": "XM",
+      "claims": 248081576000.0,
+      "liabilities": 101550219000.0,
+      "net": 146531357000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "HK",
+      "target": "ZA",
+      "claims": 1631694000.0,
+      "liabilities": 276898000.0,
+      "net": 1354796000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "JP",
+      "target": "AU",
+      "claims": 105318665000.0,
+      "liabilities": 28592026000.0,
+      "net": 76726639000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "JP",
+      "target": "BR",
+      "claims": 8973058000.0,
+      "liabilities": 434525000.0,
+      "net": 8538533000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "JP",
+      "target": "CA",
+      "claims": 85489277000.0,
+      "liabilities": 8777411000.0,
+      "net": 76711866000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "JP",
+      "target": "CH",
+      "claims": 34079282000.0,
+      "liabilities": 1550294000.0,
+      "net": 32528988000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "JP",
+      "target": "CN",
+      "claims": 55316060000.0,
+      "liabilities": 41672008000.0,
+      "net": 13644052000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "JP",
+      "target": "DK",
+      "claims": 11633751000.0,
+      "liabilities": 256799000.0,
+      "net": 11376952000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "JP",
+      "target": "GB",
+      "claims": 456958392000.0,
+      "liabilities": 463836707000.0,
+      "net": -6878315000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "JP",
+      "target": "HK",
+      "claims": 58963911000.0,
+      "liabilities": 115029704000.0,
+      "net": -56065793000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "JP",
+      "target": "ID",
+      "claims": 17826571000.0,
+      "liabilities": 2094986000.0,
+      "net": 15731585000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "JP",
+      "target": "IN",
+      "claims": 38751169000.0,
+      "liabilities": 4000129000.0,
+      "net": 34751040000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "JP",
+      "target": "KR",
+      "claims": 38828212000.0,
+      "liabilities": 9390831000.0,
+      "net": 29437381000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "JP",
+      "target": "MX",
+      "claims": 12525524000.0,
+      "liabilities": 716463000.0,
+      "net": 11809061000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "JP",
+      "target": "MY",
+      "claims": 9604374000.0,
+      "liabilities": 958913000.0,
+      "net": 8645461000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "JP",
+      "target": "NO",
+      "claims": 6111893000.0,
+      "liabilities": 43814000.0,
+      "net": 6068079000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "JP",
+      "target": "NZ",
+      "claims": 9107473000.0,
+      "liabilities": 127152000.0,
+      "net": 8980321000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "JP",
+      "target": "PL",
+      "claims": 8632601000.0,
+      "liabilities": 24894000.0,
+      "net": 8607707000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "JP",
+      "target": "RU",
+      "claims": 2504775000.0,
+      "liabilities": 102296000.0,
+      "net": 2402479000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "JP",
+      "target": "SA",
+      "claims": 8403951000.0,
+      "liabilities": 373781000.0,
+      "net": 8030170000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "JP",
+      "target": "SE",
+      "claims": 14301409000.0,
+      "liabilities": 52068000.0,
+      "net": 14249341000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "JP",
+      "target": "SG",
+      "claims": 124097871000.0,
+      "liabilities": 82354848000.0,
+      "net": 41743023000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "JP",
+      "target": "TH",
+      "claims": 19987910000.0,
+      "liabilities": 2396002000.0,
+      "net": 17591908000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "JP",
+      "target": "TR",
+      "claims": 1520284000.0,
+      "liabilities": 78900000.0,
+      "net": 1441384000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "JP",
+      "target": "TW",
+      "claims": 28368462000.0,
+      "liabilities": 26317158000.0,
+      "net": 2051304000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "JP",
+      "target": "US",
+      "claims": 2305424439000.0,
+      "liabilities": 491741676000.0,
+      "net": 1813682763000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "JP",
+      "target": "VN",
+      "claims": 9299013000.0,
+      "liabilities": 1853353000.0,
+      "net": 7445660000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "JP",
+      "target": "XM",
+      "claims": 814407040000.0,
+      "liabilities": 288518002000.0,
+      "net": 525889038000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "JP",
+      "target": "ZA",
+      "claims": 2966501000.0,
+      "liabilities": 73174000.0,
+      "net": 2893327000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "KR",
+      "target": "AU",
+      "claims": 4810665000.0,
+      "liabilities": 8245643000.0,
+      "net": -3434978000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "KR",
+      "target": "BR",
+      "claims": 1922691000.0,
+      "liabilities": 14133000.0,
+      "net": 1908558000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "KR",
+      "target": "CA",
+      "claims": 2580257000.0,
+      "liabilities": 627560000.0,
+      "net": 1952697000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "KR",
+      "target": "CH",
+      "claims": 1065572000.0,
+      "liabilities": 641615000.0,
+      "net": 423957000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "KR",
+      "target": "CN",
+      "claims": 21447059000.0,
+      "liabilities": 24423776000.0,
+      "net": -2976717000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "KR",
+      "target": "DK",
+      "claims": 743420000.0,
+      "liabilities": 7044000.0,
+      "net": 736376000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "KR",
+      "target": "GB",
+      "claims": 13172149000.0,
+      "liabilities": 46932617000.0,
+      "net": -33760468000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "KR",
+      "target": "HK",
+      "claims": 13244502000.0,
+      "liabilities": 69007175000.0,
+      "net": -55762673000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "KR",
+      "target": "ID",
+      "claims": 7598279000.0,
+      "liabilities": 960213000.0,
+      "net": 6638066000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "KR",
+      "target": "IN",
+      "claims": 3722518000.0,
+      "liabilities": 109006000.0,
+      "net": 3613512000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "KR",
+      "target": "JP",
+      "claims": 11257523000.0,
+      "liabilities": 7978994000.0,
+      "net": 3278529000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "KR",
+      "target": "MX",
+      "claims": 2260267000.0,
+      "liabilities": 20277000.0,
+      "net": 2239990000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "KR",
+      "target": "MY",
+      "claims": 2385044000.0,
+      "liabilities": 829346000.0,
+      "net": 1555698000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "KR",
+      "target": "NO",
+      "claims": 578615000.0,
+      "liabilities": 131294000.0,
+      "net": 447321000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "KR",
+      "target": "NZ",
+      "claims": 369483000.0,
+      "liabilities": 29726000.0,
+      "net": 339757000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "KR",
+      "target": "PL",
+      "claims": 3883250000.0,
+      "liabilities": 8148000.0,
+      "net": 3875102000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "KR",
+      "target": "RU",
+      "claims": 591228000.0,
+      "liabilities": 1199924000.0,
+      "net": -608696000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "KR",
+      "target": "SA",
+      "claims": 5008219000.0,
+      "liabilities": 80901000.0,
+      "net": 4927318000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "KR",
+      "target": "SE",
+      "claims": 208531000.0,
+      "liabilities": 57498000.0,
+      "net": 151033000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "KR",
+      "target": "SG",
+      "claims": 12223294000.0,
+      "liabilities": 29567130000.0,
+      "net": -17343836000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "KR",
+      "target": "TH",
+      "claims": 311264000.0,
+      "liabilities": 568605000.0,
+      "net": -257341000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "KR",
+      "target": "TR",
+      "claims": 2329574000.0,
+      "liabilities": 9310000.0,
+      "net": 2320264000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "KR",
+      "target": "TW",
+      "claims": 2874864000.0,
+      "liabilities": 4117504000.0,
+      "net": -1242640000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "KR",
+      "target": "US",
+      "claims": 69029581000.0,
+      "liabilities": 38845045000.0,
+      "net": 30184536000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "KR",
+      "target": "VN",
+      "claims": 6211407000.0,
+      "liabilities": 1043753000.0,
+      "net": 5167654000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "KR",
+      "target": "XM",
+      "claims": 18986707000.0,
+      "liabilities": 29675167000.0,
+      "net": -10688460000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "KR",
+      "target": "ZA",
+      "claims": 255664000.0,
+      "liabilities": 103746000.0,
+      "net": 151918000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "MX",
+      "target": "AU",
+      "claims": 116000.0,
+      "liabilities": 4074000.0,
+      "net": -3958000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "MX",
+      "target": "BR",
+      "claims": 5296864000.0,
+      "liabilities": 25786000.0,
+      "net": 5271078000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "MX",
+      "target": "CA",
+      "claims": 1242700000.0,
+      "liabilities": 39843000.0,
+      "net": 1202857000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "MX",
+      "target": "CH",
+      "claims": 269940000.0,
+      "liabilities": 69357000.0,
+      "net": 200583000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "MX",
+      "target": "CN",
+      "claims": 22550000.0,
+      "liabilities": 530024000.0,
+      "net": -507474000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "MX",
+      "target": "DK",
+      "claims": 94000.0,
+      "liabilities": 11000.0,
+      "net": 83000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "MX",
+      "target": "GB",
+      "claims": 3008404000.0,
+      "liabilities": 627078000.0,
+      "net": 2381326000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "MX",
+      "target": "HK",
+      "claims": 177784000.0,
+      "liabilities": 2084000.0,
+      "net": 175700000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "MX",
+      "target": "IN",
+      "claims": 4000.0,
+      "liabilities": 150000.0,
+      "net": -146000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "MX",
+      "target": "JP",
+      "claims": 705349000.0,
+      "liabilities": 238945000.0,
+      "net": 466404000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "MX",
+      "target": "KR",
+      "claims": 3056000.0,
+      "liabilities": 345445000.0,
+      "net": -342389000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "MX",
+      "target": "NO",
+      "claims": 124000.0,
+      "liabilities": 81000.0,
+      "net": 43000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "MX",
+      "target": "PL",
+      "claims": 0.0,
+      "liabilities": 30000.0,
+      "net": -30000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "MX",
+      "target": "SE",
+      "claims": 1129000.0,
+      "liabilities": 711000.0,
+      "net": 418000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "MX",
+      "target": "SG",
+      "claims": 225646000.0,
+      "liabilities": 29365000.0,
+      "net": 196281000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "MX",
+      "target": "TW",
+      "claims": 2882000.0,
+      "liabilities": 5295000.0,
+      "net": -2413000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "MX",
+      "target": "US",
+      "claims": 43404175000.0,
+      "liabilities": 15679567000.0,
+      "net": 27724608000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "MX",
+      "target": "XM",
+      "claims": 7157771000.0,
+      "liabilities": 3693192000.0,
+      "net": 3464579000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "MX",
+      "target": "ZA",
+      "claims": 375000.0,
+      "liabilities": 0.0,
+      "net": 375000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "SE",
+      "target": "AU",
+      "claims": 201603000.0,
+      "liabilities": 143993000.0,
+      "net": 57610000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "SE",
+      "target": "BR",
+      "claims": 0.0,
+      "liabilities": 19045000.0,
+      "net": -19045000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "SE",
+      "target": "CA",
+      "claims": 4358276000.0,
+      "liabilities": 137602000.0,
+      "net": 4220674000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "SE",
+      "target": "CH",
+      "claims": 0.0,
+      "liabilities": 2063831000.0,
+      "net": -2063831000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "SE",
+      "target": "CN",
+      "claims": 1510844000.0,
+      "liabilities": 377380000.0,
+      "net": 1133464000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "SE",
+      "target": "DK",
+      "claims": 43000025000.0,
+      "liabilities": 33922316000.0,
+      "net": 9077709000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "SE",
+      "target": "GB",
+      "claims": 86491152000.0,
+      "liabilities": 81685179000.0,
+      "net": 4805973000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "SE",
+      "target": "HK",
+      "claims": 189208000.0,
+      "liabilities": 0.0,
+      "net": 189208000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "SE",
+      "target": "ID",
+      "claims": 8599000.0,
+      "liabilities": 10214000.0,
+      "net": -1615000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "SE",
+      "target": "IN",
+      "claims": 204626000.0,
+      "liabilities": 712635000.0,
+      "net": -508009000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "SE",
+      "target": "JP",
+      "claims": 0.0,
+      "liabilities": 142309000.0,
+      "net": -142309000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "SE",
+      "target": "KR",
+      "claims": 574227000.0,
+      "liabilities": 22275000.0,
+      "net": 551952000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "SE",
+      "target": "MX",
+      "claims": 621882000.0,
+      "liabilities": 8530000.0,
+      "net": 613352000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "SE",
+      "target": "MY",
+      "claims": 7165000.0,
+      "liabilities": 6259000.0,
+      "net": 906000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "SE",
+      "target": "NO",
+      "claims": 76608722000.0,
+      "liabilities": 41259252000.0,
+      "net": 35349470000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "SE",
+      "target": "NZ",
+      "claims": 12870000.0,
+      "liabilities": 9216000.0,
+      "net": 3654000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "SE",
+      "target": "PL",
+      "claims": 1696882000.0,
+      "liabilities": 0.0,
+      "net": 1696882000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "SE",
+      "target": "RU",
+      "claims": 3640000.0,
+      "liabilities": 5569000.0,
+      "net": -1929000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "SE",
+      "target": "SA",
+      "claims": 0.0,
+      "liabilities": 56042000.0,
+      "net": -56042000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "SE",
+      "target": "TH",
+      "claims": 41417000.0,
+      "liabilities": 68234000.0,
+      "net": -26817000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "SE",
+      "target": "TR",
+      "claims": 1226093000.0,
+      "liabilities": 13528000.0,
+      "net": 1212565000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "SE",
+      "target": "TW",
+      "claims": 2876000.0,
+      "liabilities": 21473000.0,
+      "net": -18597000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "SE",
+      "target": "US",
+      "claims": 34510147000.0,
+      "liabilities": 48448858000.0,
+      "net": -13938711000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "SE",
+      "target": "VN",
+      "claims": 12281000.0,
+      "liabilities": 0.0,
+      "net": 12281000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "SE",
+      "target": "XM",
+      "claims": 149013317000.0,
+      "liabilities": 92119125000.0,
+      "net": 56894192000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "SE",
+      "target": "ZA",
+      "claims": 121252000.0,
+      "liabilities": 0.0,
+      "net": 121252000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "TW",
+      "target": "AU",
+      "claims": 33107293000.0,
+      "liabilities": 4856953000.0,
+      "net": 28250340000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "TW",
+      "target": "BR",
+      "claims": 83488000.0,
+      "liabilities": 12963000.0,
+      "net": 70525000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "TW",
+      "target": "CA",
+      "claims": 8190683000.0,
+      "liabilities": 501053000.0,
+      "net": 7689630000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "TW",
+      "target": "CH",
+      "claims": 6424604000.0,
+      "liabilities": 1299771000.0,
+      "net": 5124833000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "TW",
+      "target": "CN",
+      "claims": 38170929000.0,
+      "liabilities": 20231326000.0,
+      "net": 17939603000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "TW",
+      "target": "DK",
+      "claims": 230778000.0,
+      "liabilities": 41011000.0,
+      "net": 189767000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "TW",
+      "target": "GB",
+      "claims": 33792633000.0,
+      "liabilities": 25064911000.0,
+      "net": 8727722000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "TW",
+      "target": "HK",
+      "claims": 36747402000.0,
+      "liabilities": 47730630000.0,
+      "net": -10983228000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "TW",
+      "target": "ID",
+      "claims": 2691265000.0,
+      "liabilities": 498830000.0,
+      "net": 2192435000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "TW",
+      "target": "IN",
+      "claims": 8442541000.0,
+      "liabilities": 101946000.0,
+      "net": 8340595000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "TW",
+      "target": "JP",
+      "claims": 42790049000.0,
+      "liabilities": 11120155000.0,
+      "net": 31669894000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "TW",
+      "target": "KR",
+      "claims": 13204585000.0,
+      "liabilities": 1743191000.0,
+      "net": 11461394000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "TW",
+      "target": "MX",
+      "claims": 1021372000.0,
+      "liabilities": 63377000.0,
+      "net": 957995000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "TW",
+      "target": "MY",
+      "claims": 4291992000.0,
+      "liabilities": 934295000.0,
+      "net": 3357697000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "TW",
+      "target": "NO",
+      "claims": 89474000.0,
+      "liabilities": 181858000.0,
+      "net": -92384000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "TW",
+      "target": "NZ",
+      "claims": 2730735000.0,
+      "liabilities": 45521000.0,
+      "net": 2685214000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "TW",
+      "target": "PL",
+      "claims": 29872000.0,
+      "liabilities": 5395000.0,
+      "net": 24477000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "TW",
+      "target": "RU",
+      "claims": 229561000.0,
+      "liabilities": 12410000.0,
+      "net": 217151000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "TW",
+      "target": "SA",
+      "claims": 7350706000.0,
+      "liabilities": 66787000.0,
+      "net": 7283919000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "TW",
+      "target": "SE",
+      "claims": 573518000.0,
+      "liabilities": 61323000.0,
+      "net": 512195000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "TW",
+      "target": "SG",
+      "claims": 44559358000.0,
+      "liabilities": 39275241000.0,
+      "net": 5284117000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "TW",
+      "target": "TH",
+      "claims": 2798356000.0,
+      "liabilities": 584980000.0,
+      "net": 2213376000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "TW",
+      "target": "TR",
+      "claims": 79722000.0,
+      "liabilities": 2173000.0,
+      "net": 77549000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "TW",
+      "target": "US",
+      "claims": 169599707000.0,
+      "liabilities": 22437917000.0,
+      "net": 147161790000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "TW",
+      "target": "VN",
+      "claims": 8920031000.0,
+      "liabilities": 2487895000.0,
+      "net": 6432136000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "TW",
+      "target": "XM",
+      "claims": 133744464000.0,
+      "liabilities": 17640784000.0,
+      "net": 116103680000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "TW",
+      "target": "ZA",
+      "claims": 349950000.0,
+      "liabilities": 33639000.0,
+      "net": 316311000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "US",
+      "target": "AU",
+      "claims": 122146000000.0,
+      "liabilities": 110689000000.0,
+      "net": 11457000000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "US",
+      "target": "BR",
+      "claims": 84515000000.0,
+      "liabilities": 22225000000.0,
+      "net": 62290000000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "US",
+      "target": "CA",
+      "claims": 453720000000.0,
+      "liabilities": 326537000000.0,
+      "net": 127183000000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "US",
+      "target": "CH",
+      "claims": 21068000000.0,
+      "liabilities": 73623000000.0,
+      "net": -52555000000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "US",
+      "target": "CN",
+      "claims": 13176000000.0,
+      "liabilities": 121918000000.0,
+      "net": -108742000000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "US",
+      "target": "DK",
+      "claims": 3495000000.0,
+      "liabilities": 7984000000.0,
+      "net": -4489000000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "US",
+      "target": "GB",
+      "claims": 1240422000000.0,
+      "liabilities": 1429913000000.0,
+      "net": -189491000000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "US",
+      "target": "HK",
+      "claims": 49752000000.0,
+      "liabilities": 96661000000.0,
+      "net": -46909000000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "US",
+      "target": "ID",
+      "claims": 3562000000.0,
+      "liabilities": 15404000000.0,
+      "net": -11842000000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "US",
+      "target": "IN",
+      "claims": 20779000000.0,
+      "liabilities": 45276000000.0,
+      "net": -24497000000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "US",
+      "target": "JP",
+      "claims": 348006000000.0,
+      "liabilities": 382548000000.0,
+      "net": -34542000000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "US",
+      "target": "KR",
+      "claims": 16204000000.0,
+      "liabilities": 45353000000.0,
+      "net": -29149000000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "US",
+      "target": "MX",
+      "claims": 51246000000.0,
+      "liabilities": 121629000000.0,
+      "net": -70383000000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "US",
+      "target": "MY",
+      "claims": 1951000000.0,
+      "liabilities": 11433000000.0,
+      "net": -9482000000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "US",
+      "target": "NO",
+      "claims": 94715000000.0,
+      "liabilities": 48667000000.0,
+      "net": 46048000000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "US",
+      "target": "NZ",
+      "claims": 1354000000.0,
+      "liabilities": 1829000000.0,
+      "net": -475000000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "US",
+      "target": "PL",
+      "claims": 5328000000.0,
+      "liabilities": 5877000000.0,
+      "net": -549000000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "US",
+      "target": "RU",
+      "claims": 951000000.0,
+      "liabilities": 6295000000.0,
+      "net": -5344000000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "US",
+      "target": "SA",
+      "claims": 10667000000.0,
+      "liabilities": 25215000000.0,
+      "net": -14548000000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "US",
+      "target": "SE",
+      "claims": 40176000000.0,
+      "liabilities": 21894000000.0,
+      "net": 18282000000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "US",
+      "target": "SG",
+      "claims": 77473000000.0,
+      "liabilities": 120395000000.0,
+      "net": -42922000000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "US",
+      "target": "TH",
+      "claims": 1391000000.0,
+      "liabilities": 6219000000.0,
+      "net": -4828000000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "US",
+      "target": "TR",
+      "claims": 1861000000.0,
+      "liabilities": 11246000000.0,
+      "net": -9385000000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "US",
+      "target": "TW",
+      "claims": 21899000000.0,
+      "liabilities": 58612000000.0,
+      "net": -36713000000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "US",
+      "target": "VN",
+      "claims": 846000000.0,
+      "liabilities": 11839000000.0,
+      "net": -10993000000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "US",
+      "target": "XM",
+      "claims": 561143000000.0,
+      "liabilities": 1158712000000.0,
+      "net": -597569000000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "US",
+      "target": "ZA",
+      "claims": 1044000000.0,
+      "liabilities": 6869000000.0,
+      "net": -5825000000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "XM",
+      "target": "AU",
+      "claims": 85412381000.0,
+      "liabilities": 63690349000.0,
+      "net": 21722032000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "XM",
+      "target": "BR",
+      "claims": 78519572000.0,
+      "liabilities": 9298843000.0,
+      "net": 69220729000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "XM",
+      "target": "CA",
+      "claims": 210722154000.0,
+      "liabilities": 84369716000.0,
+      "net": 126352438000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "XM",
+      "target": "CH",
+      "claims": 305268345000.0,
+      "liabilities": 394887098000.0,
+      "net": -89618753000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "XM",
+      "target": "CN",
+      "claims": 65832257000.0,
+      "liabilities": 98093655000.0,
+      "net": -32261398000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "XM",
+      "target": "DK",
+      "claims": 156757139000.0,
+      "liabilities": 169580683000.0,
+      "net": -12823544000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "XM",
+      "target": "GB",
+      "claims": 4101138786000.0,
+      "liabilities": 3767315541000.0,
+      "net": 333823245000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "XM",
+      "target": "HK",
+      "claims": 128204729000.0,
+      "liabilities": 173610388000.0,
+      "net": -45405659000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "XM",
+      "target": "ID",
+      "claims": 16836572000.0,
+      "liabilities": 1331330000.0,
+      "net": 15505242000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "XM",
+      "target": "IN",
+      "claims": 39729071000.0,
+      "liabilities": 12562160000.0,
+      "net": 27166911000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "XM",
+      "target": "JP",
+      "claims": 466813673000.0,
+      "liabilities": 299419608000.0,
+      "net": 167394065000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "XM",
+      "target": "KR",
+      "claims": 81425245000.0,
+      "liabilities": 38078214000.0,
+      "net": 43347031000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "XM",
+      "target": "MX",
+      "claims": 59416659000.0,
+      "liabilities": 26877461000.0,
+      "net": 32539198000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "XM",
+      "target": "MY",
+      "claims": 3438735000.0,
+      "liabilities": 3641881000.0,
+      "net": -203146000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "XM",
+      "target": "NO",
+      "claims": 118243464000.0,
+      "liabilities": 84737153000.0,
+      "net": 33506311000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "XM",
+      "target": "NZ",
+      "claims": 9664486000.0,
+      "liabilities": 2985796000.0,
+      "net": 6678690000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "XM",
+      "target": "PL",
+      "claims": 126361333000.0,
+      "liabilities": 75137679000.0,
+      "net": 51223654000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "XM",
+      "target": "RU",
+      "claims": 10661254000.0,
+      "liabilities": 255467762000.0,
+      "net": -244806508000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "XM",
+      "target": "SA",
+      "claims": 19176121000.0,
+      "liabilities": 48402364000.0,
+      "net": -29226243000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "XM",
+      "target": "SE",
+      "claims": 194459536000.0,
+      "liabilities": 111072422000.0,
+      "net": 83387114000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "XM",
+      "target": "SG",
+      "claims": 235366897000.0,
+      "liabilities": 145319898000.0,
+      "net": 90046999000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "XM",
+      "target": "TH",
+      "claims": 3566447000.0,
+      "liabilities": 4523850000.0,
+      "net": -957403000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "XM",
+      "target": "TR",
+      "claims": 71853701000.0,
+      "liabilities": 24331030000.0,
+      "net": 47522671000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "XM",
+      "target": "TW",
+      "claims": 37899734000.0,
+      "liabilities": 14328380000.0,
+      "net": 23571354000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "XM",
+      "target": "US",
+      "claims": 2010982432000.0,
+      "liabilities": 1694745706000.0,
+      "net": 316236726000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "XM",
+      "target": "VN",
+      "claims": 5171511000.0,
+      "liabilities": 3402463000.0,
+      "net": 1769048000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "XM",
+      "target": "ZA",
+      "claims": 13367245000.0,
+      "liabilities": 9994188000.0,
+      "net": 3373057000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "ZA",
+      "target": "AU",
+      "claims": 304000000.0,
+      "liabilities": 81000000.0,
+      "net": 223000000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "ZA",
+      "target": "BR",
+      "claims": 349000000.0,
+      "liabilities": 76000000.0,
+      "net": 273000000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "ZA",
+      "target": "CA",
+      "claims": 243000000.0,
+      "liabilities": 159000000.0,
+      "net": 84000000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "ZA",
+      "target": "CH",
+      "claims": 366000000.0,
+      "liabilities": 525000000.0,
+      "net": -159000000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "ZA",
+      "target": "CN",
+      "claims": 588000000.0,
+      "liabilities": 2704000000.0,
+      "net": -2116000000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "ZA",
+      "target": "DK",
+      "claims": 5000000.0,
+      "liabilities": 24000000.0,
+      "net": -19000000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "ZA",
+      "target": "GB",
+      "claims": 24157000000.0,
+      "liabilities": 19612000000.0,
+      "net": 4545000000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "ZA",
+      "target": "HK",
+      "claims": 161000000.0,
+      "liabilities": 996000000.0,
+      "net": -835000000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "ZA",
+      "target": "ID",
+      "claims": 0.0,
+      "liabilities": 1000000.0,
+      "net": -1000000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "ZA",
+      "target": "IN",
+      "claims": 190000000.0,
+      "liabilities": 432000000.0,
+      "net": -242000000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "ZA",
+      "target": "JP",
+      "claims": 80000000.0,
+      "liabilities": 48000000.0,
+      "net": 32000000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "ZA",
+      "target": "KR",
+      "claims": 100000000.0,
+      "liabilities": 58000000.0,
+      "net": 42000000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "ZA",
+      "target": "MX",
+      "claims": 40000000.0,
+      "liabilities": 0.0,
+      "net": 40000000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "ZA",
+      "target": "MY",
+      "claims": 0.0,
+      "liabilities": 9000000.0,
+      "net": -9000000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "ZA",
+      "target": "NO",
+      "claims": 4000000.0,
+      "liabilities": 150000000.0,
+      "net": -146000000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "ZA",
+      "target": "NZ",
+      "claims": 11000000.0,
+      "liabilities": 10000000.0,
+      "net": 1000000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "ZA",
+      "target": "PL",
+      "claims": 59000000.0,
+      "liabilities": 4000000.0,
+      "net": 55000000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "ZA",
+      "target": "RU",
+      "claims": 0.0,
+      "liabilities": 8000000.0,
+      "net": -8000000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "ZA",
+      "target": "SA",
+      "claims": 6000000.0,
+      "liabilities": 9000000.0,
+      "net": -3000000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "ZA",
+      "target": "SE",
+      "claims": 188000000.0,
+      "liabilities": 34000000.0,
+      "net": 154000000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "ZA",
+      "target": "SG",
+      "claims": 703000000.0,
+      "liabilities": 37000000.0,
+      "net": 666000000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "ZA",
+      "target": "TH",
+      "claims": 11000000.0,
+      "liabilities": 9000000.0,
+      "net": 2000000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "ZA",
+      "target": "TR",
+      "claims": 166000000.0,
+      "liabilities": 7000000.0,
+      "net": 159000000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "ZA",
+      "target": "TW",
+      "claims": 13000000.0,
+      "liabilities": 217000000.0,
+      "net": -204000000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "ZA",
+      "target": "US",
+      "claims": 6341000000.0,
+      "liabilities": 3724000000.0,
+      "net": 2617000000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "ZA",
+      "target": "VN",
+      "claims": 0.0,
+      "liabilities": 1000000.0,
+      "net": -1000000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    },
+    {
+      "source": "ZA",
+      "target": "XM",
+      "claims": 7445000000.0,
+      "liabilities": 5926000000.0,
+      "net": 1519000000.0,
+      "as_of": "2026-Q2",
+      "unit": "USD"
+    }
+  ],
+  "nodes": {
+    "AU": {
+      "out_claims": 556904435000.0,
+      "in_liabilities": 351095309000.0,
+      "net_exposure": 205809126000.0,
+      "share_of_network_claims": 0.02
+    },
+    "BR": {
+      "out_claims": 51762580000.0,
+      "in_liabilities": 45363754000.0,
+      "net_exposure": 6398826000.0,
+      "share_of_network_claims": 0.0
+    },
+    "CA": {
+      "out_claims": 1632246916000.0,
+      "in_liabilities": 562272373000.0,
+      "net_exposure": 1069974543000.0,
+      "share_of_network_claims": 0.06
+    },
+    "CH": {
+      "out_claims": 764861707000.0,
+      "in_liabilities": 764898179000.0,
+      "net_exposure": -36472000.0,
+      "share_of_network_claims": 0.03
+    },
+    "CN": {
+      "out_claims": 0.0,
+      "in_liabilities": 1079150781000.0,
+      "net_exposure": -1079150781000.0,
+      "share_of_network_claims": 0.0
+    },
+    "DK": {
+      "out_claims": 253500362000.0,
+      "in_liabilities": 222903586000.0,
+      "net_exposure": 30596776000.0,
+      "share_of_network_claims": 0.01
+    },
+    "GB": {
+      "out_claims": 5954227000000.0,
+      "in_liabilities": 6786656655000.0,
+      "net_exposure": -832429655000.0,
+      "share_of_network_claims": 0.21
+    },
+    "HK": {
+      "out_claims": 2208931746000.0,
+      "in_liabilities": 816960846000.0,
+      "net_exposure": 1391970900000.0,
+      "share_of_network_claims": 0.08
+    },
+    "ID": {
+      "out_claims": 0.0,
+      "in_liabilities": 27421807000.0,
+      "net_exposure": -27421807000.0,
+      "share_of_network_claims": 0.0
+    },
+    "IN": {
+      "out_claims": 0.0,
+      "in_liabilities": 125136952000.0,
+      "net_exposure": -125136952000.0,
+      "share_of_network_claims": 0.0
+    },
+    "JP": {
+      "out_claims": 4289401868000.0,
+      "in_liabilities": 969581113000.0,
+      "net_exposure": 3319820755000.0,
+      "share_of_network_claims": 0.15
+    },
+    "KR": {
+      "out_claims": 209071627000.0,
+      "in_liabilities": 142104237000.0,
+      "net_exposure": 66967390000.0,
+      "share_of_network_claims": 0.01
+    },
+    "MX": {
+      "out_claims": 61518963000.0,
+      "in_liabilities": 207082558000.0,
+      "net_exposure": -145563595000.0,
+      "share_of_network_claims": 0.0
+    },
+    "MY": {
+      "out_claims": 0.0,
+      "in_liabilities": 36701875000.0,
+      "net_exposure": -36701875000.0,
+      "share_of_network_claims": 0.0
+    },
+    "NO": {
+      "out_claims": 0.0,
+      "in_liabilities": 318020416000.0,
+      "net_exposure": -318020416000.0,
+      "share_of_network_claims": 0.0
+    },
+    "NZ": {
+      "out_claims": 0.0,
+      "in_liabilities": 41775878000.0,
+      "net_exposure": -41775878000.0,
+      "share_of_network_claims": 0.0
+    },
+    "PL": {
+      "out_claims": 0.0,
+      "in_liabilities": 113670626000.0,
+      "net_exposure": -113670626000.0,
+      "share_of_network_claims": 0.0
+    },
+    "RU": {
+      "out_claims": 0.0,
+      "in_liabilities": 279920748000.0,
+      "net_exposure": -279920748000.0,
+      "share_of_network_claims": 0.0
+    },
+    "SA": {
+      "out_claims": 0.0,
+      "in_liabilities": 153633133000.0,
+      "net_exposure": -153633133000.0,
+      "share_of_network_claims": 0.0
+    },
+    "SE": {
+      "out_claims": 400417104000.0,
+      "in_liabilities": 175791918000.0,
+      "net_exposure": 224625186000.0,
+      "share_of_network_claims": 0.01
+    },
+    "SG": {
+      "out_claims": 0.0,
+      "in_liabilities": 807332245000.0,
+      "net_exposure": -807332245000.0,
+      "share_of_network_claims": 0.0
+    },
+    "TH": {
+      "out_claims": 0.0,
+      "in_liabilities": 33658642000.0,
+      "net_exposure": -33658642000.0,
+      "share_of_network_claims": 0.0
+    },
+    "TR": {
+      "out_claims": 0.0,
+      "in_liabilities": 56074070000.0,
+      "net_exposure": -56074070000.0,
+      "share_of_network_claims": 0.0
+    },
+    "TW": {
+      "out_claims": 600245068000.0,
+      "in_liabilities": 234379444000.0,
+      "net_exposure": 365865624000.0,
+      "share_of_network_claims": 0.02
+    },
+    "US": {
+      "out_claims": 3248890000000.0,
+      "in_liabilities": 5565623139000.0,
+      "net_exposure": -2316733139000.0,
+      "share_of_network_claims": 0.11
+    },
+    "VN": {
+      "out_claims": 0.0,
+      "in_liabilities": 29016720000.0,
+      "net_exposure": -29016720000.0,
+      "share_of_network_claims": 0.0
+    },
+    "XM": {
+      "out_claims": 8656289479000.0,
+      "in_liabilities": 3644020805000.0,
+      "net_exposure": 5012268674000.0,
+      "share_of_network_claims": 0.3
+    },
+    "ZA": {
+      "out_claims": 41530000000.0,
+      "in_liabilities": 39921587000.0,
+      "net_exposure": 1608413000.0,
+      "share_of_network_claims": 0.0
+    }
+  },
+  "concentration": {
+    "hhi_bilateral": 0.049375,
+    "largest_bilateral_share": 0.141762,
+    "top_node_share": 0.299217,
+    "edge_count": 395.0,
+    "total_claims": 28929798855000.0,
+    "largest_bilateral_source": "XM",
+    "largest_bilateral_target": "GB"
+  },
+  "notes": [],
+  "countries": [],
+  "source": "BIS locational banking statistics (WS_LBS_D_PUB): loans and deposits, US dollars, all counterparty sectors"
+}

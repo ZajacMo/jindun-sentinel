@@ -1,0 +1,188 @@
+{
+  "banks": [
+    {
+      "name": "JP Morgan Chase",
+      "bucket": 4,
+      "jurisdiction": "",
+      "year": 0
+    },
+    {
+      "name": "Bank of America",
+      "bucket": 3,
+      "jurisdiction": "",
+      "year": 0
+    },
+    {
+      "name": "Citigroup",
+      "bucket": 3,
+      "jurisdiction": "",
+      "year": 0
+    },
+    {
+      "name": "Industrial and Commercial Bank of China",
+      "bucket": 3,
+      "jurisdiction": "",
+      "year": 0
+    },
+    {
+      "name": "Agricultural Bank of China",
+      "bucket": 2,
+      "jurisdiction": "",
+      "year": 0
+    },
+    {
+      "name": "BNP Paribas",
+      "bucket": 2,
+      "jurisdiction": "",
+      "year": 0
+    },
+    {
+      "name": "Bank of China",
+      "bucket": 2,
+      "jurisdiction": "",
+      "year": 0
+    },
+    {
+      "name": "China Construction Bank",
+      "bucket": 2,
+      "jurisdiction": "",
+      "year": 0
+    },
+    {
+      "name": "Goldman Sachs",
+      "bucket": 2,
+      "jurisdiction": "",
+      "year": 0
+    },
+    {
+      "name": "Groupe Crédit Agricole",
+      "bucket": 2,
+      "jurisdiction": "",
+      "year": 0
+    },
+    {
+      "name": "Mitsubishi UFJ FG",
+      "bucket": 2,
+      "jurisdiction": "",
+      "year": 0
+    },
+    {
+      "name": "11 Compared with the list of G-SIBs published in 2024, two banks have moved to a higher bucket: Bank of America and Industrial",
+      "bucket": 1,
+      "jurisdiction": "",
+      "year": 0
+    },
+    {
+      "name": "12 The bucket approach is defined in paragraphs SCO40.20 to SCO40.22 of the Basel Framework. The numbers in parentheses",
+      "bucket": 1,
+      "jurisdiction": "",
+      "year": 0
+    },
+    {
+      "name": "Bank of Communications (BoCom)",
+      "bucket": 1,
+      "jurisdiction": "",
+      "year": 0
+    },
+    {
+      "name": "Bank of New York Mellon",
+      "bucket": 1,
+      "jurisdiction": "",
+      "year": 0
+    },
+    {
+      "name": "Deutsche Bank",
+      "bucket": 1,
+      "jurisdiction": "",
+      "year": 0
+    },
+    {
+      "name": "Groupe BPCE",
+      "bucket": 1,
+      "jurisdiction": "",
+      "year": 0
+    },
+    {
+      "name": "Mizuho FG",
+      "bucket": 1,
+      "jurisdiction": "",
+      "year": 0
+    },
+    {
+      "name": "Morgan Stanley",
+      "bucket": 1,
+      "jurisdiction": "",
+      "year": 0
+    },
+    {
+      "name": "Royal Bank of Canada",
+      "bucket": 1,
+      "jurisdiction": "",
+      "year": 0
+    },
+    {
+      "name": "Santander",
+      "bucket": 1,
+      "jurisdiction": "",
+      "year": 0
+    },
+    {
+      "name": "Société Générale",
+      "bucket": 1,
+      "jurisdiction": "",
+      "year": 0
+    },
+    {
+      "name": "Standard Chartered",
+      "bucket": 1,
+      "jurisdiction": "",
+      "year": 0
+    },
+    {
+      "name": "State Street",
+      "bucket": 1,
+      "jurisdiction": "",
+      "year": 0
+    },
+    {
+      "name": "Sumitomo Mitsui FG",
+      "bucket": 1,
+      "jurisdiction": "",
+      "year": 0
+    },
+    {
+      "name": "Toronto Dominion",
+      "bucket": 1,
+      "jurisdiction": "",
+      "year": 0
+    },
+    {
+      "name": "Wells Fargo",
+      "bucket": 1,
+      "jurisdiction": "",
+      "year": 0
+    },
+    {
+      "name": "and Commercial Bank of China have moved from bucket 2 to bucket 3. One bank has moved to a lower bucket: Deutsche Bank",
+      "bucket": 1,
+      "jurisdiction": "",
+      "year": 0
+    },
+    {
+      "name": "are the required level of additional common equity loss absorbency as a percentage of risk -weighted assets that each G-SIB",
+      "bucket": 1,
+      "jurisdiction": "",
+      "year": 0
+    }
+  ],
+  "count": 29,
+  "bucket_histogram": {
+    "1": 18,
+    "2": 7,
+    "3": 3,
+    "4": 1
+  },
+  "source_url": "https://www.fsb.org/uploads/P271125.pdf",
+  "retrieved_at": "2026-11-02T19:54:42.165172+00:00",
+  "warnings": []
+}

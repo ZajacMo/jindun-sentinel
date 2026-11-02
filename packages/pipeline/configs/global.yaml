@@ -1,0 +1,139 @@
+# Global configuration for JinDun Sentinel.
+#
+# Everything a researcher would want to vary lives here — never in code.
+# The values below reproduce the specification of the original research for
+# China; other economies are configured in `countries/`.
+
+project:
+  name: jindun-sentinel
+  default_locale: en-US
+
+# The four shipped locales.  Simplified and Traditional Chinese are written by
+# hand separately: financial vocabulary genuinely differs between them
+# (房地产 / 不動產, 软件 / 軟體), so a machine conversion would be wrong.
+locales:
+  - code: en-US
+    label: English
+    direction: ltr
+    date_format: medium
+    number_locale: en-US
+  - code: zh-CN
+    label: 简体中文
+    direction: ltr
+    date_format: medium
+    number_locale: zh-CN
+  - code: zh-TW
+    label: 繁體中文
+    direction: ltr
+    date_format: medium
+    number_locale: zh-TW
+  - code: ja-JP
+    label: 日本語
+    direction: ltr
+    date_format: medium
+    number_locale: ja-JP
+
+index:
+  # Cumulative explained variance that the retained principal components must
+  # reach.  The legacy implementation had no such threshold (it used a fixed
+  # component count), which was defect E1.
+  pca_variance_threshold: 0.80
+  # "cdf_rank" maps every indicator onto its own empirical cumulative
+  # distribution, which is what makes economies comparable across jurisdictions.
+  normalisation: cdf_rank
+  min_observations: 60
+  rolling_window: 250
+
+composite:
+  # Market weights of the MBSED composite for China.  The remaining countries
+  # carry their own weights in `countries/`.
+  market_weights:
+    equity: 0.30
+    bond: 0.30
+    fx: 0.10
+    money: 0.20
+    derivative: 0.10
+  scale: 2.0
+  # The default reporting lens.  "percentile" is the within-country percentile
+  # (robust, the primary lens); "deviation" is the distance from the
+  # country's own trend (the auxiliary lens).
+  baseline: percentile
+  weight_mode: configured
+
+regime:
+  k_regimes: 2
+  order: 5
+  switching_variance: true
+  trend: c
+  # Bandwidth of the two-component normal mixture used for the risk
+  # probability.  The legacy code hard-coded the two means; they are now
+  # estimated from the fitted regime model.
+  probability_bandwidth: 0.2
+  # The legacy "HP filter" was a text-tiling smooth over 90 observations.
+  # The window is kept and translated into an equivalent HP lambda.
+  hp_window: 90
+
+forecast:
+  horizon: 50
+  arima_max_order: 3
+  lstm_epochs: 100
+  lstm_batch_size: 32
+  lstm_window: 300
+  backtest_window: 120
+  # The walk-forward evaluation refits the model at every origin, so the
+  # number of origins is bounded: the stride produces non-overlapping forecast
+  # blocks and the cap keeps the most recent origins.
+  backtest_stride: 10
+  max_backtest_origins: 120
+
+contagion:
+  # See docs/methodology/spillover-legacy-vs-paper.md.
+  method: paper_equation
+  horizon: 10
+  var_order: null
+  criterion: bic
+  max_order: 5
+  transform: level
+  # Rolling windows behind the spill-out surge alert.  The windows are wide on
+  # purpose: a spill-out share is a slow structural quantity, and a daily
+  # frequency would fire on noise.
+  surge_enabled: true
+  surge_window: 500
+  surge_step: 250
+  surge_max_windows: 24
+  surge_min_windows: 4
+  # A z-score over a nearly flat series is large even for a negligible move,
+  # so the surge also has to be material in relative terms.
+  surge_min_relative_change: 0.20
+
+alert_rules:
+  - id: composite.p1
+    severity: P1
+    scope: all
+    message_key: alert.composite_p1
+    params:
+      threshold: 0.90
+    silence_days: 3
+    description: Composite stress index in the extreme decile of its own history.
+  - id: composite.p2
+    severity: P2
+    scope: all
+    message_key: alert.composite_p2
+    params:
+      threshold: 0.75
+    silence_days: 5
+    description: Composite stress index in the upper quartile of its own history.
+  - id: regime.change
+    severity: P2
+    scope: all
+    message_key: alert.regime_change
+    silence_days: 0
+    description: The country switched from the moderate to the high stress regime.
+  - id: spillout.surge
+    severity: P3
+    scope: all
+    message_key: alert.spillout_surge
+    params:
+      zscore: 2.0
+    silence_days: 5
+    description: A market's total spill-out rose sharply against its own history.

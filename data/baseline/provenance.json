@@ -1,0 +1,11 @@
+{
+  "source_workbook": "F:\\Projects\\01_courses\\python\\PythonPro\\DataAnalysis\\SystemicFinancialRiskMonitoring\\output\\指数汇总_系统性金融风险维度.xlsx",
+  "source_sha256": "4db6879d7e23bdac581044c0b1cf60ce76ece135724222936cc030dfca8b9194",
+  "rows": 3133,
+  "first_date": "2011-11-07",
+  "last_date": "2024-10-18",
+  "generated_files": {
+    "cn_legacy_market_indices.csv": "3664ef5a606c03a8e28aaba05e0648d2e7549be52394b4bd6bd547b3ea95d544",
+    "paper_spillover_tables.json": "7265901f77e29fbce685b32985b112ad0c333c69d1306c5e70433aa6143d10c1"
+  }
+}

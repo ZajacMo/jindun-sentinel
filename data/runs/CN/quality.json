@@ -1,0 +1,672 @@
+{
+  "generated_at": "2026-11-02T20:09:14.118276+00:00",
+  "passed": true,
+  "counts": {
+    "total": 11,
+    "ok": 7,
+    "warning": 4,
+    "failure": 0
+  },
+  "series": [
+    {
+      "series_id": "cn.equity.sse_composite_volume",
+      "adapter": "akshare",
+      "country_code": "CN",
+      "severity": "warning",
+      "passed": true,
+      "observations": 8754,
+      "first_date": "1990-12-19",
+      "last_date": "2026-11-02",
+      "checks": [
+        {
+          "name": "has_observations",
+          "passed": true,
+          "severity": "ok",
+          "measured": 8754,
+          "threshold": 60,
+          "message": ""
+        },
+        {
+          "name": "unique_dates",
+          "passed": true,
+          "severity": "ok",
+          "measured": 0,
+          "threshold": null,
+          "message": ""
+        },
+        {
+          "name": "ordered_dates",
+          "passed": true,
+          "severity": "ok",
+          "measured": null,
+          "threshold": null,
+          "message": ""
+        },
+        {
+          "name": "completeness",
+          "passed": true,
+          "severity": "ok",
+          "measured": 0.9355,
+          "threshold": 0.9,
+          "message": ""
+        },
+        {
+          "name": "max_gap",
+          "passed": false,
+          "severity": "warning",
+          "measured": 20,
+          "threshold": 15,
+          "message": "the series contains a long gap"
+        },
+        {
+          "name": "freshness",
+          "passed": true,
+          "severity": "ok",
+          "measured": 1,
+          "threshold": 5,
+          "message": ""
+        }
+      ]
+    },
+    {
+      "series_id": "cn.equity.margin_to_market_cap",
+      "adapter": "akshare",
+      "country_code": "CN",
+      "severity": "ok",
+      "passed": true,
+      "observations": 4023,
+      "first_date": "2010-03-31",
+      "last_date": "2026-10-30",
+      "checks": [
+        {
+          "name": "has_observations",
+          "passed": true,
+          "severity": "ok",
+          "measured": 4023,
+          "threshold": 60,
+          "message": ""
+        },
+        {
+          "name": "unique_dates",
+          "passed": true,
+          "severity": "ok",
+          "measured": 0,
+          "threshold": null,
+          "message": ""
+        },
+        {
+          "name": "ordered_dates",
+          "passed": true,
+          "severity": "ok",
+          "measured": null,
+          "threshold": null,
+          "message": ""
+        },
+        {
+          "name": "completeness",
+          "passed": true,
+          "severity": "ok",
+          "measured": 0.9297,
+          "threshold": 0.9,
+          "message": ""
+        },
+        {
+          "name": "max_gap",
+          "passed": true,
+          "severity": "ok",
+          "measured": 11,
+          "threshold": 15,
+          "message": ""
+        },
+        {
+          "name": "freshness",
+          "passed": true,
+          "severity": "ok",
+          "measured": 4,
+          "threshold": 5,
+          "message": ""
+        }
+      ]
+    },
+    {
+      "series_id": "cn.equity.return_volatility",
+      "adapter": "akshare",
+      "country_code": "CN",
+      "severity": "warning",
+      "passed": true,
+      "observations": 8744,
+      "first_date": "1991-01-03",
+      "last_date": "2026-11-02",
+      "checks": [
+        {
+          "name": "has_observations",
+          "passed": true,
+          "severity": "ok",
+          "measured": 8744,
+          "threshold": 60,
+          "message": ""
+        },
+        {
+          "name": "unique_dates",
+          "passed": true,
+          "severity": "ok",
+          "measured": 0,
+          "threshold": null,
+          "message": ""
+        },
+        {
+          "name": "ordered_dates",
+          "passed": true,
+          "severity": "ok",
+          "measured": null,
+          "threshold": null,
+          "message": ""
+        },
+        {
+          "name": "completeness",
+          "passed": true,
+          "severity": "ok",
+          "measured": 0.9355,
+          "threshold": 0.9,
+          "message": ""
+        },
+        {
+          "name": "max_gap",
+          "passed": false,
+          "severity": "warning",
+          "measured": 20,
+          "threshold": 15,
+          "message": "the series contains a long gap"
+        },
+        {
+          "name": "freshness",
+          "passed": true,
+          "severity": "ok",
+          "measured": 1,
+          "threshold": 5,
+          "message": ""
+        }
+      ]
+    },
+    {
+      "series_id": "cn.bond.cgb_yield_slope_10y_1y",
+      "adapter": "akshare",
+      "country_code": "CN",
+      "severity": "ok",
+      "passed": true,
+      "observations": 4205,
+      "first_date": "2010-01-04",
+      "last_date": "2026-11-02",
+      "checks": [
+        {
+          "name": "has_observations",
+          "passed": true,
+          "severity": "ok",
+          "measured": 4205,
+          "threshold": 60,
+          "message": ""
+        },
+        {
+          "name": "unique_dates",
+          "passed": true,
+          "severity": "ok",
+          "measured": 0,
+          "threshold": null,
+          "message": ""
+        },
+        {
+          "name": "ordered_dates",
+          "passed": true,
+          "severity": "ok",
+          "measured": null,
+          "threshold": null,
+          "message": ""
+        },
+        {
+          "name": "completeness",
+          "passed": true,
+          "severity": "ok",
+          "measured": 0.9579,
+          "threshold": 0.9,
+          "message": ""
+        },
+        {
+          "name": "max_gap",
+          "passed": true,
+          "severity": "ok",
+          "measured": 11,
+          "threshold": 15,
+          "message": ""
+        },
+        {
+          "name": "freshness",
+          "passed": true,
+          "severity": "ok",
+          "measured": 1,
+          "threshold": 5,
+          "message": ""
+        }
+      ]
+    },
+    {
+      "series_id": "cn.fx.usd_cny_volatility",
+      "adapter": "akshare",
+      "country_code": "CN",
+      "severity": "warning",
+      "passed": true,
+      "observations": 3250,
+      "first_date": "2014-11-16",
+      "last_date": "2026-11-03",
+      "checks": [
+        {
+          "name": "has_observations",
+          "passed": true,
+          "severity": "ok",
+          "measured": 3250,
+          "threshold": 60,
+          "message": ""
+        },
+        {
+          "name": "unique_dates",
+          "passed": true,
+          "severity": "ok",
+          "measured": 0,
+          "threshold": null,
+          "message": ""
+        },
+        {
+          "name": "ordered_dates",
+          "passed": true,
+          "severity": "ok",
+          "measured": null,
+          "threshold": null,
+          "message": ""
+        },
+        {
+          "name": "completeness",
+          "passed": true,
+          "severity": "ok",
+          "measured": 1.041,
+          "threshold": 0.9,
+          "message": ""
+        },
+        {
+          "name": "max_gap",
+          "passed": false,
+          "severity": "warning",
+          "measured": 32,
+          "threshold": 15,
+          "message": "the series contains a long gap"
+        },
+        {
+          "name": "freshness",
+          "passed": true,
+          "severity": "ok",
+          "measured": 0,
+          "threshold": 5,
+          "message": ""
+        }
+      ]
+    },
+    {
+      "series_id": "cn.money.shibor_term_premium",
+      "adapter": "akshare",
+      "country_code": "CN",
+      "severity": "warning",
+      "passed": true,
+      "observations": 2396,
+      "first_date": "2015-05-08",
+      "last_date": "2026-11-02",
+      "checks": [
+        {
+          "name": "has_observations",
+          "passed": true,
+          "severity": "ok",
+          "measured": 2396,
+          "threshold": 60,
+          "message": ""
+        },
+        {
+          "name": "unique_dates",
+          "passed": true,
+          "severity": "ok",
+          "measured": 0,
+          "threshold": null,
+          "message": ""
+        },
+        {
+          "name": "ordered_dates",
+          "passed": true,
+          "severity": "ok",
+          "measured": null,
+          "threshold": null,
+          "message": ""
+        },
+        {
+          "name": "completeness",
+          "passed": false,
+          "severity": "warning",
+          "measured": 0.7997,
+          "threshold": 0.9,
+          "message": "the series has gaps relative to its own calendar"
+        },
+        {
+          "name": "max_gap",
+          "passed": false,
+          "severity": "warning",
+          "measured": 679,
+          "threshold": 15,
+          "message": "the series contains a long gap"
+        },
+        {
+          "name": "freshness",
+          "passed": true,
+          "severity": "ok",
+          "measured": 1,
+          "threshold": 5,
+          "message": ""
+        }
+      ]
+    },
+    {
+      "series_id": "cn.money.shibor_on_volatility",
+      "adapter": "akshare",
+      "country_code": "CN",
+      "severity": "ok",
+      "passed": true,
+      "observations": 2386,
+      "first_date": "2017-03-30",
+      "last_date": "2026-11-02",
+      "checks": [
+        {
+          "name": "has_observations",
+          "passed": true,
+          "severity": "ok",
+          "measured": 2386,
+          "threshold": 60,
+          "message": ""
+        },
+        {
+          "name": "unique_dates",
+          "passed": true,
+          "severity": "ok",
+          "measured": 0,
+          "threshold": null,
+          "message": ""
+        },
+        {
+          "name": "ordered_dates",
+          "passed": true,
+          "severity": "ok",
+          "measured": null,
+          "threshold": null,
+          "message": ""
+        },
+        {
+          "name": "completeness",
+          "passed": true,
+          "severity": "ok",
+          "measured": 0.9536,
+          "threshold": 0.9,
+          "message": ""
+        },
+        {
+          "name": "max_gap",
+          "passed": true,
+          "severity": "ok",
+          "measured": 11,
+          "threshold": 15,
+          "message": ""
+        },
+        {
+          "name": "freshness",
+          "passed": true,
+          "severity": "ok",
+          "measured": 1,
+          "threshold": 5,
+          "message": ""
+        }
+      ]
+    },
+    {
+      "series_id": "cn.money.shibor_1w_volatility",
+      "adapter": "akshare",
+      "country_code": "CN",
+      "severity": "ok",
+      "passed": true,
+      "observations": 2386,
+      "first_date": "2017-03-30",
+      "last_date": "2026-11-02",
+      "checks": [
+        {
+          "name": "has_observations",
+          "passed": true,
+          "severity": "ok",
+          "measured": 2386,
+          "threshold": 60,
+          "message": ""
+        },
+        {
+          "name": "unique_dates",
+          "passed": true,
+          "severity": "ok",
+          "measured": 0,
+          "threshold": null,
+          "message": ""
+        },
+        {
+          "name": "ordered_dates",
+          "passed": true,
+          "severity": "ok",
+          "measured": null,
+          "threshold": null,
+          "message": ""
+        },
+        {
+          "name": "completeness",
+          "passed": true,
+          "severity": "ok",
+          "measured": 0.9536,
+          "threshold": 0.9,
+          "message": ""
+        },
+        {
+          "name": "max_gap",
+          "passed": true,
+          "severity": "ok",
+          "measured": 11,
+          "threshold": 15,
+          "message": ""
+        },
+        {
+          "name": "freshness",
+          "passed": true,
+          "severity": "ok",
+          "measured": 1,
+          "threshold": 5,
+          "message": ""
+        }
+      ]
+    },
+    {
+      "series_id": "cn.money.shibor_3m_volatility",
+      "adapter": "akshare",
+      "country_code": "CN",
+      "severity": "ok",
+      "passed": true,
+      "observations": 2386,
+      "first_date": "2017-03-30",
+      "last_date": "2026-11-02",
+      "checks": [
+        {
+          "name": "has_observations",
+          "passed": true,
+          "severity": "ok",
+          "measured": 2386,
+          "threshold": 60,
+          "message": ""
+        },
+        {
+          "name": "unique_dates",
+          "passed": true,
+          "severity": "ok",
+          "measured": 0,
+          "threshold": null,
+          "message": ""
+        },
+        {
+          "name": "ordered_dates",
+          "passed": true,
+          "severity": "ok",
+          "measured": null,
+          "threshold": null,
+          "message": ""
+        },
+        {
+          "name": "completeness",
+          "passed": true,
+          "severity": "ok",
+          "measured": 0.9536,
+          "threshold": 0.9,
+          "message": ""
+        },
+        {
+          "name": "max_gap",
+          "passed": true,
+          "severity": "ok",
+          "measured": 11,
+          "threshold": 15,
+          "message": ""
+        },
+        {
+          "name": "freshness",
+          "passed": true,
+          "severity": "ok",
+          "measured": 1,
+          "threshold": 5,
+          "message": ""
+        }
+      ]
+    },
+    {
+      "series_id": "cn.derivative.csi300_futures_deviation",
+      "adapter": "akshare",
+      "country_code": "CN",
+      "severity": "ok",
+      "passed": true,
+      "observations": 2374,
+      "first_date": "2017-01-17",
+      "last_date": "2026-11-02",
+      "checks": [
+        {
+          "name": "has_observations",
+          "passed": true,
+          "severity": "ok",
+          "measured": 2374,
+          "threshold": 60,
+          "message": ""
+        },
+        {
+          "name": "unique_dates",
+          "passed": true,
+          "severity": "ok",
+          "measured": 0,
+          "threshold": null,
+          "message": ""
+        },
+        {
+          "name": "ordered_dates",
+          "passed": true,
+          "severity": "ok",
+          "measured": null,
+          "threshold": null,
+          "message": ""
+        },
+        {
+          "name": "completeness",
+          "passed": true,
+          "severity": "ok",
+          "measured": 0.9295,
+          "threshold": 0.9,
+          "message": ""
+        },
+        {
+          "name": "max_gap",
+          "passed": true,
+          "severity": "ok",
+          "measured": 11,
+          "threshold": 15,
+          "message": ""
+        },
+        {
+          "name": "freshness",
+          "passed": true,
+          "severity": "ok",
+          "measured": 1,
+          "threshold": 5,
+          "message": ""
+        }
+      ]
+    },
+    {
+      "series_id": "cn.derivative.csi300_futures_volatility",
+      "adapter": "akshare",
+      "country_code": "CN",
+      "severity": "ok",
+      "passed": true,
+      "observations": 2364,
+      "first_date": "2017-02-07",
+      "last_date": "2026-11-02",
+      "checks": [
+        {
+          "name": "has_observations",
+          "passed": true,
+          "severity": "ok",
+          "measured": 2364,
+          "threshold": 60,
+          "message": ""
+        },
+        {
+          "name": "unique_dates",
+          "passed": true,
+          "severity": "ok",
+          "measured": 0,
+          "threshold": null,
+          "message": ""
+        },
+        {
+          "name": "ordered_dates",
+          "passed": true,
+          "severity": "ok",
+          "measured": null,
+          "threshold": null,
+          "message": ""
+        },
+        {
+          "name": "completeness",
+          "passed": true,
+          "severity": "ok",
+          "measured": 0.9311,
+          "threshold": 0.9,
+          "message": ""
+        },
+        {
+          "name": "max_gap",
+          "passed": true,
+          "severity": "ok",
+          "measured": 11,
+          "threshold": 15,
+          "message": ""
+        },
+        {
+          "name": "freshness",
+          "passed": true,
+          "severity": "ok",
+          "measured": 1,
+          "threshold": 5,
+          "message": ""
+        }
+      ]
+    }
+  ]
+}

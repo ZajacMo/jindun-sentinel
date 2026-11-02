@@ -1,0 +1,546 @@
+/**
+ * Global styles: typography, layout primitives and the styling of the
+ * hand-written SVG mechanism diagrams.
+ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  /* The font stack is defined once, here.  A component must never repeat it. */
+  font-family: var(--jd-font-stack);
+  font-size: 15px;
+  /* Latin script. */
+  line-height: 1.5;
+  color-scheme: light;
+  -webkit-text-size-adjust: 100%;
+}
+
+html.dark {
+  color-scheme: dark;
+}
+
+/* Chinese needs more breathing room than Latin: the glyphs are denser and the
+   characters are full width. */
+html[lang='zh-CN'] {
+  line-height: 1.7;
+}
+
+html[lang='zh-TW'] {
+  line-height: 1.7;
+}
+
+/* Japanese mixes kana and kanji and needs the most breathing room. */
+html[lang='ja-JP'] {
+  line-height: 1.8;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--jd-bg);
+  color: var(--jd-text);
+  font-family: var(--jd-font-stack);
+}
+
+h1,
+h2,
+h3,
+h4 {
+  margin: 0 0 0.4em;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+h1 {
+  font-size: 1.5rem;
+}
+
+h2 {
+  font-size: 1.2rem;
+}
+
+h3 {
+  font-size: 1.05rem;
+}
+
+p {
+  margin: 0 0 0.8em;
+}
+
+a {
+  color: var(--jd-accent);
+}
+
+code,
+pre,
+.jd-mono {
+  font-family: var(--jd-font-mono);
+}
+
+/* Numeric columns must not jitter while the table re-renders. */
+.jd-numeric,
+td.jd-numeric,
+th.jd-numeric,
+.el-table .jd-numeric {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' 1;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.jd-muted {
+  color: var(--jd-text-muted);
+}
+
+.jd-faint {
+  color: var(--jd-text-faint);
+}
+
+/* ------------------------------------------------------------------ */
+/* Layout                                                              */
+/* ------------------------------------------------------------------ */
+
+.jd-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.jd-main {
+  flex: 1 1 auto;
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: var(--jd-gap);
+}
+
+.jd-page-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--jd-gap);
+  margin-bottom: var(--jd-gap);
+}
+
+.jd-page-header p {
+  margin: 0;
+  color: var(--jd-text-muted);
+}
+
+.jd-grid {
+  display: grid;
+  gap: var(--jd-gap);
+}
+
+.jd-grid-2 {
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+}
+
+.jd-grid-3 {
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+.jd-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--jd-gap);
+}
+
+.jd-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--jd-gap-sm);
+}
+
+.jd-panel {
+  background: var(--jd-surface);
+  border: 1px solid var(--jd-border);
+  border-radius: var(--jd-radius);
+  padding: var(--jd-gap);
+}
+
+.jd-panel > h2:first-child,
+.jd-panel > h3:first-child {
+  margin-top: 0;
+}
+
+.jd-kpi-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--jd-gap);
+}
+
+.jd-kpi {
+  background: var(--jd-surface);
+  border: 1px solid var(--jd-border);
+  border-radius: var(--jd-radius);
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.jd-kpi__label {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--jd-text-muted);
+}
+
+.jd-kpi__value {
+  font-size: 1.6rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' 1;
+}
+
+.jd-kpi__hint {
+  font-size: 0.82rem;
+  color: var(--jd-text-faint);
+}
+
+.jd-chart {
+  width: 100%;
+  height: 320px;
+}
+
+.jd-chart--tall {
+  height: 420px;
+}
+
+/* ------------------------------------------------------------------ */
+/* Mechanism diagrams                                                  */
+/* ------------------------------------------------------------------ */
+
+.jd-diagram {
+  width: 100%;
+  height: auto;
+  display: block;
+  overflow: visible;
+}
+
+.jd-diagram text {
+  font-family: var(--jd-font-stack);
+  fill: var(--jd-diagram-node-text);
+}
+
+.jd-diagram .jd-diagram__title {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.jd-diagram .jd-diagram__subtitle {
+  font-size: 12px;
+  fill: var(--jd-diagram-muted);
+}
+
+.jd-diagram .jd-diagram__label {
+  font-size: 12px;
+}
+
+.jd-diagram .jd-diagram__small {
+  font-size: 10.5px;
+  fill: var(--jd-diagram-muted);
+}
+
+.jd-diagram .jd-node__box {
+  fill: var(--jd-diagram-node);
+  stroke: var(--jd-diagram-node-border);
+  stroke-width: 1.25;
+}
+
+.jd-diagram .jd-node__box--accent {
+  fill: var(--jd-diagram-accent-soft);
+  stroke: var(--jd-diagram-accent);
+  stroke-width: 1.6;
+}
+
+.jd-diagram .jd-node__box--reject {
+  fill: var(--jd-diagram-reject-soft);
+  stroke: var(--jd-diagram-reject);
+  stroke-width: 1.4;
+  stroke-dasharray: 5 3;
+}
+
+.jd-diagram .jd-node__label {
+  font-size: 12px;
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+
+.jd-diagram .jd-node__sub {
+  font-size: 10px;
+  text-anchor: middle;
+  fill: var(--jd-diagram-muted);
+}
+
+.jd-diagram .jd-arrow {
+  fill: none;
+  stroke: var(--jd-diagram-line);
+  stroke-width: 1.5;
+}
+
+.jd-diagram .jd-arrow--accent {
+  stroke: var(--jd-diagram-accent);
+  stroke-width: 2;
+}
+
+.jd-diagram .jd-arrow--reject {
+  stroke: var(--jd-diagram-reject);
+  stroke-dasharray: 5 3;
+}
+
+.jd-diagram .jd-arrow--muted {
+  stroke: var(--jd-diagram-muted);
+  stroke-dasharray: 4 4;
+}
+
+.jd-diagram .jd-flow {
+  fill: none;
+  stroke: var(--jd-diagram-accent);
+  stroke-width: 1.6;
+  opacity: 0.85;
+}
+
+.jd-diagram .jd-bar {
+  fill: var(--jd-diagram-accent);
+}
+
+.jd-diagram .jd-bar--muted {
+  fill: var(--jd-diagram-muted);
+}
+
+.jd-diagram .jd-bar--high {
+  fill: var(--jd-regime-high);
+}
+
+.jd-diagram .jd-band {
+  fill: var(--jd-diagram-accent-soft);
+  stroke: none;
+}
+
+.jd-diagram .jd-gridline {
+  stroke: var(--jd-chart-grid);
+  stroke-width: 1;
+}
+
+.jd-diagram .jd-axis {
+  stroke: var(--jd-chart-axis);
+  stroke-width: 1;
+}
+
+.jd-diagram .jd-ring {
+  fill: none;
+  stroke: var(--jd-diagram-line);
+  stroke-width: 1.2;
+  stroke-dasharray: 4 4;
+}
+
+.jd-diagram .jd-curve {
+  fill: none;
+  stroke-width: 2;
+}
+
+.jd-diagram .jd-curve--moderate {
+  stroke: var(--jd-regime-moderate);
+}
+
+.jd-diagram .jd-curve--high {
+  stroke: var(--jd-regime-high);
+}
+
+.jd-diagram .jd-legend__swatch {
+  stroke-width: 0;
+}
+
+/* ------------------------------------------------------------------ */
+/* Severity and status chips                                          */
+/* ------------------------------------------------------------------ */
+
+.jd-severity {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  font-size: 0.8rem;
+  font-weight: 600;
+  line-height: 1.5;
+  white-space: nowrap;
+}
+
+.jd-severity--P1 {
+  color: var(--jd-sev-p1);
+  background: var(--jd-sev-p1-soft);
+  border-color: var(--jd-sev-p1);
+}
+
+.jd-severity--P2 {
+  color: var(--jd-sev-p2);
+  background: var(--jd-sev-p2-soft);
+  border-color: var(--jd-sev-p2);
+}
+
+.jd-severity--P3 {
+  color: var(--jd-sev-p3);
+  background: var(--jd-sev-p3-soft);
+  border-color: var(--jd-sev-p3);
+}
+
+.jd-regime {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border: 1px solid transparent;
+}
+
+.jd-regime--high {
+  color: var(--jd-regime-high);
+  background: var(--jd-regime-high-soft);
+  border-color: var(--jd-regime-high);
+}
+
+.jd-regime--moderate {
+  color: var(--jd-regime-moderate);
+  background: var(--jd-regime-moderate-soft);
+  border-color: var(--jd-regime-moderate);
+}
+
+.jd-quality {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 8px;
+  border-radius: var(--jd-radius-sm);
+  font-size: 0.8rem;
+  font-weight: 600;
+  border: 1px solid transparent;
+}
+
+.jd-quality--ok {
+  color: var(--jd-quality-ok);
+  background: var(--jd-quality-ok-soft);
+  border-color: var(--jd-quality-ok);
+}
+
+.jd-quality--warning {
+  color: var(--jd-quality-warning);
+  background: var(--jd-quality-warning-soft);
+  border-color: var(--jd-quality-warning);
+}
+
+.jd-quality--failure {
+  color: var(--jd-quality-failure);
+  background: var(--jd-quality-failure-soft);
+  border-color: var(--jd-quality-failure);
+}
+
+/* ------------------------------------------------------------------ */
+/* Markdown                                                            */
+/* ------------------------------------------------------------------ */
+
+.jd-markdown {
+  overflow-wrap: anywhere;
+}
+
+.jd-markdown h1,
+.jd-markdown h2,
+.jd-markdown h3 {
+  margin-top: 1.4em;
+}
+
+.jd-markdown pre {
+  background: var(--jd-surface-2);
+  border: 1px solid var(--jd-border);
+  border-radius: var(--jd-radius-sm);
+  padding: 12px 14px;
+  overflow-x: auto;
+  font-size: 0.85rem;
+  line-height: 1.55;
+}
+
+.jd-markdown code {
+  background: var(--jd-surface-2);
+  border-radius: 4px;
+  padding: 1px 5px;
+  font-size: 0.88em;
+}
+
+.jd-markdown pre code {
+  background: none;
+  padding: 0;
+}
+
+.jd-markdown table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1em 0;
+  font-size: 0.9rem;
+}
+
+.jd-markdown th,
+.jd-markdown td {
+  border: 1px solid var(--jd-border);
+  padding: 6px 10px;
+  text-align: left;
+  vertical-align: top;
+}
+
+.jd-markdown th {
+  background: var(--jd-surface-2);
+}
+
+.jd-markdown blockquote {
+  margin: 1em 0;
+  padding: 4px 14px;
+  border-left: 3px solid var(--jd-border-strong);
+  color: var(--jd-text-muted);
+}
+
+.jd-markdown ul,
+.jd-markdown ol {
+  padding-left: 1.4em;
+}
+
+.jd-markdown hr {
+  border: none;
+  border-top: 1px solid var(--jd-border);
+  margin: 1.6em 0;
+}
+
+/* ------------------------------------------------------------------ */
+/* Element Plus adjustments                                            */
+/* ------------------------------------------------------------------ */
+
+.el-card,
+.el-table {
+  --el-card-bg-color: var(--jd-surface);
+}
+
+.el-table .cell {
+  line-height: inherit;
+}
+
+.el-table th.el-table__cell {
+  background: var(--jd-surface-2);
+  font-weight: 600;
+}
+
+.el-descriptions__label {
+  color: var(--jd-text-muted);
+}
+
+.el-tabs__item {
+  font-weight: 500;
+}

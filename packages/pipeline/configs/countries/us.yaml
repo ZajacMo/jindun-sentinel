@@ -1,0 +1,46 @@
+# United States configuration.
+#
+# The United States is monitored through the official ECB composite indicator of
+# systemic stress, which the ECB publishes daily for the United States
+# (`SS_CIN.IDX`, reference area `US`).
+#
+# Why an official index and not the MBSED composite:
+#
+# * the MBSED construction needs a verified tertiary indicator set for each of
+#   the five markets (equity, bond, foreign exchange, money, derivatives);
+# * no such set exists for the United States that is free *and* verified
+#   against a live service, and this project does not publish a number whose
+#   source has not been read;
+# * the ECB composite is itself built from the same five sub-stresses, so it
+#   measures the same object at the country level.
+#
+# The consequence is stated in the run output and in the documentation: this
+# economy has no sub-market decomposition, therefore no market attribution and
+# no cross-market spillover network.  What it does have is the regime model,
+# the forecast and the alerting rules, which operate on the country index.
+
+code: US
+name_en: United States
+name_local: United States
+currency: USD
+timezone: America/New_York
+locale: en-US
+# The ECB composite indicator of systemic stress covers the United States.
+ciss_area: US
+official_index_ref: ECB_CISS_SS_CIN_US
+profile: official_index
+methodology_ref: default
+enabled: true
+
+markets:
+  - code: systemic
+    label_key: index.official
+    weight: 1.0
+    indicators:
+      - code: ciss_composite
+        label_key: indicator.official_index
+        direction: same
+        unit: index
+        source_adapter: ecb_ciss
+        source_series_id: ecb_ciss.composite
+        weight: 1.0

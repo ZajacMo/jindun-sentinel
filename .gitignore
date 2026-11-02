@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# Node
+node_modules/
+dist/
+*.tsbuildinfo
+.vite/
+
+# Bulky, reproducible source downloads.
+# The BIS bulk archive is 365 MB; the *filtered* snapshot it produces is
+# committed under data/snapshots instead.
+data/cache/
+
+# Scratch space of the development scripts
+.scratch/
+
+# Editors and operating systems
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

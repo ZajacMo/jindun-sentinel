@@ -1,0 +1,36 @@
+{
+  "run_id": "2026-11-02T19-22-28Z",
+  "started_at": "2026-11-02T19:22:28.737475+00:00",
+  "code_version": {
+    "git_commit": null,
+    "dirty": null
+  },
+  "data_snapshot": {},
+  "sources": [],
+  "config": {
+    "project": "jindun-sentinel"
+  },
+  "environment": {},
+  "outputs": {
+    "CN": {
+      "market_indices": "F:\\Projects\\03_projects\\jindun-sentinel\\data\\runs\\CN\\market_indices.csv",
+      "run": "F:\\Projects\\03_projects\\jindun-sentinel\\data\\runs\\CN\\run.json",
+      "quality": "F:\\Projects\\03_projects\\jindun-sentinel\\data\\runs\\CN\\quality.json"
+    }
+  },
+  "elapsed_sec": 1.153,
+  "warnings": [
+    "method=paper_equation; VAR order=2 (selected by bic); horizon=10; sample=2017-03-30..2026-10-30",
+    "CN: cn.equity.sse_composite_volume -> warning",
+    "CN: cn.equity.margin_to_market_cap -> warning",
+    "CN: cn.equity.return_volatility -> warning",
+    "CN: cn.bond.cgb_yield_slope_10y_1y -> warning",
+    "CN: cn.fx.usd_cny_volatility -> warning",
+    "CN: cn.money.shibor_term_premium -> warning",
+    "CN: cn.money.shibor_on_volatility -> warning",
+    "CN: cn.money.shibor_1w_volatility -> warning",
+    "CN: cn.money.shibor_3m_volatility -> warning",
+    "CN: cn.derivative.csi300_futures_deviation -> warning",
+    "CN: cn.derivative.csi300_futures_volatility -> warning"
+  ]
+}

@@ -1,0 +1,178 @@
+/**
+ * Design tokens.
+ *
+ * Every colour the application uses is a CSS custom property, which is what
+ * makes the light and the dark theme a pure data change.  Element Plus is
+ * re-skinned from the same tokens, so the widgets and the hand-written SVG
+ * diagrams never drift apart.
+ */
+
+:root {
+  /* Typography.  The stack is defined once, here, and never in a component. */
+  --jd-font-stack: 'Noto Sans SC', 'Noto Sans TC', 'Noto Sans JP', 'PingFang SC',
+    'Hiragino Sans', 'Microsoft YaHei', system-ui, sans-serif;
+  --jd-font-mono: 'SFMono-Regular', 'JetBrains Mono', 'Cascadia Mono', Consolas,
+    'Liberation Mono', monospace;
+
+  /* Geometry. */
+  --jd-radius: 10px;
+  --jd-radius-sm: 6px;
+  --jd-gap: 16px;
+  --jd-gap-sm: 8px;
+
+  /* Light palette. */
+  --jd-bg: #eef1f5;
+  --jd-surface: #ffffff;
+  --jd-surface-2: #f4f6f9;
+  --jd-surface-3: #e9edf2;
+  --jd-border: #d3dae3;
+  --jd-border-strong: #b6c0cd;
+  --jd-text: #16202b;
+  --jd-text-muted: #5b6b7c;
+  --jd-text-faint: #8794a3;
+
+  /* The accent is deliberately not Element Plus' default blue: data-bearing
+     elements must not be mistaken for the brand colour of the widget kit. */
+  --jd-accent: #0f766e;
+  --jd-accent-soft: rgba(15, 118, 110, 0.12);
+  --jd-accent-strong: #0b5d57;
+
+  /* Regimes. */
+  --jd-regime-high: #b3261e;
+  --jd-regime-high-soft: rgba(179, 38, 30, 0.14);
+  --jd-regime-moderate: #0f766e;
+  --jd-regime-moderate-soft: rgba(15, 118, 110, 0.12);
+
+  /* Severity.  Each severity also carries an icon and a text label, so the
+     distinction never depends on the hue alone. */
+  --jd-sev-p1: #b3261e;
+  --jd-sev-p1-soft: rgba(179, 38, 30, 0.14);
+  --jd-sev-p2: #9a5b00;
+  --jd-sev-p2-soft: rgba(154, 91, 0, 0.16);
+  --jd-sev-p3: #3d5878;
+  --jd-sev-p3-soft: rgba(61, 88, 120, 0.14);
+
+  /* Data quality. */
+  --jd-quality-ok: #1f6f43;
+  --jd-quality-ok-soft: rgba(31, 111, 67, 0.14);
+  --jd-quality-warning: #9a5b00;
+  --jd-quality-warning-soft: rgba(154, 91, 0, 0.16);
+  --jd-quality-failure: #b3261e;
+  --jd-quality-failure-soft: rgba(179, 38, 30, 0.14);
+
+  /* Charts. */
+  --jd-chart-grid: #dfe5ec;
+  --jd-chart-axis: #7d8b9a;
+
+  /* Diagrams. */
+  --jd-diagram-node: #ffffff;
+  --jd-diagram-node-border: #b6c0cd;
+  --jd-diagram-node-text: #16202b;
+  --jd-diagram-accent: #0f766e;
+  --jd-diagram-accent-soft: rgba(15, 118, 110, 0.1);
+  --jd-diagram-muted: #5b6b7c;
+  --jd-diagram-line: #8794a3;
+  --jd-diagram-reject: #b3261e;
+  --jd-diagram-reject-soft: rgba(179, 38, 30, 0.1);
+  --jd-diagram-shadow: rgba(22, 32, 43, 0.08);
+
+  /* Element Plus re-skin. */
+  --el-color-primary: var(--jd-accent);
+  --el-color-primary-light-3: #4fa39c;
+  --el-color-primary-light-5: #8fc4bf;
+  --el-color-primary-light-7: #cfe5e3;
+  --el-color-primary-light-8: #e0efee;
+  --el-color-primary-light-9: #eef7f6;
+  --el-color-primary-dark-2: var(--jd-accent-strong);
+  --el-bg-color: var(--jd-surface);
+  --el-bg-color-page: var(--jd-bg);
+  --el-bg-color-overlay: var(--jd-surface);
+  --el-text-color-primary: var(--jd-text);
+  --el-text-color-regular: var(--jd-text);
+  --el-text-color-secondary: var(--jd-text-muted);
+  --el-text-color-placeholder: var(--jd-text-faint);
+  --el-text-color-disabled: var(--jd-text-faint);
+  --el-border-color: var(--jd-border);
+  --el-border-color-light: var(--jd-border);
+  --el-border-color-lighter: var(--jd-border);
+  --el-border-color-extra-light: var(--jd-border);
+  --el-fill-color: var(--jd-surface-2);
+  --el-fill-color-light: var(--jd-surface-2);
+  --el-fill-color-lighter: var(--jd-surface-2);
+  --el-fill-color-blank: var(--jd-surface);
+  --el-mask-color: rgba(255, 255, 255, 0.75);
+}
+
+html.dark {
+  --jd-bg: #10151b;
+  --jd-surface: #182029;
+  --jd-surface-2: #1f2833;
+  --jd-surface-3: #27313d;
+  --jd-border: #2e3946;
+  --jd-border-strong: #3d4a59;
+  --jd-text: #e6ecf3;
+  --jd-text-muted: #9dabbb;
+  --jd-text-faint: #71808f;
+
+  --jd-accent: #3fb8a4;
+  --jd-accent-soft: rgba(63, 184, 164, 0.18);
+  --jd-accent-strong: #6fd3c3;
+
+  --jd-regime-high: #ff7a70;
+  --jd-regime-high-soft: rgba(255, 122, 112, 0.18);
+  --jd-regime-moderate: #3fb8a4;
+  --jd-regime-moderate-soft: rgba(63, 184, 164, 0.16);
+
+  --jd-sev-p1: #ff7a70;
+  --jd-sev-p1-soft: rgba(255, 122, 112, 0.18);
+  --jd-sev-p2: #e0a44a;
+  --jd-sev-p2-soft: rgba(224, 164, 74, 0.18);
+  --jd-sev-p3: #9fb4cc;
+  --jd-sev-p3-soft: rgba(159, 180, 204, 0.18);
+
+  --jd-quality-ok: #5cc98d;
+  --jd-quality-ok-soft: rgba(92, 201, 141, 0.16);
+  --jd-quality-warning: #e0a44a;
+  --jd-quality-warning-soft: rgba(224, 164, 74, 0.18);
+  --jd-quality-failure: #ff7a70;
+  --jd-quality-failure-soft: rgba(255, 122, 112, 0.18);
+
+  --jd-chart-grid: #2b3541;
+  --jd-chart-axis: #8a97a6;
+
+  --jd-diagram-node: #1d2631;
+  --jd-diagram-node-border: #3d4a59;
+  --jd-diagram-node-text: #e6ecf3;
+  --jd-diagram-accent: #3fb8a4;
+  --jd-diagram-accent-soft: rgba(63, 184, 164, 0.16);
+  --jd-diagram-muted: #9dabbb;
+  --jd-diagram-line: #71808f;
+  --jd-diagram-reject: #ff7a70;
+  --jd-diagram-reject-soft: rgba(255, 122, 112, 0.14);
+  --jd-diagram-shadow: rgba(0, 0, 0, 0.4);
+
+  --el-color-primary: var(--jd-accent);
+  --el-color-primary-light-3: #2f8f80;
+  --el-color-primary-light-5: #275f56;
+  --el-color-primary-light-7: #1f3d38;
+  --el-color-primary-light-8: #1a2f2c;
+  --el-color-primary-light-9: #17221f;
+  --el-color-primary-dark-2: var(--jd-accent-strong);
+  --el-bg-color: var(--jd-surface);
+  --el-bg-color-page: var(--jd-bg);
+  --el-bg-color-overlay: var(--jd-surface);
+  --el-text-color-primary: var(--jd-text);
+  --el-text-color-regular: var(--jd-text);
+  --el-text-color-secondary: var(--jd-text-muted);
+  --el-text-color-placeholder: var(--jd-text-faint);
+  --el-text-color-disabled: var(--jd-text-faint);
+  --el-border-color: var(--jd-border);
+  --el-border-color-light: var(--jd-border);
+  --el-border-color-lighter: var(--jd-border);
+  --el-border-color-extra-light: var(--jd-border);
+  --el-fill-color: var(--jd-surface-2);
+  --el-fill-color-light: var(--jd-surface-2);
+  --el-fill-color-lighter: var(--jd-surface-2);
+  --el-fill-color-blank: var(--jd-surface);
+  --el-mask-color: rgba(16, 21, 27, 0.75);
+}

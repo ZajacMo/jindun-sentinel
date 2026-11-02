@@ -1,0 +1,35 @@
+# United Kingdom configuration.
+#
+# The United Kingdom is monitored through the official ECB composite indicator
+# of systemic stress, published daily for the United Kingdom
+# (`SS_CIN.IDX`, reference area `GB`).
+#
+# The rationale is the one documented in `us.yaml`: the MBSED construction
+# requires a verified tertiary indicator set for every market, and the ECB
+# composite measures the same object at the country level with a source that
+# can be read and checked.
+
+code: GB
+name_en: United Kingdom
+name_local: United Kingdom
+currency: GBP
+timezone: Europe/London
+locale: en-US
+ciss_area: GB
+official_index_ref: ECB_CISS_SS_CIN_GB
+profile: official_index
+methodology_ref: default
+enabled: true
+
+markets:
+  - code: systemic
+    label_key: index.official
+    weight: 1.0
+    indicators:
+      - code: ciss_composite
+        label_key: indicator.official_index
+        direction: same
+        unit: index
+        source_adapter: ecb_ciss
+        source_series_id: ecb_ciss.composite
+        weight: 1.0

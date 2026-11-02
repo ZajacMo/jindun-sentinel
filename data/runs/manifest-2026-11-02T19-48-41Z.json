@@ -1,0 +1,30 @@
+{
+  "run_id": "2026-11-02T19-48-41Z",
+  "started_at": "2026-11-02T19:48:41.527243+00:00",
+  "code_version": {
+    "git_commit": null,
+    "dirty": null
+  },
+  "data_snapshot": {},
+  "sources": [],
+  "config": {
+    "project": "jindun-sentinel"
+  },
+  "environment": {},
+  "outputs": {
+    "CN": {
+      "market_indices": "F:\\Projects\\03_projects\\jindun-sentinel\\data\\runs\\CN\\market_indices.csv",
+      "run": "F:\\Projects\\03_projects\\jindun-sentinel\\data\\runs\\CN\\run.json",
+      "quality": "F:\\Projects\\03_projects\\jindun-sentinel\\data\\runs\\CN\\quality.json"
+    }
+  },
+  "elapsed_sec": 24.753,
+  "warnings": [
+    "method=paper_equation; VAR order=2 (selected by bic); horizon=10; sample=2017-03-30..2026-10-30",
+    "the move could not be attributed: underlying array is read-only",
+    "CN: cn.equity.sse_composite_volume -> warning",
+    "CN: cn.equity.return_volatility -> warning",
+    "CN: cn.fx.usd_cny_volatility -> warning",
+    "CN: cn.money.shibor_term_premium -> warning"
+  ]
+}

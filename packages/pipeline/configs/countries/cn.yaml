@@ -1,0 +1,171 @@
+# China configuration.
+#
+# The indicator codes are stable, language-neutral identifiers; the display
+# names live in the shared locale catalogues under `indicator.<code>`.
+#
+# The market weights and the indicator weights reproduce the specification of
+# the original research.  The indicator set is the modernised one: every
+# enabled indicator is backed by a source that was verified against the live
+# service.  Indicators whose original source is not available as a free,
+# verified feed are kept in the file with `enabled: false` so that the gap is
+# documented rather than silently filled with a proxy.
+#
+# Sources
+#   akshare  — Chinese market data (SSE/SZSE indices, ChinaBond yields,
+#              SHIBOR fixings, margin balances, index futures, USD/CNY)
+#   ecb_ciss — the official ECB composite stress index, used as the external
+#              cross-check anchor for China
+
+code: CN
+name_en: China
+name_local: 中国
+currency: CNY
+timezone: Asia/Shanghai
+locale: zh-CN
+# The ECB composite indicator of systemic stress covers China, so the Chinese
+# composite has an official cross-check anchor.
+ciss_area: CN
+official_index_ref: ECB_CISS_SS_CIN_CN
+methodology_ref: default
+enabled: true
+
+markets:
+  - code: equity
+    label_key: market.equity
+    weight: 0.30
+    indicators:
+      - code: pe_ratio
+        label_key: indicator.pe_ratio
+        direction: bidirectional
+        unit: ratio
+        source_adapter: akshare
+        source_series_id: cn.equity.pe_ttm
+        weight: 1.0
+        # No free, verified feed for the aggregate price/earnings ratio is
+        # available; the original research used a commercial terminal.
+        enabled: false
+      - code: turnover
+        label_key: indicator.turnover
+        direction: same
+        unit: shares
+        source_adapter: akshare
+        source_series_id: cn.equity.sse_composite_volume
+        weight: 1.0
+      - code: margin_balance_ratio
+        label_key: indicator.margin_balance_ratio
+        direction: same
+        unit: ratio
+        source_adapter: akshare
+        source_series_id: cn.equity.margin_to_market_cap
+        weight: 1.0
+      - code: return_volatility
+        label_key: indicator.return_volatility
+        direction: same
+        unit: percent
+        source_adapter: akshare
+        source_series_id: cn.equity.return_volatility
+        weight: 1.0
+
+  - code: bond
+    label_key: market.bond
+    weight: 0.30
+    indicators:
+      - code: yield_curve_slope
+        label_key: indicator.yield_curve_slope
+        direction: bidirectional
+        unit: percent
+        source_adapter: akshare
+        source_series_id: cn.bond.cgb_yield_slope_10y_1y
+        weight: 1.0
+      - code: credit_risk_premium
+        label_key: indicator.credit_risk_premium
+        direction: bidirectional
+        unit: percent
+        source_adapter: akshare
+        source_series_id: cn.bond.credit_risk_premium
+        weight: 1.0
+        # The original series came from a commercial terminal.
+        enabled: false
+      - code: bond_index_volatility
+        label_key: indicator.bond_index_volatility
+        direction: same
+        unit: percent
+        source_adapter: akshare
+        source_series_id: cn.bond.bond_index_volatility
+        weight: 1.0
+        # The original series came from a commercial terminal.
+        enabled: false
+
+  - code: fx
+    label_key: market.fx
+    weight: 0.10
+    indicators:
+      - code: exchange_rate_distortion
+        label_key: indicator.exchange_rate_distortion
+        direction: same
+        unit: index
+        source_adapter: akshare
+        source_series_id: cn.fx.exchange_rate_distortion
+        weight: 1.0
+        # The original series was constructed in the research and is not part
+        # of any public feed.
+        enabled: false
+      - code: cny_fixing_volatility
+        label_key: indicator.cny_fixing_volatility
+        direction: same
+        unit: percent
+        source_adapter: akshare
+        source_series_id: cn.fx.usd_cny_volatility
+        weight: 1.0
+
+  - code: money
+    label_key: market.money
+    weight: 0.20
+    indicators:
+      - code: liquidity_premium
+        label_key: indicator.liquidity_premium
+        direction: bidirectional
+        unit: percent
+        source_adapter: akshare
+        source_series_id: cn.money.shibor_term_premium
+        weight: 0.3
+      - code: repo_1d_volatility
+        label_key: indicator.repo_1d_volatility
+        direction: same
+        unit: percent
+        source_adapter: akshare
+        source_series_id: cn.money.shibor_on_volatility
+        weight: 0.3
+      - code: repo_7d_volatility
+        label_key: indicator.repo_7d_volatility
+        direction: same
+        unit: percent
+        source_adapter: akshare
+        source_series_id: cn.money.shibor_1w_volatility
+        weight: 0.3
+      - code: shibor_3m_volatility
+        label_key: indicator.shibor_3m_volatility
+        direction: same
+        unit: percent
+        source_adapter: akshare
+        source_series_id: cn.money.shibor_3m_volatility
+        weight: 0.1
+
+  - code: derivative
+    label_key: market.derivative
+    weight: 0.10
+    indicators:
+      - code: futures_basis_deviation
+        label_key: indicator.futures_basis_deviation
+        direction: bidirectional
+        unit: percent
+        source_adapter: akshare
+        source_series_id: cn.derivative.csi300_futures_deviation
+        weight: 1.0
+      - code: csi300_futures_volatility
+        label_key: indicator.csi300_futures_volatility
+        direction: same
+        unit: percent
+        source_adapter: akshare
+        source_series_id: cn.derivative.csi300_futures_volatility
+        weight: 1.0
