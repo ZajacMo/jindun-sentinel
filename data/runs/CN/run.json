@@ -64380,6 +64380,8 @@
         "money",
         "derivative"
       ],
+      "window": 500,
+      "step": 250,
       "values": [
         [
           0.21136530937716835,

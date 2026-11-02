@@ -29,4 +29,6 @@ target-version = "py311"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B", "SIM"]
-ignore = ["E501"]
+# B008 is the FastAPI dependency-injection idiom: a callable in the default of
+# a route parameter is exactly how FastAPI declares its dependencies.
+ignore = ["E501", "B008"]

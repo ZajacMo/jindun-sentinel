@@ -80,7 +80,7 @@ def country_index(
     for name, values in series.items():
         markets[name] = [
             SeriesPoint(date=day, value=float(value))
-            for day, value in zip(dates, values)
+            for day, value in zip(dates, values, strict=False)
         ]
 
     regime_block = payload.get("regime") or {}

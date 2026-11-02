@@ -21,11 +21,15 @@ import json
 import time
 import urllib.error
 import urllib.request
+from collections.abc import Mapping
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Mapping
+from typing import TYPE_CHECKING, Any
 
 from ..models import Direction, Observation
+
+if TYPE_CHECKING:  # pragma: no cover - typing only
+    from ..models import Series
 
 __all__ = [
     "HttpClient",
@@ -113,7 +117,7 @@ class HttpClient:
                         url=url,
                         status=int(handle.status),
                         body=body,
-                        retrieved_at=dt.datetime.now(dt.timezone.utc),
+                        retrieved_at=dt.datetime.now(dt.UTC),
                     )
             except urllib.error.HTTPError as exc:
                 last_error = HttpError(url, exc.code, exc.reason or "http error")
@@ -168,7 +172,7 @@ class FetchResult:
     def last_date(self) -> dt.date | None:
         return self.observations[-1].date if self.observations else None
 
-    def to_series(self) -> "Series":
+    def to_series(self) -> Series:
         from ..models import Series
 
         return Series(
@@ -228,7 +232,7 @@ class SnapshotStore:
         retrieved_at: dt.datetime | None = None,
         extra: Mapping[str, Any] | None = None,
     ) -> Path:
-        moment = retrieved_at or dt.datetime.now(dt.timezone.utc)
+        moment = retrieved_at or dt.datetime.now(dt.UTC)
         target = self.path_for(adapter, series_id)
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_bytes(payload)

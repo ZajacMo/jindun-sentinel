@@ -88,7 +88,7 @@ def extract_cycle_factor(
     cumulative = np.cumsum(ratios)
 
     factor = panel.to_numpy(dtype=float) @ vectors[:, 0]
-    loadings = dict(zip(panel.columns, vectors[:, 0].tolist()))
+    loadings = dict(zip(panel.columns, vectors[:, 0].tolist(), strict=True))
     if float(np.corrcoef(factor, panel.mean(axis=1).to_numpy())[0, 1]) < 0:
         factor = -factor
         loadings = {key: -value for key, value in loadings.items()}

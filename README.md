@@ -166,16 +166,23 @@ See `docs/methodology/spillover-legacy-vs-paper.md` for the full comparison.
 
 ## Economies and languages
 
-Five economies are in scope, each with a named official cross-check anchor where one
-exists.
+Five economies are in scope.  They are **not** measured with the same instrument, and
+`docs/methodology/country-profiles.md` states exactly what each one has and what it does
+not have.
 
-| economy | code | cross-check anchor | country configuration shipped | run published in this tree |
-| --- | --- | --- | --- | --- |
-| China | `CN` | ECB CISS daily composite `SS_CIN` (area `CN`) | yes — `packages/pipeline/configs/countries/cn.yaml` | yes |
-| United States | `US` | ECB CISS daily composite `SS_CIN` (area `US`) | no | no |
-| Euro area | `U2` | ECB CISS daily composite `SS_CIN` (area `U2`) and the monthly composite `SS_CI` | no | no |
-| United Kingdom | `GB` | ECB CISS daily composite `SS_CIN` (area `GB`) | no | no |
-| Japan | `JP` | **none** — the ECB CISS publishes no Japanese series at all; the Bank of Japan statistics API is used instead | no | no |
+| economy | code | country index | cross-check anchor | configuration shipped | run published in this tree |
+| --- | --- | --- | --- | --- | --- |
+| China | `CN` | MBSED composite over five markets | ECB CISS daily composite `SS_CIN` (area `CN`) | yes — `packages/pipeline/configs/countries/cn.yaml` | yes |
+| Japan | `JP` | MBSED composite over two markets (BOJ call rates, USD/JPY) | **none** — the ECB CISS publishes no Japanese series at all | yes — `configs/countries/jp.yaml` | yes |
+| United States | `US` | official ECB composite stress index | the index itself (`SS_CIN`, area `US`) | yes — `configs/countries/us.yaml` | yes |
+| United Kingdom | `GB` | official ECB composite stress index | the index itself (`SS_CIN`, area `GB`) | yes — `configs/countries/gb.yaml` | yes |
+| Euro area | `EU` | official ECB composite stress index | the index itself (`SS_CIN`, area `U2`) | yes — `configs/countries/eu.yaml` | yes |
+
+An economy whose index is an official published index has **no** sub-market
+decomposition, so no market attribution and no cross-market spillover network: the run
+artefact says so explicitly rather than publishing a decomposition that was never
+computed.  The cross-country network and the global cycle factor work on the country
+composites and are therefore available for all five.
 
 The four shipped locales are English (`en-US`), Simplified Chinese (`zh-CN`),
 Traditional Chinese (`zh-TW`) and Japanese (`ja-JP`). Simplified and Traditional
@@ -193,14 +200,15 @@ gaps cannot be monitored.
 
 | source | endpoint / format | coverage | known gaps and limits |
 | --- | --- | --- | --- |
-| ECB CISS — daily composite `SS_CIN` | `https://data-api.ecb.europa.eu/service/data/CISS/D/<area>/Z0Z/4F/EC/SS_CIN/IDX?format=csvdata&detail=dataonly` (SDMX 2.1) | 14 reference areas: `AT BE CN DE ES FI FR GB IE IT NL PT U2 US` | no other reference area exists on the daily frequency, including Japan |
-| ECB CISS — monthly composite `SS_CI` | same base path with `/M/<area>/…/SS_CI/IDX` | 2 reference areas: `U2`, `US` | the monthly composite is **not** published for any individual member state |
-| ECB CISS — sub-stress components | `…/D/<area>/…/<COMPONENT>_CON/CON` | 5 components (`CREDIT`, `EQUITY`, `INTERBANK`, `REAL_ESTATE`, `SOVEREIGN`) for the euro area `U2` only | components exist only as `.CON` contribution series; the `.IDX` variant of a component does not exist and answers 404. Components are not available for `CN`, `GB` or `US` |
+| ECB CISS — daily composite `SS_CIN` | `https://data-api.ecb.europa.eu/service/data/CISS/D.<area>.Z0Z.4F.EC.SS_CIN.IDX?format=csvdata&detail=dataonly` (SDMX 2.1; the key is **one** path segment with dots between the dimensions) | 14 reference areas: `AT BE CN DE ES FI FR GB IE IT NL PT U2 US` | no other reference area exists on the daily frequency, including Japan |
+| ECB CISS — monthly composite `SS_CI` | same base path with `M.<area>.…` and `SS_CI` | 2 reference areas: `U2`, `US` | the monthly composite is **not** published for any individual member state |
+| ECB CISS — sub-stress components | `…/D.<area>.….<COMPONENT>_CON/CON` | 5 components (`CREDIT`, `EQUITY`, `INTERBANK`, `REAL_ESTATE`, `SOVEREIGN`) for the euro area `U2` only | components exist only as `.CON` contribution series; the `.IDX` variant of a component does not exist and answers 404. Components are not available for `CN`, `GB` or `US` |
 | ECB CISS — Japan | any Japanese reference area | **nothing** | every Japanese reference area returns 404 on both the daily and the monthly frequency. Japan therefore has **no CISS cross-check anchor**; the Bank of Japan API is used instead and the methodology states this explicitly |
 | BIS statistical API — data | `https://stats.bis.org/api/v1/data/{flow}/{key}?startPeriod=…&endPeriod=…&format=csvfile` | 10 of the 56 published flows are used: `WS_LBS_D_PUB`, `WS_LBS_PUB`, `WS_CBS_PUB`, `WS_GLI`, `WS_CREDIT_GAP`, `WS_DSR`, `WS_EER`, `WS_XRU`, `WS_OTC_DERIV2`, `WS_CPP` | **the key must be part of the URL path.** A request of the form `/api/v1/data/WS_LBS_D_PUB?key=…` silently ignores the key and returns the entire flow — 25 MB for a single quarter of the locational banking statistics, against 358 bytes for the same query in path form |
 | BIS statistical API — structure | `https://stats.bis.org/api/v1/dataflow/BIS` (SDMX-ML) | the full flow catalogue | requesting the JSON representation (`Accept: application/vnd.sdmx.structure+json`) answers **406**; the endpoint serves SDMX-ML XML, which is what the adapter parses |
+| BIS bulk archive — locational banking statistics | `https://data.bis.org/static/bulk/WS_LBS_D_PUB_csv_flat.zip` (365 MB, ~18 GB uncompressed) | the bilateral reporting-economy × counterparty-country matrix | **the bilateral matrix is only served by the bulk file.** Through the API the reporting-country dimension accepts the aggregate `5A` only, so a request for `L_REP_CTY=US` answers 404 although the data is published. The archive is downloaded once into `data/cache/` (never committed) and streamed into a filtered snapshot of about two megabytes under `data/snapshots/bis/` |
 | BIS SDMX v2 | `/api/v2/…` | none | the v2 paths answer **404** or **501**; only the v1 API exists |
-| Bank of Japan — Time-Series Statistics Search | `https://www.stat-search.boj.or.jp/api/v1/getMetadata`, `/getDataCode`, `/getDataLayer` | 9 databases used by this project: `IR01`, `FM01`, `FM08`, `FM09`, `MD01`, `MD02`, `PR01`, `CO`, `BP01` (the adapter also knows `BIS`, the Japanese slice of the BIS international banking and credit statistics) | `getDataCode` accepts at most 250 series codes per request, `getDataLayer` at most 1 250; pagination is driven by `NEXTPOSITION`, which must be echoed back as `startPosition`; the service asks clients not to hammer it, so the adapter enforces a minimum delay between requests |
+| Bank of Japan — Time-Series Statistics Search | `https://www.stat-search.boj.or.jp/api/v1/getMetadata`, `/getDataCode`, `/getDataLayer` | 10 databases used by this project: `IR01`, `FM01`, `FM02`, `FM08`, `FM09`, `MD01`, `MD02`, `PR01`, `CO`, `BP01` (the adapter also knows `BIS`, the Japanese slice of the BIS international banking and credit statistics), plus three derived series (the call-rate term spread, the USD/JPY volatility and the USD/JPY deviation from trend) | `getDataCode` accepts at most 250 series codes per request, `getDataLayer` at most 1 250; pagination is driven by `NEXTPOSITION`, which must be echoed back as `startPosition`; the service asks clients not to hammer it, so the adapter enforces a minimum delay between requests. The BOJ publishes no daily equity index, no daily derivatives market and no daily government bond yield curve, so the Japanese index has two markets rather than five |
 | FSB — G-SIB list | announcement page → linked PDF | the annual list, parsed into bank names with buckets 1–10 | the bank names are **not** in the announcement page: they live in a PDF linked from the list page, so the adapter resolves the link and parses the document's text layer. The bucket surcharge is the Basel schedule (0.5 % per bucket, 1.0 %–5.0 %) |
 | akshare — Chinese market data | `akshare` Python package | 26 registered series (14 direct reads of an upstream table + 12 deterministic derivations): SSE/SZSE/CSI 300 levels and turnover, ChinaBond government yields and curve slopes, SHIBOR fixings, margin balances, CSI 300 index futures, USD/CNY middle rate | `akshare` is an **optional** dependency (`--extra market`). Without it every Chinese indicator is reported as unavailable with a warning — never as a silent zero. Only series whose output shape was verified against the live service are registered |
 
@@ -219,14 +227,8 @@ and `jindun-api` from the workspace.
 uv sync --extra dev --extra market --all-packages
 ```
 
-> **Known issue on the current tree.** The workspace member glob is `packages/*`,
-> which also matches `packages/data` — the snapshot store's default directory, not a
-> Python package. `uv` therefore aborts every `sync` with
-> `Workspace member …/packages/data is missing a pyproject.toml (matches: packages/*)`.
-> The fix is one line in the root `pyproject.toml`: narrow the glob to the two
-> Python packages (`members = ["packages/pipeline", "packages/api"]`) or move the
-> snapshot directory out of `packages/`. Every other command in this document works
-> unchanged once the workspace resolves.
+The workspace members are the three Python packages (`packages/pipeline`, `packages/api`,
+`packages/agent`); the front end is a separate npm package and is excluded.
 
 Extras available on `jindun-pipeline`: `arch` (GARCH volatility), `market` (akshare),
 `ml` (torch), `dev` (pytest, pytest-cov, ruff, mypy). `jindun-api` has a `dev` extra
@@ -277,14 +279,31 @@ Writes, per country, into `<out>/<CODE>/`:
 | file | content |
 | --- | --- |
 | `market_indices.csv` | the sub-market stress indices, one column per market |
-| `run.json` | composite, percentile and deviation series, the regime block, the spillover network, the alerts, the source list and the warnings |
+| `run.json` | composite, percentile and deviation series, the regime block, the spillover network (with the rolling spill-out history behind the surge alert), the alerts, the attribution of the last move, the forecast with its walk-forward score, the source list and the warnings |
 | `quality.json` | the quality-gate verdict per series, with the measured value and the threshold of every check |
 
 and one manifest per run, `<out>/manifest-<run_id>.json`, pinning the run id, the
 start time, the git commit and dirty flag, the artefact paths, the elapsed time and
 the warnings. The command exits 1 if any country's quality report contains a failure.
 
-### 4. Re-check the gates without recomputing
+A full run of the five economies takes about three minutes.  The two parts that would
+otherwise dominate it are bounded on purpose: the walk-forward evaluation refits the
+model at a bounded number of origins, and the regime model and the forecast use the
+most recent 2 500 observations.
+
+### 4. Build the global layer
+
+```bash
+jindun-pipeline global
+```
+
+Writes `data/runs/global/spillover.json` (the cross-country network),
+`cycle.json` (the global cycle factor), `banking_network.json` (the BIS cross-border
+banking network) and `gsib.json` (the FSB G-SIB list).  The banking network is read
+from the BIS snapshot; to create that snapshot see
+`docs/global/banking-network.md`.
+
+### 5. Re-check the gates without recomputing
 
 ```bash
 jindun-pipeline verify
@@ -294,7 +313,7 @@ jindun-pipeline verify --country CN
 Re-evaluates the quality gates against the stored snapshots and prints the report as
 JSON. Exits 1 when the report contains a failure.
 
-### 5. Serve the API
+### 6. Serve the API
 
 ```bash
 uvicorn jindun_api.app:app --reload
@@ -327,35 +346,42 @@ Three environment variables configure the server:
 | variable | default | effect |
 | --- | --- | --- |
 | `JINDUN_RUNS_DIR` | the repository's `data/runs` | where the artefacts are read from |
-| `JINDUN_LOCALE_DIR` | the empty `packages/pipeline/locales` in a source checkout | where the shared locale catalogue is read from |
+| `JINDUN_LOCALE_DIR` | the repository's `locales/` | where the shared locale catalogue is read from |
 | `JINDUN_CORS_ORIGINS` | `http://localhost:5173,http://127.0.0.1:5173` | the allowed browser origins |
 
 The API exposes the locale catalogue through `jindun.i18n`, which reads the shared
-`locales/` directory. Point it at the catalogue explicitly in a source checkout:
+`locales/` directory.  The directory is **discovered**, not guessed: the repository root
+is the nearest ancestor that carries both a `pyproject.toml` and a populated `locales`
+directory, so the server and the front end always read the same files.  The environment
+variable is only needed when the catalogue lives somewhere else.
 
-```bash
-export JINDUN_LOCALE_DIR="$PWD/locales"
-```
-
-```powershell
-$env:JINDUN_LOCALE_DIR = "$PWD\locales"
-```
-
-Without it the module resolves to the empty `packages/pipeline/locales` directory and
-`GET /api/v1/locales` reports an empty list.
-
-### 6. Run the front end against the API
+### 7. Run the front end against the API
 
 ```bash
 cd packages/web
 VITE_API_BASE=http://localhost:8000 npm run dev
 ```
 
+### 8. Ask the system a question
+
+```bash
+jindun-agent ask --question "How stressed is China?" --country CN --locale zh-CN
+jindun-agent ask --question "Who lends to whom?" --json
+jindun-agent tools
+```
+
+The agent reads the same run artefacts as the API.  Without an LLM endpoint it
+answers deterministically and in the requested locale; with `JINDUN_LLM_BASE_URL`,
+`JINDUN_LLM_API_KEY` and `JINDUN_LLM_MODEL` set it asks the model, with the
+published numbers in the prompt and the rule that it may not invent a number.
+The offline path never touches the network, and every number it prints is a
+number that appears in an artefact.
+
 ## Repository layout
 
 ```
 jindun-sentinel/
-├── pyproject.toml            uv workspace root (members: packages/*)
+├── pyproject.toml            uv workspace root (members: the three Python packages)
 ├── uv.lock                   resolved dependency lock
 ├── README.md                 this file
 ├── LICENSE                   Apache License 2.0
@@ -366,26 +392,36 @@ jindun-sentinel/
 ├── locales/                  shared message catalogues: en-US, zh-CN, zh-TW, ja-JP
 ├── data/
 │   ├── runs/                 published artefacts and run manifests
-│   └── baseline/             vendored regression baselines and their provenance
-├── docs/methodology/         methodology notes (spillover estimators, comparability)
+│   ├── snapshots/            raw source snapshots, including the BIS slice
+│   ├── baseline/             vendored regression baselines and their provenance
+│   └── cache/                bulky reproducible downloads (not committed)
+├── docs/
+│   ├── methodology/          the spillover estimators, the country profiles
+│   ├── global/               the global layer and the banking network
+│   └── user-guide/           the quick start
 ├── packages/
 │   ├── pipeline/             jindun-pipeline — the computation core
 │   │   ├── configs/          global.yaml and countries/*.yaml
-│   │   ├── src/jindun/       indicators, index, regime, contagion, adapters, global
+│   │   ├── src/jindun/       indicators, index, regime, contagion, adapters, global_layer
 │   │   └── tests/            pytest suite
 │   ├── api/                  jindun-api — the FastAPI server
 │   │   └── src/jindun_api/   app, store, schemas, routers
-│   ├── web/                  @jindun/web — the Vue 3 front end
-│   │   └── src/              api client, stores, composables, components, i18n
-│   └── data/snapshots/       raw source snapshots (the default snapshot store)
-└── scripts/freeze_baseline.py
+│   ├── agent/                jindun-agent — the question answering layer
+│   │   └── src/jindun_agent/ context, tools, prompts, agent, cli
+│   └── web/                  @jindun/web — the Vue 3 front end
+│       └── src/              api client, stores, composables, components, i18n
+└── scripts/                  the baseline freeze, the BIS download and extraction
 ```
 
 The Python package is layered so that each stage can be tested and reused in
 isolation: `indicators` (transforms), `index` (normalisation, PCA, CRITIC, composite),
 `regime` (HP filter, Markov switch, probability model), `contagion` (VAR, generalised
-variance decomposition), `adapters` (read-only source clients), `global` (cross-country
-layer).
+variance decomposition, surge test), `adapters` (read-only source clients),
+`global_layer` (cross-country layer, global cycle, banking network).
+
+The package that carries the global layer is called `global_layer` and not
+`global`: `global` is a Python keyword, and `from .global import …` does not
+parse.
 
 ## Known gaps in this tree
 
@@ -393,14 +429,14 @@ Stated plainly, because a monitoring system that hides its gaps is not monitorab
 
 | area | status |
 | --- | --- |
-| country configurations | only `cn.yaml` is shipped; the four other economies have anchors but no configuration file yet |
-| global layer artefacts | no CLI subcommand writes `data/runs/global/*.json`, so the four `/api/v1/global/*` endpoints answer 404 until those artefacts exist |
-| `jindun.global` package | `packages/pipeline/src/jindun/global/banking_network.py` is missing from the tree, so `import jindun.global` raises `ModuleNotFoundError`; `packages/pipeline/src/jindun/global/cycle.py` and `packages/pipeline/src/jindun/global/cross_country.py` are present |
-| web front end | under active development: `src/router/index.ts` defines seven pages, and the page, chart and diagram components under `packages/web/src/` are still being added to match it. `npm run typecheck` and `npm run build` in `packages/web` are the acceptance gates, and the build is not green at the time of writing |
-| front end ↔ API paths | the front end requests `/api/v1/data-quality/{code}`, while the API serves `/api/v1/countries/{code}/data-quality` |
-| spill-out alert | the `spillout.surge` rule is declared in `global.yaml` but its firing condition is not implemented in `_evaluate_alerts` |
-| continuous integration | `.github/workflows` and `.github/ISSUE_TEMPLATE` are empty; no CI is configured |
-| static analysis | the test suite passes (51 tests), but `ruff check` reports 61 findings in the pipeline and 14 in the API, `ruff format --check` would reformat 23 files, and `mypy` reports 43 errors in 24 of 46 files |
+| country configurations | all five economies are shipped and their runs are published in this tree |
+| Japanese index | the Bank of Japan publishes no daily equity index, no daily derivatives market and no daily government bond yield curve, so the Japanese index has **two** markets instead of five and the Japanese cross-market spillover network has two nodes. The monthly and quarterly BOJ price databases are not mixed into the daily panel |
+| sub-market decomposition of the United States, the United Kingdom and the euro area | these economies are measured with the official ECB composite stress index, so they have **no** sub-market decomposition, no market attribution and no cross-market spillover network. Every run artefact says so |
+| global layer artefacts | `jindun-pipeline global` writes the four artefacts into `data/runs/global/`; the `/api/v1/global/*` endpoints answer 404 until that command has been run |
+| the BIS archive | the bilateral matrix is only served by the bulk archive, which is downloaded once into `data/cache/` (365 MB, not committed) and streamed into a filtered snapshot of about two megabytes under `data/snapshots/bis/` |
+| the published table 5-2 of the source specification | it **cannot** be reproduced to the digit: the original input workbook was never published, and an exhaustive search over 4 696 candidate specifications did not find a single one that reproduces it. `docs/methodology/spillover-legacy-vs-paper.md` states the evidence and the regression strategy that replaced it |
+| static analysis | `ruff check` is clean for all three Python packages. `mypy` still reports 22 findings in the pipeline — mostly annotation precision in the adapter layer, no known runtime defect among them |
+| continuous integration | `.github/workflows/ci.yml` runs the linter, the test suite, the locale-catalogue audit and the front-end build and test on every push and pull request |
 
 ## Licence
 

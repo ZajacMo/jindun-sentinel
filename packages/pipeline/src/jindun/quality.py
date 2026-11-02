@@ -15,9 +15,9 @@ dates, values outside the plausible range) is a failure and blocks the run.
 from __future__ import annotations
 
 import datetime as dt
+from collections.abc import Iterable
 from dataclasses import dataclass, field
-from enum import Enum
-from typing import Iterable, Mapping, Sequence
+from enum import StrEnum
 
 from .adapters.base import FetchResult
 
@@ -32,7 +32,7 @@ __all__ = [
 ]
 
 
-class Severity(str, Enum):
+class Severity(StrEnum):
     OK = "ok"
     WARNING = "warning"
     FAILURE = "failure"
@@ -298,7 +298,7 @@ def evaluate_series(
     ordered_dates = sorted(unique_dates)
     gaps = [
         (later - earlier).days
-        for earlier, later in zip(ordered_dates, ordered_dates[1:])
+        for earlier, later in zip(ordered_dates, ordered_dates[1:], strict=False)
         if later > earlier
     ]
     longest_gap = max(gaps) if gaps else 0
@@ -383,6 +383,6 @@ def evaluate_all(
     generated_at: str | None = None,
 ) -> QualityReport:
     """Evaluate every fetched series and aggregate the verdict."""
-    moment = generated_at or dt.datetime.now(dt.timezone.utc).isoformat()
+    moment = generated_at or dt.datetime.now(dt.UTC).isoformat()
     series = [evaluate_series(result, policy, today=today) for result in results]
     return QualityReport(generated_at=moment, series=series)

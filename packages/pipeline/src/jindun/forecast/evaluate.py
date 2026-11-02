@@ -22,8 +22,8 @@ The metrics are:
 
 from __future__ import annotations
 
+from collections.abc import Callable, Mapping
 from dataclasses import dataclass, field
-from typing import Callable, Mapping
 
 import numpy as np
 import pandas as pd
@@ -135,10 +135,7 @@ def backtest(
         for index in range(horizon):
             actual_move = np.sign(actual[index] - previous)
             predicted_move = np.sign(predicted[index] - previous)
-            if actual_move == 0 and predicted_move == 0:
-                direction_total += 1
-                direction_hits += 1
-            elif actual_move == predicted_move:
+            if actual_move == 0 and predicted_move == 0 or actual_move == predicted_move:
                 direction_total += 1
                 direction_hits += 1
             previous = actual[index]

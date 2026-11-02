@@ -1,0 +1,79 @@
+# Japan configuration.
+#
+# Japan is the one economy of the five that the ECB does not cover: every
+# Japanese reference area of the CISS answers 404, so there is no official
+# cross-check anchor for the Japanese index.  The index is therefore built from
+# the Bank of Japan's own daily statistics, using the same normalisation and
+# weighting machinery as the other economies.
+#
+# What the Bank of Japan publishes on a daily frequency:
+#
+#   FM01  uncollateralised overnight call rate
+#   FM02  call rates at 1 week, 1 month, 2 months and 3 months
+#   FM08  exchange rates, including the USD/JPY spot rate of the Tokyo market
+#   IR01  the basic discount rate
+#
+# What it does not publish on a daily frequency, and therefore what the
+# Japanese index does not contain: an equity index, a derivatives market and
+# a government bond yield curve.  The BOJ price databases (producer prices,
+# the Tankan) are monthly and quarterly; mixing them into a daily panel would
+# silently reduce the whole index to the frequency of its slowest component,
+# so they are not used.  The consequence is stated in every run artefact: the
+# Japanese index has two markets instead of five, and the Japanese
+# cross-market spillover network has two nodes.
+#
+# The two markets are the ones where a daily stress signal genuinely exists:
+#
+#   money  the term structure of the call rate.  A widening spread between the
+#          three month and the overnight rate is the classic sign that the
+#          money market is under strain, and the dispersion of the overnight
+#          rate is the second signal.
+#   fx     the USD/JPY exchange rate.  Its realised volatility and its
+#          deviation from trend are both stress signals, and a sharp move in
+#          either direction is a risk event, which is why the exchange rate
+#          enters as a volatility rather than as a level.
+
+code: JP
+name_en: Japan
+name_local: 日本
+currency: JPY
+timezone: Asia/Tokyo
+locale: ja-JP
+# The ECB composite indicator of systemic stress does not cover Japan.
+ciss_area: null
+official_index_ref: null
+profile: mbsed
+methodology_ref: default
+enabled: true
+
+markets:
+  - code: money
+    label_key: market.money
+    weight: 0.60
+    indicators:
+      - code: call_rate_term_spread
+        label_key: indicator.call_rate_term_spread
+        direction: same
+        unit: percent
+        source_adapter: boj
+        source_series_id: boj.money.call_rate_term_spread
+        weight: 1.0
+
+  - code: fx
+    label_key: market.fx
+    weight: 0.40
+    indicators:
+      - code: usdjpy_volatility
+        label_key: indicator.usdjpy_volatility
+        direction: same
+        unit: percent
+        source_adapter: boj
+        source_series_id: boj.fx.usdjpy_volatility
+        weight: 1.0
+      - code: usdjpy_deviation
+        label_key: indicator.usdjpy_deviation
+        direction: bidirectional
+        unit: percent
+        source_adapter: boj
+        source_series_id: boj.fx.usdjpy_deviation
+        weight: 0.5

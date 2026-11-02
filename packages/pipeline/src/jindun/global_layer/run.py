@@ -22,8 +22,9 @@ from __future__ import annotations
 
 import datetime as dt
 import json
+from collections.abc import Iterable, Sequence
 from pathlib import Path
-from typing import Any, Iterable, Sequence
+from typing import Any
 
 import pandas as pd
 
@@ -169,7 +170,7 @@ def run_global_layer(
     cycle = extract_cycle_factor(composites)
     cycle_payload = cycle.to_payload()
     cycle_payload["countries"] = sorted(composites)
-    cycle_payload["generated_at"] = dt.datetime.now(dt.timezone.utc).isoformat()
+    cycle_payload["generated_at"] = dt.datetime.now(dt.UTC).isoformat()
     path = root / "cycle.json"
     path.write_text(
         json.dumps(cycle_payload, ensure_ascii=False, indent=2), encoding="utf-8"
@@ -182,7 +183,7 @@ def run_global_layer(
     )
     if snapshot.exists():
         try:
-            payload = _banking_network_payload(snapshot, countries=countries)
+            payload = _banking_network_payload(snapshot, countries=codes)
         except Exception as exc:  # noqa: BLE001
             payload = {"edges": [], "nodes": {}, "notes": [str(exc)]}
             warnings.append(f"the banking network could not be built: {exc}")
@@ -203,7 +204,9 @@ def run_global_layer(
     # 4. G-SIB list --------------------------------------------------------
     try:
         payload = _gsib_payload(FsbAdapter(), use_cache=use_cache)
-        warnings.extend(payload.get("warnings", []))
+        extra = payload.get("warnings")
+        if isinstance(extra, list):
+            warnings.extend(str(item) for item in extra)
     except Exception as exc:  # noqa: BLE001
         payload = {"banks": [], "count": 0, "warnings": [str(exc)]}
         warnings.append(f"the G-SIB list could not be fetched: {exc}")

@@ -114,5 +114,5 @@ class ArtifactStore:
             "countries": countries,
             "last_run_id": (manifest or {}).get("run_id"),
             "last_started_at": (manifest or {}).get("started_at"),
-            "generated_at": dt.datetime.now(dt.timezone.utc).isoformat(),
+            "generated_at": dt.datetime.now(dt.UTC).isoformat(),
         }

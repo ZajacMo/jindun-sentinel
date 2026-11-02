@@ -21,14 +21,15 @@ from __future__ import annotations
 
 import datetime as dt
 import json
+from collections.abc import Mapping, Sequence
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Mapping, Sequence
+from typing import Any
 
 import numpy as np
 import pandas as pd
 
-from .adapters.base import FetchResult, SnapshotStore
+from .adapters.base import FetchResult
 from .attribution import attribute_composite_move
 from .config import Settings
 from .contagion import (
@@ -42,8 +43,14 @@ from .contagion.surge import SurgeScore
 from .index.composite import deviation_from_trend, synthesise_composite, to_percentile
 from .index.critic import resolve_weights
 from .index.normalise import normalise_panel
-from .index.pca import pca_analysis
-from .models import Alert, Country, CountryIndexResult, Direction, RegimeLabel, Severity
+from .models import (
+    Alert,
+    AlertState,
+    Country,
+    Direction,
+    RegimeLabel,
+    Severity,
+)
 from .quality import QualityPolicy, QualityReport, evaluate_all
 from .regime.markov import fit_regime
 from .regime.probability import fit_probability_model
@@ -313,7 +320,7 @@ def run_country(
                 market_frame, spec, scope=country.code
             )
             spillover_payload = spillover.to_payload()
-            if not spillover.notes == []:
+            if spillover.notes != []:
                 warnings.extend(spillover.notes)
 
             # The surge alert compares a market's spill-out with its own
@@ -333,6 +340,8 @@ def run_country(
                     spillover_payload["spillout_history"] = {
                         "window_end": [str(index) for index in history.index],
                         "markets": [str(column) for column in history.columns],
+                        "window": history.attrs.get("window"),
+                        "step": history.attrs.get("step"),
                         "values": [
                             [float(value) for value in row] for row in history.to_numpy()
                         ],
@@ -539,8 +548,8 @@ def _evaluate_alerts(
                 country_code=country.code,
                 rule_id=rule.id,
                 severity=severity,
-                state="active",
-                fired_at=dt.datetime.now(dt.timezone.utc),
+                state=AlertState.ACTIVE,
+                fired_at=dt.datetime.now(dt.UTC),
                 message_key=rule.message_key,
                 message_params=message_params,
                 attribution={"latest_percentile": round(latest_value, 6), **surge_detail},

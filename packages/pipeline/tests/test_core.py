@@ -12,7 +12,7 @@ import pytest
 from jindun.config import load_settings
 from jindun.i18n import Translator
 from jindun.indicators.transforms import apply_transform, first_difference, log_returns, zscore
-from jindun.manifest import RunManifest, sha256_json, sha256_file
+from jindun.manifest import RunManifest, sha256_file, sha256_json
 from jindun.models import Direction, Severity, series_from_mapping
 
 

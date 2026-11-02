@@ -31,12 +31,19 @@ from __future__ import annotations
 import datetime as dt
 import json
 import time
+from collections.abc import Callable, Iterable
 from dataclasses import dataclass
-from typing import Any, Iterable
+from typing import Any
 
 from .base import FetchResult, HttpClient, SnapshotStore
 
-__all__ = ["BojAdapter", "BojSeriesMeta", "BOJ_API_BASE"]
+__all__ = [
+    "BojAdapter",
+    "BojDerivedSeries",
+    "BojSeriesMeta",
+    "BOJ_API_BASE",
+    "DERIVED_SERIES",
+]
 
 BOJ_API_BASE = "https://www.stat-search.boj.or.jp/api/v1"
 
@@ -68,6 +75,111 @@ class BojSeriesMeta:
     start: str = ""
     end: str = ""
     last_update: str = ""
+
+
+@dataclass(frozen=True, slots=True)
+class BojDerivedSeries:
+    """A series that is computed from two or more published BOJ series.
+
+    The derivation lives in the adapter rather than in the pipeline so that the
+    formula sits next to the data it is computed from and can be tested with
+    it.
+    """
+
+    series_id: str
+    description: str
+    build: Callable[[BojAdapter, bool], Any]
+    unit: str = ""
+    frequency: str = "D"
+
+
+def _as_frame(result: FetchResult):
+    """Turn a fetch result into a dated series."""
+    import pandas as pd
+
+    if not result.observations:
+        return pd.Series(dtype=float)
+    index = pd.to_datetime([observation.date for observation in result.observations])
+    values = [observation.value for observation in result.observations]
+    series = pd.Series(values, index=index, dtype=float)
+    return series[~series.index.duplicated(keep="last")].sort_index()
+
+
+def _one(
+    adapter: BojAdapter,
+    database: str,
+    code: str,
+    *,
+    use_cache: bool,
+    country_code: str = "JP",
+):
+    """Fetch one BOJ series as a dated series."""
+    results = adapter.fetch(database, [code], country_code=country_code, use_cache=use_cache)
+    for result in results:
+        if result.series_id.upper().endswith(code.upper()):
+            return _as_frame(result)
+    return results[0] if results else _as_frame(
+        FetchResult(adapter="boj", series_id=code, country_code=country_code)
+    )
+
+
+def _build_call_rate_term_spread(adapter: BojAdapter, use_cache: bool):
+    """Three month call rate minus the overnight call rate."""
+    import pandas as pd
+
+    long_end = _one(adapter, "FM02", "STRDCLUC3M", use_cache=use_cache)
+    overnight = _one(adapter, "FM01", "STRDCLUCON", use_cache=use_cache)
+    if long_end.empty or overnight.empty:
+        return pd.Series(dtype=float)
+    joined = pd.concat([long_end.rename("long"), overnight.rename("on")], axis=1).dropna()
+    return (joined["long"] - joined["on"]).rename("spread")
+
+
+def _build_fx_volatility(adapter: BojAdapter, use_cache: bool, window: int = 20):
+    """Annualised volatility of the USD/JPY spot rate."""
+    import numpy as np
+    import pandas as pd
+
+    spot = _one(adapter, "FM08", "FXERD01", use_cache=use_cache)
+    if spot.empty:
+        return pd.Series(dtype=float)
+    returns = np.log(spot).diff()
+    volatility = returns.rolling(window, min_periods=window).std(ddof=1) * np.sqrt(252) * 100.0
+    return volatility.dropna().rename("volatility")
+
+
+def _build_fx_deviation(adapter: BojAdapter, use_cache: bool, window: int = 250):
+    """Deviation of the USD/JPY spot rate from its one year moving average."""
+    import pandas as pd
+
+    spot = _one(adapter, "FM08", "FXERD01", use_cache=use_cache)
+    if spot.empty:
+        return pd.Series(dtype=float)
+    average = spot.rolling(window, min_periods=window).mean()
+    return ((spot / average - 1.0) * 100.0).dropna().rename("deviation")
+
+
+#: The derived series this project publishes.
+DERIVED_SERIES: dict[str, BojDerivedSeries] = {
+    "boj.money.call_rate_term_spread": BojDerivedSeries(
+        series_id="boj.money.call_rate_term_spread",
+        description="Three month call rate minus the overnight call rate",
+        unit="percent",
+        build=_build_call_rate_term_spread,
+    ),
+    "boj.fx.usdjpy_volatility": BojDerivedSeries(
+        series_id="boj.fx.usdjpy_volatility",
+        description="Annualised volatility of the USD/JPY spot rate",
+        unit="percent",
+        build=_build_fx_volatility,
+    ),
+    "boj.fx.usdjpy_deviation": BojDerivedSeries(
+        series_id="boj.fx.usdjpy_deviation",
+        description="Deviation of the USD/JPY spot rate from its one year moving average",
+        unit="percent",
+        build=_build_fx_deviation,
+    ),
+}
 
 
 class BojAdapter:
@@ -160,6 +272,72 @@ class BojAdapter:
                 )
             )
         return results
+
+    # ------------------------------------------------------------------
+    def fetch_series(
+        self,
+        series_id: str,
+        *,
+        country_code: str = "JP",
+        use_cache: bool = True,
+    ) -> FetchResult:
+        """Fetch one series by its stable identifier.
+
+        ``boj.<DATABASE>.<CODE>`` addresses a published series; the identifiers
+        in :data:`DERIVED_SERIES` address a series computed from published
+        ones.  Both are cached in the snapshot store under their identifier.
+        """
+        from ..models import Observation
+
+        derived = DERIVED_SERIES.get(series_id)
+        if derived is not None:
+            try:
+                series = derived.build(self, use_cache)
+            except Exception as exc:  # noqa: BLE001
+                return FetchResult(
+                    adapter=self.name,
+                    series_id=series_id,
+                    country_code=country_code,
+                    warnings=[f"the derived series could not be built: {exc}"],
+                    extra={"description": derived.description},
+                )
+            observations = tuple(
+                Observation(date=timestamp.date(), value=float(value))
+                for timestamp, value in series.items()
+                if value == value  # skip NaN
+            )
+            return FetchResult(
+                adapter=self.name,
+                series_id=series_id,
+                country_code=country_code,
+                observations=observations,
+                source_url=f"{BOJ_API_BASE} (derived)",
+                unit=derived.unit,
+                frequency=derived.frequency,
+                extra={"description": derived.description, "derived": True},
+            )
+
+        parts = series_id.split(".")
+        if len(parts) < 3:
+            return FetchResult(
+                adapter=self.name,
+                series_id=series_id,
+                country_code=country_code,
+                warnings=[f"the series identifier {series_id!r} is malformed"],
+            )
+        database = parts[1]
+        code = ".".join(parts[2:])
+        results = self.fetch(
+            database, [code], country_code=country_code, use_cache=use_cache
+        )
+        if results:
+            return results[0]
+        return FetchResult(
+            adapter=self.name,
+            series_id=series_id,
+            country_code=country_code,
+            warnings=["the BOJ service returned no data for this series"],
+        )
 
     # ------------------------------------------------------------------
     def _fetch_batch(

@@ -1,0 +1,192 @@
+{
+  "generated_at": "2026-11-02T20:31:42.818864+00:00",
+  "passed": true,
+  "counts": {
+    "total": 3,
+    "ok": 2,
+    "warning": 1,
+    "failure": 0
+  },
+  "series": [
+    {
+      "series_id": "boj.money.call_rate_term_spread",
+      "adapter": "boj",
+      "country_code": "JP",
+      "severity": "warning",
+      "passed": true,
+      "observations": 271,
+      "first_date": "2025-01-07",
+      "last_date": "2026-10-29",
+      "checks": [
+        {
+          "name": "has_observations",
+          "passed": true,
+          "severity": "ok",
+          "measured": 271,
+          "threshold": 60,
+          "message": ""
+        },
+        {
+          "name": "unique_dates",
+          "passed": true,
+          "severity": "ok",
+          "measured": 0,
+          "threshold": null,
+          "message": ""
+        },
+        {
+          "name": "ordered_dates",
+          "passed": true,
+          "severity": "ok",
+          "measured": null,
+          "threshold": null,
+          "message": ""
+        },
+        {
+          "name": "completeness",
+          "passed": false,
+          "severity": "warning",
+          "measured": 0.5742,
+          "threshold": 0.9,
+          "message": "the series has gaps relative to its own calendar"
+        },
+        {
+          "name": "max_gap",
+          "passed": true,
+          "severity": "ok",
+          "measured": 11,
+          "threshold": 15,
+          "message": ""
+        },
+        {
+          "name": "freshness",
+          "passed": true,
+          "severity": "ok",
+          "measured": 5,
+          "threshold": 5,
+          "message": ""
+        }
+      ]
+    },
+    {
+      "series_id": "boj.fx.usdjpy_volatility",
+      "adapter": "boj",
+      "country_code": "JP",
+      "severity": "ok",
+      "passed": true,
+      "observations": 6797,
+      "first_date": "1999-02-02",
+      "last_date": "2026-10-29",
+      "checks": [
+        {
+          "name": "has_observations",
+          "passed": true,
+          "severity": "ok",
+          "measured": 6797,
+          "threshold": 60,
+          "message": ""
+        },
+        {
+          "name": "unique_dates",
+          "passed": true,
+          "severity": "ok",
+          "measured": 0,
+          "threshold": null,
+          "message": ""
+        },
+        {
+          "name": "ordered_dates",
+          "passed": true,
+          "severity": "ok",
+          "measured": null,
+          "threshold": null,
+          "message": ""
+        },
+        {
+          "name": "completeness",
+          "passed": true,
+          "severity": "ok",
+          "measured": 0.9392,
+          "threshold": 0.9,
+          "message": ""
+        },
+        {
+          "name": "max_gap",
+          "passed": true,
+          "severity": "ok",
+          "measured": 11,
+          "threshold": 15,
+          "message": ""
+        },
+        {
+          "name": "freshness",
+          "passed": true,
+          "severity": "ok",
+          "measured": 5,
+          "threshold": 5,
+          "message": ""
+        }
+      ]
+    },
+    {
+      "series_id": "boj.fx.usdjpy_deviation",
+      "adapter": "boj",
+      "country_code": "JP",
+      "severity": "ok",
+      "passed": true,
+      "observations": 6568,
+      "first_date": "2000-01-11",
+      "last_date": "2026-10-29",
+      "checks": [
+        {
+          "name": "has_observations",
+          "passed": true,
+          "severity": "ok",
+          "measured": 6568,
+          "threshold": 60,
+          "message": ""
+        },
+        {
+          "name": "unique_dates",
+          "passed": true,
+          "severity": "ok",
+          "measured": 0,
+          "threshold": null,
+          "message": ""
+        },
+        {
+          "name": "ordered_dates",
+          "passed": true,
+          "severity": "ok",
+          "measured": null,
+          "threshold": null,
+          "message": ""
+        },
+        {
+          "name": "completeness",
+          "passed": true,
+          "severity": "ok",
+          "measured": 0.9394,
+          "threshold": 0.9,
+          "message": ""
+        },
+        {
+          "name": "max_gap",
+          "passed": true,
+          "severity": "ok",
+          "measured": 11,
+          "threshold": 15,
+          "message": ""
+        },
+        {
+          "name": "freshness",
+          "passed": true,
+          "severity": "ok",
+          "measured": 5,
+          "threshold": 5,
+          "message": ""
+        }
+      ]
+    }
+  ]
+}

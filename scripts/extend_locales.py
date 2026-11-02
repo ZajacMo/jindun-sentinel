@@ -18,24 +18,36 @@ ADDITIONS: dict[str, dict[str, str]] = {
         "index.official": "Official Systemic Stress Index",
         "market.systemic": "Systemic",
         "indicator.official_index": "Official stress index",
+        "indicator.call_rate_term_spread": "Money Market Term Spread",
+        "indicator.usdjpy_volatility": "USD/JPY Volatility",
+        "indicator.usdjpy_deviation": "USD/JPY Deviation from Trend",
     },
     "zh-CN": {
         "common.regime": "区制",
         "index.official": "官方系统性压力指数",
         "market.systemic": "系统性",
         "indicator.official_index": "官方压力指数",
+        "indicator.call_rate_term_spread": "货币市场期限利差",
+        "indicator.usdjpy_volatility": "美元兑日元波动率",
+        "indicator.usdjpy_deviation": "美元兑日元趋势偏离",
     },
     "zh-TW": {
         "common.regime": "區制",
         "index.official": "官方系統性壓力指數",
         "market.systemic": "系統性",
         "indicator.official_index": "官方壓力指數",
+        "indicator.call_rate_term_spread": "貨幣市場期限利差",
+        "indicator.usdjpy_volatility": "美元兌日圓波動率",
+        "indicator.usdjpy_deviation": "美元兌日圓趨勢偏離",
     },
     "ja-JP": {
         "common.regime": "レジーム",
         "index.official": "公的システム的ストレス指数",
         "market.systemic": "システム全体",
         "indicator.official_index": "公的ストレス指数",
+        "indicator.call_rate_term_spread": "コールレート期間スプレッド",
+        "indicator.usdjpy_volatility": "ドル円ボラティリティ",
+        "indicator.usdjpy_deviation": "ドル円のトレンド乖離",
     },
 }
 
@@ -45,6 +57,9 @@ ANCHORS: dict[str, str] = {
     "index.official": "index.deviation",
     "market.systemic": "market.derivative",
     "indicator.official_index": "indicator.csi300_futures_volatility",
+    "indicator.call_rate_term_spread": "indicator.official_index",
+    "indicator.usdjpy_volatility": "indicator.call_rate_term_spread",
+    "indicator.usdjpy_deviation": "indicator.usdjpy_volatility",
 }
 
 

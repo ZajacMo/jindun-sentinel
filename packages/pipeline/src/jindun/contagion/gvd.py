@@ -62,8 +62,8 @@ forecast error variance that is attributable to node ``j``.  Consequently
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
-from typing import Mapping, Sequence
+from collections.abc import Mapping, Sequence
+from dataclasses import dataclass
 
 import numpy as np
 import pandas as pd
@@ -276,7 +276,6 @@ def total_spillout(shares: np.ndarray, nodes: Sequence[str]) -> dict[str, float]
     This is the column off-diagonal sum: the share of *other* nodes'
     forecast error variance that is attributable to the node.
     """
-    size = len(nodes)
     result: dict[str, float] = {}
     for index, node in enumerate(nodes):
         column = shares[:, index]
@@ -286,7 +285,6 @@ def total_spillout(shares: np.ndarray, nodes: Sequence[str]) -> dict[str, float]
 
 def total_spillin(shares: np.ndarray, nodes: Sequence[str]) -> dict[str, float]:
     """How much of each node's own forecast error variance comes from elsewhere."""
-    size = len(nodes)
     result: dict[str, float] = {}
     for index, node in enumerate(nodes):
         row = shares[index]
@@ -334,9 +332,10 @@ def compute_spillover(
     spillin = total_spillin(shares, nodes)
 
     notes = list(spec.notes)
+    sample = fit.sample or ("", "")
     notes.append(
         f"method={spec.method}; VAR order={fit.order} (selected by {spec.criterion}); "
-        f"horizon={spec.horizon}; sample={fit.sample[0]}..{fit.sample[1]}"
+        f"horizon={spec.horizon}; sample={sample[0]}..{sample[1]}"
     )
     if spec.method == "dy_generalised":
         notes.append(

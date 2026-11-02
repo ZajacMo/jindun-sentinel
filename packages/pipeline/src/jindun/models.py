@@ -13,9 +13,10 @@ i18n catalogues so the API never has to decide which language to speak.
 from __future__ import annotations
 
 import datetime as dt
+from collections.abc import Iterable, Mapping, Sequence
 from dataclasses import dataclass, field
-from enum import Enum
-from typing import Iterable, Mapping, Sequence
+from enum import StrEnum
+from typing import Any
 
 __all__ = [
     "Direction",
@@ -33,7 +34,7 @@ __all__ = [
 ]
 
 
-class Direction(str, Enum):
+class Direction(StrEnum):
     """How a tertiary indicator relates to systemic risk.
 
     Mirrors the Chinese sheet vocabulary of the original workbook:
@@ -45,7 +46,7 @@ class Direction(str, Enum):
     BIDIRECTIONAL = "bidirectional"
 
     @classmethod
-    def parse(cls, raw: str) -> "Direction":
+    def parse(cls, raw: str) -> Direction:
         """Parse a direction label, accepting the Chinese source vocabulary."""
         key = (raw or "").strip()
         mapping = {
@@ -61,19 +62,19 @@ class Direction(str, Enum):
         return mapping[key]
 
 
-class Severity(str, Enum):
+class Severity(StrEnum):
     P1 = "P1"
     P2 = "P2"
     P3 = "P3"
 
 
-class AlertState(str, Enum):
+class AlertState(StrEnum):
     ACTIVE = "active"
     ACKNOWLEDGED = "acknowledged"
     RESOLVED = "resolved"
 
 
-class RegimeLabel(str, Enum):
+class RegimeLabel(StrEnum):
     """Two-state regime as defined by the Markov-switching model."""
 
     MODERATE = "moderate"
@@ -206,7 +207,7 @@ class RegimeSeries:
     dates: list[dt.date] = field(default_factory=list)
     probability_moderate: list[float] = field(default_factory=list)
     probability_high: list[float] = field(default_factory=list)
-    regime_params: dict[str, float] = field(default_factory=dict)
+    regime_params: dict[str, Any] = field(default_factory=dict)
 
     def to_records(self) -> list[dict[str, object]]:
         return [
@@ -217,7 +218,11 @@ class RegimeSeries:
                 "probability_high": p_high,
             }
             for date, label, p_mod, p_high in zip(
-                self.dates, self.labels, self.probability_moderate, self.probability_high
+                self.dates,
+                self.labels,
+                self.probability_moderate,
+                self.probability_high,
+                strict=False,
             )
         ]
 

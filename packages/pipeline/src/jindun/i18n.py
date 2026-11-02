@@ -20,9 +20,10 @@ from __future__ import annotations
 
 import json
 import re
+from collections.abc import Mapping
 from functools import lru_cache
 from pathlib import Path
-from typing import Any, Mapping
+from typing import Any
 
 __all__ = ["Translator", "get_translator", "available_locales", "locale_root"]
 
@@ -60,7 +61,7 @@ class Translator:
         self._fallback: dict[str, str] = {}
 
     @classmethod
-    def load(cls, locale: str, fallback_locale: str = "en-US") -> "Translator":
+    def load(cls, locale: str, fallback_locale: str = "en-US") -> Translator:
         catalogue = _load_catalogue(locale)
         fallback = _load_catalogue(fallback_locale) if fallback_locale != locale else {}
         translator = cls(locale, catalogue)

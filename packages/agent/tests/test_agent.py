@@ -55,6 +55,17 @@ def quality_payload() -> dict[str, Any]:
     return _load(path)
 
 
+@pytest.fixture(scope="session")
+def global_payload() -> dict[str, Any]:
+    """The published global artefacts, when the global layer has been built."""
+    payload: dict[str, Any] = {}
+    for name in ("cycle.json", "spillover.json"):
+        path = RUNS_DIR / "global" / name
+        if path.is_file():
+            payload[name] = _load(path)
+    return payload
+
+
 def _numbers(payload: Any) -> set[str]:
     """Return every number of a JSON payload, rendered as it would be printed."""
     found: set[str] = set()
@@ -128,7 +139,9 @@ def test_context_pack_reports_the_missing_global_layer(run_payload: dict[str, An
 
 
 def test_offline_answer_contains_the_published_numbers(
-    run_payload: dict[str, Any], quality_payload: dict[str, Any]
+    run_payload: dict[str, Any],
+    quality_payload: dict[str, Any],
+    global_payload: dict[str, Any],
 ) -> None:
     agent = Agent(config=AgentConfig(endpoint=None))
     answer = agent.ask("How stressed is the system?", country="CN", locale="en-US")
@@ -136,19 +149,21 @@ def test_offline_answer_contains_the_published_numbers(
     assert answer.mode == "offline"
     assert answer.country == "CN"
 
-    published = _numbers(run_payload) | _numbers(quality_payload)
+    published = _numbers(run_payload) | _numbers(quality_payload) | _numbers(global_payload)
     printed = set(_NUMBER.findall(_ISO_DATETIME.sub(" ", answer.answer)))
     assert printed, "the offline answer should report at least one number"
     assert printed <= published, f"the answer reports numbers that were not published: {printed - published}"
 
 
 def test_offline_answer_never_invents_a_number(
-    run_payload: dict[str, Any], quality_payload: dict[str, Any]
+    run_payload: dict[str, Any],
+    quality_payload: dict[str, Any],
+    global_payload: dict[str, Any],
 ) -> None:
     agent = Agent(config=AgentConfig(endpoint=None))
     answer = agent.ask("What is the risk state right now?", country="CN", locale="en-US")
 
-    published = _numbers(run_payload) | _numbers(quality_payload)
+    published = _numbers(run_payload) | _numbers(quality_payload) | _numbers(global_payload)
     printed = set(_NUMBER.findall(_ISO_DATETIME.sub(" ", answer.answer)))
     assert not (printed - published)
 

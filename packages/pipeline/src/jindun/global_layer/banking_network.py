@@ -31,10 +31,9 @@ from __future__ import annotations
 
 import csv
 import datetime as dt
-import io
+from collections.abc import Iterable, Mapping, Sequence
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Iterable, Mapping, Sequence
 
 __all__ = [
     "BankingEdge",
@@ -214,11 +213,11 @@ def build_banking_network(
         )
         source["out_claims"] += edge.claims
         target["in_liabilities"] += edge.liabilities
-    for code, values in nodes.items():
+    for values in nodes.values():
         values["net_exposure"] = values["out_claims"] - values["in_liabilities"]
 
     total_claims = sum(edge.claims for edge in edges)
-    for code, values in nodes.items():
+    for values in nodes.values():
         values["share_of_network_claims"] = (
             values["out_claims"] / total_claims if total_claims else 0.0
         )

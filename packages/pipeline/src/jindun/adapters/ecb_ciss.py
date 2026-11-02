@@ -25,7 +25,7 @@ from __future__ import annotations
 import csv
 import datetime as dt
 import io
-from typing import Iterable
+from collections.abc import Iterable
 
 from .base import FetchResult, HttpClient, SnapshotStore
 

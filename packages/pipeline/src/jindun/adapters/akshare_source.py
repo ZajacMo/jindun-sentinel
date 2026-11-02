@@ -28,9 +28,8 @@ from __future__ import annotations
 import contextlib
 import datetime as dt
 import io
-import sys
+from collections.abc import Callable, Mapping
 from dataclasses import dataclass
-from typing import Callable, Mapping
 
 import numpy as np
 import pandas as pd
@@ -74,7 +73,7 @@ def _require_akshare():
     return ak
 
 
-_CGB_CACHE: "pd.DataFrame | None" = None
+_CGB_CACHE: pd.DataFrame | None = None
 
 
 # ----------------------------------------------------------------------

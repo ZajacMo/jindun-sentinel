@@ -24,7 +24,7 @@ much the correction moved the published numbers.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
 import numpy as np
 import pandas as pd
@@ -107,10 +107,7 @@ def pca_analysis(
     values, vectors = _covariance_eigendecomposition(covariance)
 
     total = float(values.sum())
-    if total <= 0:
-        ratios = np.zeros_like(values)
-    else:
-        ratios = values / total
+    ratios = np.zeros_like(values) if total <= 0 else values / total
     cumulative = np.cumsum(ratios)
 
     if legacy:
@@ -129,10 +126,7 @@ def pca_analysis(
     # The legacy contribution metric divides the loading matrix by the
     # standard deviation of the eigenvalues, then sums absolute values.
     eigenvalue_std = float(np.std(values))
-    if eigenvalue_std > 0:
-        coefficient = factor_loading / eigenvalue_std
-    else:
-        coefficient = factor_loading
+    coefficient = factor_loading / eigenvalue_std if eigenvalue_std > 0 else factor_loading
     contribution = coefficient.abs().sum(axis=1)
 
     return PCAResult(

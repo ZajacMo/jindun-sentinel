@@ -29,15 +29,15 @@ import contextlib
 import datetime as dt
 import json
 import sys
+from collections.abc import Sequence
 from pathlib import Path
-from typing import Any, Sequence
+from typing import Any
 
 from .adapters import (
     AkshareAdapter,
     BisAdapter,
     BojAdapter,
     EcbCissAdapter,
-    FsbAdapter,
     SnapshotStore,
 )
 from .config import Settings, load_settings
@@ -74,7 +74,6 @@ def _adapter_fetcher(settings: Settings, store: SnapshotStore, *, country: Count
     """Return a callable that fetches one series for ``country``."""
     akshare = AkshareAdapter(store)
     ecb = EcbCissAdapter(store=store)
-    boj = BojAdapter(store=store)
 
     def fetch(series_id: str, *, use_cache: bool = True):
         adapter = series_id.split(".", 1)[0]
@@ -86,9 +85,8 @@ def _adapter_fetcher(settings: Settings, store: SnapshotStore, *, country: Count
                 area, country_code=country.code, use_cache=use_cache
             )
         if adapter == "boj":
-            database, _, code = series_id.partition(".")
-            return BojAdapter(store=store).fetch(
-                database, [code], country_code=country.code, use_cache=use_cache
+            return BojAdapter(store=store).fetch_series(
+                series_id, country_code=country.code, use_cache=use_cache
             )
         return akshare.fetch(series_id, country_code=country.code, use_cache=use_cache)
 
@@ -157,7 +155,7 @@ def _cmd_fetch(args: argparse.Namespace) -> int:
 def _cmd_run(args: argparse.Namespace) -> int:
     settings = _settings(args)
     store = SnapshotStore(args.snapshot_dir)
-    started = dt.datetime.now(dt.timezone.utc)
+    started = dt.datetime.now(dt.UTC)
     run_id = new_run_id(started)
     out_dir = Path(args.out or (_repo_root() / "data" / "runs"))
 
@@ -196,7 +194,7 @@ def _cmd_run(args: argparse.Namespace) -> int:
         if result.quality is not None and not result.quality.passed:
             exit_code = 1
 
-    manifest.elapsed_sec = (dt.datetime.now(dt.timezone.utc) - started).total_seconds()
+    manifest.elapsed_sec = (dt.datetime.now(dt.UTC) - started).total_seconds()
     manifest_path = manifest.write(out_dir / f"manifest-{run_id}.json")
     print(f"\nmanifest: {manifest_path}")
     return exit_code

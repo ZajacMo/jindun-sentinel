@@ -18,7 +18,7 @@ import json
 import subprocess
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
-from typing import Any, Mapping
+from typing import Any
 
 __all__ = [
     "SourceVintage",
@@ -130,7 +130,7 @@ class RunManifest:
         return target
 
     @classmethod
-    def read(cls, path: str | Path) -> "RunManifest":
+    def read(cls, path: str | Path) -> RunManifest:
         payload = json.loads(Path(path).read_text(encoding="utf-8"))
         sources = [SourceVintage(**item) for item in payload.get("sources", [])]
         return cls(
@@ -148,5 +148,5 @@ class RunManifest:
 
 
 def new_run_id(moment: dt.datetime | None = None) -> str:
-    moment = moment or dt.datetime.now(dt.timezone.utc)
+    moment = moment or dt.datetime.now(dt.UTC)
     return moment.strftime("%Y-%m-%dT%H-%M-%SZ")

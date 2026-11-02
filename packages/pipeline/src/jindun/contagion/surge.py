@@ -15,8 +15,8 @@ frequency here would produce a noisy series that fires on noise.
 
 from __future__ import annotations
 
+from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
-from typing import Mapping, Sequence
 
 import numpy as np
 import pandas as pd
@@ -77,18 +77,26 @@ def rolling_spillout_history(
     if len(frame) < max(60, window // 2):
         return pd.DataFrame()
 
-    starts = list(range(0, max(1, len(frame) - window + 1), max(1, step)))
+    # A sample shorter than the configured window cannot support it: the window
+    # shrinks to a third of the sample and the step with it.  The effective
+    # values are recorded in the frame attributes so that the artefact says
+    # which window produced the numbers.
+    length = len(frame)
+    effective_window = min(int(window), max(60, length // 3))
+    effective_step = max(1, min(int(step), effective_window // 2))
+
+    starts = list(range(0, max(1, length - effective_window + 1), effective_step))
     # The last window always ends on the final observation: the surge test is
     # about the present, so the present must be in the history.
-    last_start = max(0, len(frame) - window)
+    last_start = max(0, length - effective_window)
     if not starts or starts[-1] != last_start:
         starts.append(last_start)
     if len(starts) > max_windows:
         starts = starts[-max_windows:]
 
     for start in starts:
-        chunk = frame.iloc[start : start + window]
-        if len(chunk) < max(60, window // 2):
+        chunk = frame.iloc[start : start + effective_window]
+        if len(chunk) < max(60, effective_window // 2):
             continue
         try:
             result = compute_spillover(chunk, spec)
@@ -103,6 +111,8 @@ def rolling_spillout_history(
         return pd.DataFrame()
 
     history = pd.DataFrame(rows, index=pd.Index(labels, name="window_end"))
+    history.attrs["window"] = effective_window
+    history.attrs["step"] = effective_step
     return history
 
 

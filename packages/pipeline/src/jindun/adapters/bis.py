@@ -24,7 +24,7 @@ from __future__ import annotations
 import csv
 import datetime as dt
 import io
-from typing import Any, Iterable
+from collections.abc import Iterable
 from xml.etree import ElementTree as ET
 
 from .base import FetchResult, HttpClient, SnapshotStore

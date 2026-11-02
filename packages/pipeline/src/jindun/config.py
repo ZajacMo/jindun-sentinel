@@ -10,9 +10,10 @@ and it is what this module exists to prevent.
 from __future__ import annotations
 
 import os
+from collections.abc import Mapping, Sequence
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Mapping, Sequence
+from typing import Any
 
 import yaml
 

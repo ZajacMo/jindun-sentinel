@@ -1,0 +1,27 @@
+{
+  "run_id": "2026-11-02T20-18-39Z",
+  "started_at": "2026-11-02T20:18:39.579074+00:00",
+  "code_version": {
+    "git_commit": "cccfcc2001a694655b17129c6a05bce84bb50b69",
+    "dirty": true
+  },
+  "data_snapshot": {},
+  "sources": [],
+  "config": {
+    "project": "jindun-sentinel"
+  },
+  "environment": {},
+  "outputs": {
+    "JP": {
+      "market_indices": "F:\\Projects\\03_projects\\jindun-sentinel\\data\\runs\\JP\\market_indices.csv",
+      "run": "F:\\Projects\\03_projects\\jindun-sentinel\\data\\runs\\JP\\run.json",
+      "quality": "F:\\Projects\\03_projects\\jindun-sentinel\\data\\runs\\JP\\quality.json"
+    }
+  },
+  "elapsed_sec": 5.825,
+  "warnings": [
+    "method=paper_equation; VAR order=2 (selected by bic); horizon=10; sample=2025-01-07..2026-10-29",
+    "the rolling spill-out history could not be built; the surge alert stays silent for this run",
+    "JP: boj.money.call_rate_term_spread -> warning"
+  ]
+}

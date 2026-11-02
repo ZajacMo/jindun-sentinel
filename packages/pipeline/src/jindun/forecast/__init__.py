@@ -29,7 +29,7 @@ from .evaluate import (
     forecast_series,
     mean_absolute_scaled_error,
 )
-from .lstm import lstm_available, forecast_lstm
+from .lstm import forecast_lstm, lstm_available
 
 __all__ = [
     "ArimaFit",

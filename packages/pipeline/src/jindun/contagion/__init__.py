@@ -3,9 +3,9 @@
 from __future__ import annotations
 
 from .gvd import (
+    METHODS,
     GVDSpec,
     GVDSpecError,
-    METHODS,
     compute_spillover,
     diebold_yilmaz_generalised_gvd,
     legacy_appendix_spillover,

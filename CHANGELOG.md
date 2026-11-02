@@ -12,7 +12,7 @@ sections below it describe released versions.
 
 ### Added
 
-The initial monorepo: one uv workspace with the root project and two member packages,
+The initial monorepo: one uv workspace with the root project and three member packages,
 plus one npm package and a shared locale catalogue at the repository root.
 
 #### Pipeline — `packages/pipeline` (`jindun-pipeline`)
@@ -23,7 +23,8 @@ plus one npm package and a shared locale catalogue at the repository root.
   the MBSED composite and its two reporting lenses), `regime` (HP-filter trend,
   Markov-switching autoregression, the two-component risk probability model),
   `contagion` (VAR estimation, generalised forecast error variance decomposition,
-  spillover networks) and `global` (cross-country contagion, the global cycle factor).
+  spillover networks) and `global_layer` (cross-country contagion, the global cycle
+  factor, the cross-border banking network and the G-SIB list).
 - **Four spillover estimators**, each selectable through
   `contagion.method` and each carrying its own documented caveat:
   `paper_equation` (the default, implementing equations (6) and (7) of the source
@@ -53,11 +54,22 @@ plus one npm package and a shared locale catalogue at the repository root.
   regime parameters, forecast parameters, contagion parameters, alert rules) and
   `configs/countries/*.yaml` (one file per economy).
 - **Command line interface** `jindun-pipeline`, also runnable as
-  `python -m jindun.cli`, with four subcommands: `sources` (the series the adapters
+  `python -m jindun.cli`, with five subcommands: `sources` (the series the adapters
   can deliver and the coverage of every source), `fetch` (download the configured
   sources into the snapshot store), `run` (the full chain for one or more countries,
-  writing the artefacts and the manifest) and `verify` (re-evaluate the quality gates
+  writing the artefacts and the manifest), `global` (build the global layer from the
+  country runs) and `verify` (re-evaluate the quality gates
   against the stored snapshots without recomputing the indices).
+- **Two country profiles.** `mbsed` synthesises the composite from the sub-market
+  indices; `official_index` uses a published official stress index and says in the
+  artefact that no sub-market decomposition is available for that economy.
+- **The spill-out surge test** (`contagion.surge`): the network is recomputed over
+  rolling windows so that every market has a distribution of its own spill-out, and a
+  surge is a z-score above the threshold *and* a material relative change.
+- **Five economies.** China and Japan are measured with the full construction (the
+  Japanese one from the Bank of Japan's daily call rates and the USD/JPY market);
+  the United States, the United Kingdom and the euro area are measured with the
+  official ECB composite stress index.
 
 #### API — `packages/api` (`jindun-api`)
 
@@ -80,8 +92,23 @@ plus one npm package and a shared locale catalogue at the repository root.
   vue-i18n) with a typed API client, a store layer, shared formatting and label
   composables, and a Vite plugin that reads the shared locale catalogue at build
   time.
+- Seven workspaces, each with a hand-written inline SVG **mechanism diagram** that
+  shows what the page's computation actually does — the pipeline, the spillover
+  decomposition, the regime model, the alerting loop, the global network and the
+  quality gate.  The diagrams are mechanisms, not result charts.
 - A language switcher and a theme toggle, with all four shipped locales
   left-to-right.
+- 58 front-end tests, including a page-level smoke test that mounts every route and
+  asserts that its diagram is present.
+
+#### Agent — `packages/agent` (`jindun-agent`)
+
+- A question answering layer over the same artefacts as the API: a language-neutral
+  context pack, a registry of read-only tools and an orchestrator that renders a
+  deterministic localised answer offline and asks an OpenAI-compatible endpoint when
+  one is configured.
+- The offline path never touches the network and never prints a number that does not
+  appear in a published artefact; the prompt says the same to the model.
 
 #### Locales
 
@@ -98,6 +125,12 @@ plus one npm package and a shared locale catalogue at the repository root.
   and derivative — with 11 enabled indicators and 4 indicators kept with
   `enabled: false` because their original source is a commercial terminal or a
   research construction and no free verified feed exists for them.
+- **Japan** (`configs/countries/jp.yaml`): two sub-markets — the money market (the
+  call-rate term spread) and foreign exchange (the USD/JPY volatility and its
+  deviation from trend) — built from the Bank of Japan's daily statistics, with three
+  derived series computed in the adapter.
+- **United States, United Kingdom and euro area** (`configs/countries/{us,gb,eu}.yaml`):
+  the official ECB composite stress index, with the profile `official_index`.
 - The ECB CISS daily composite is registered as China's external cross-check
   anchor.
 
@@ -111,36 +144,53 @@ plus one npm package and a shared locale catalogue at the repository root.
 - `data/baseline/`: the vendored regression assets and their provenance, and
   `scripts/freeze_baseline.py` to regenerate them.
 
-### Known limitations
+### Fixed
 
-- Only the China country configuration is shipped. The United States, the euro area,
-  the United Kingdom and Japan have their cross-check anchors identified, but no
-  configuration file yet.
-- The `jindun.global` package cannot be imported:
-  `packages/pipeline/src/jindun/global/banking_network.py` is missing from the tree.
-  `global/cycle.py` and `global/cross_country.py` are present.
-- No CLI subcommand writes the global artefacts, so the four `/api/v1/global/*`
-  endpoints answer 404 until `data/runs/global/*.json` exists.
-- The web front end is under active development and its build is not green at the time
-  of writing: `src/router/index.ts` defines seven pages and the page, chart and diagram
-  components under `packages/web/src/` are still being added to match it.
-  `npm run typecheck` and `npm run build` in `packages/web` are the acceptance gates.
-- The front end requests `/api/v1/data-quality/{code}` while the API serves
-  `/api/v1/countries/{code}/data-quality`.
-- The `spillout.surge` alert rule is declared in `global.yaml`, but its firing
-  condition is not implemented.
-- `uv sync` fails on the current tree: the workspace member glob `packages/*` also
-  matches `packages/data`, the snapshot store's default directory, which has no
-  `pyproject.toml`.
-- `jindun.i18n` resolves the catalogue to the empty `packages/pipeline/locales`
-  directory in a source checkout; set `JINDUN_LOCALE_DIR` to the repository's
-  `locales/` directory.
-- No continuous integration is configured: `.github/workflows` and
-  `.github/ISSUE_TEMPLATE` are empty.
-- The test suite passes (51 tests), but the static-analysis checks do not:
-  `ruff check` reports 61 findings in the pipeline and 14 in the API,
-  `ruff format --check` would reformat 23 files, and `mypy` reports 43 errors in 24 of
-  46 files.
+- **The ECB CISS adapter built its URL with slashes between the dimensions.**  The
+  SDMX key is a single path segment with dots, so every request answered 404 and the
+  adapter silently returned no data for every economy.  It now returns 5 236
+  observations for China and 12 226 for the United States.
+- **The repository root was counted rather than discovered.**  Two modules sat one
+  directory deeper than the others, so the snapshot store wrote into
+  `packages/data/snapshots` and the locale catalogue resolved to an empty
+  directory.  Both now go through `jindun.paths`, which finds the root by looking
+  for the workspace manifest and a populated catalogue.
+- **The walk-forward evaluation refitted the model at every origin.**  On a series
+  of twelve thousand daily observations that is tens of thousands of model fits and a
+  run that never finished.  The order is now chosen once on the first training
+  window, the origins are strided and capped, and a run of the five economies takes
+  about three minutes.
+- **The regime model and the forecast used the whole history.**  A
+  Markov-switching model with several lags on four decades of daily data is slow and
+  over-parameterised; both now use the most recent 2 500 observations.
+- **`pandas` 3 makes `to_numpy()` read-only.**  The attribution and the composite
+  wrote into the result and failed; both copy first.
+- **`from .global import …` does not parse** — `global` is a keyword.  The package
+  that carries the global layer is called `global_layer`.
+- **`Alert.state` was a string where the model expects the enum**, which broke the
+  serialisation of the first alert that actually fired.
+- The alert fired on a flat series: a single outlier among equal values always
+  produces the same standardised distance.  A surge now needs a material relative
+  change as well.
+- The BIS bulk download stopped silently at a third of the file; it is now chunked,
+  resumable and verified against the archive before it is published.
+
+- Japan has two markets instead of five: the Bank of Japan publishes no daily equity
+  index, no daily derivatives market and no daily government bond yield curve. The
+  monthly and quarterly price databases are not mixed into the daily panel, because
+  that would reduce the whole index to the frequency of its slowest component.
+- The United States, the United Kingdom and the euro area are measured with the
+  official ECB composite stress index and therefore have no sub-market decomposition,
+  no market attribution and no cross-market spillover network.
+- The bilateral BIS matrix is only served by the bulk archive, which is downloaded
+  once into `data/cache/` and streamed into a filtered snapshot of about two
+  megabytes under `data/snapshots/bis/`.
+- The published table 5-2 of the source specification cannot be reproduced to the
+  digit; `docs/methodology/spillover-legacy-vs-paper.md` states the evidence and the
+  regression strategy that replaced it.
+- `ruff check` is clean for the three Python packages. `mypy` still reports 22
+  findings in the pipeline — annotation precision in the adapter layer, with no known
+  runtime defect among them.
 
 ## [0.1.0] - 2026-11-03
 
