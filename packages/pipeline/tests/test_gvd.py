@@ -10,6 +10,7 @@ from jindun.contagion import (
     GVDSpec,
     GVDSpecError,
     compute_spillover,
+    compute_spillover_all,
     legacy_appendix_spillover,
     net_spillover,
     paper_equation_gvd,
@@ -81,9 +82,52 @@ def test_legacy_appendix_requires_horizon_equal_to_node_count(
     market_indices: pd.DataFrame,
 ) -> None:
     with pytest.raises(GVDSpecError):
-        compute_spillover(
-            market_indices, GVDSpec(method="legacy_appendix", horizon=3, var_order=3)
-        )
+        compute_spillover(market_indices, GVDSpec(method="legacy_appendix", horizon=3, var_order=3))
+
+
+def test_the_legacy_estimator_is_published_with_the_node_count_as_horizon(
+    market_indices: pd.DataFrame,
+) -> None:
+    """The legacy horizon is structural, so the set computes it that way.
+
+    The single-estimator call still refuses a mismatched horizon; the set
+    computes the legacy index with the only horizon it is defined for and
+    says so in its notes.
+    """
+    networks = compute_spillover_all(
+        market_indices, GVDSpec(method="paper_equation", horizon=8, var_order=3), scope="test"
+    )
+    legacy = networks.results["legacy_appendix"]
+    assert legacy.horizon == len(legacy.nodes)
+    assert any("horizon" in note for note in legacy.notes)
+
+
+def test_a_failing_estimator_does_not_remove_the_others(
+    market_indices: pd.DataFrame,
+) -> None:
+    """One estimator that cannot be computed must not take the set down."""
+    networks = compute_spillover_all(
+        market_indices,
+        GVDSpec(method="paper_equation", horizon=8, var_order=3),
+        scope="test",
+        methods=["paper_equation", "not_an_estimator"],
+    )
+    assert "paper_equation" in networks.results
+    assert "not_an_estimator" in networks.failures
+    assert "paper_equation" not in networks.failures
+
+
+def test_every_estimator_is_published_by_default(market_indices: pd.DataFrame) -> None:
+    networks = compute_spillover_all(
+        market_indices, GVDSpec(method="paper_equation", horizon=8, var_order=3), scope="test"
+    )
+    assert set(networks.results) == {
+        "paper_equation",
+        "sims_structural",
+        "dy_generalised",
+        "legacy_appendix",
+    }
+    assert not networks.failures
 
 
 def test_legacy_appendix_matches_an_independent_transcription(
@@ -109,9 +153,7 @@ def test_legacy_appendix_matches_an_independent_transcription(
             denominator = abs(sigma[k, k]) * np.sum(
                 sigma @ coefs[:horizon, j] @ coefs[:horizon, j].T
             )
-            theta = (
-                np.sum((sigma @ coefs[:horizon, k]) ** 2) * abs(sigma[j, k]) / denominator
-            )
+            theta = np.sum((sigma @ coefs[:horizon, k]) ** 2) * abs(sigma[j, k]) / denominator
             reference[j, k] = abs(theta)
     reference = reference / reference.sum(axis=1, keepdims=True)
 

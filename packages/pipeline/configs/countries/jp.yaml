@@ -24,10 +24,11 @@
 #
 # The two markets are the ones where a daily stress signal genuinely exists:
 #
-#   money  the term structure of the call rate.  A widening spread between the
-#          three month and the overnight rate is the classic sign that the
-#          money market is under strain, and the dispersion of the overnight
-#          rate is the second signal.
+#   money  the dispersion of the overnight call rate: the highest minus the
+#          lowest rate fixed on the same day.  This carries the same stress
+#          signal as the classic three month minus overnight spread, but it
+#          comes from a series with history — the term call rates of FM02
+#          only start in 2025.
 #   fx     the USD/JPY exchange rate.  Its realised volatility and its
 #          deviation from trend are both stress signals, and a sharp move in
 #          either direction is a risk event, which is why the exchange rate
@@ -51,12 +52,15 @@ markets:
     label_key: market.money
     weight: 0.60
     indicators:
-      - code: call_rate_term_spread
-        label_key: indicator.call_rate_term_spread
+      # The dispersion of the overnight call rate — the highest minus the
+      # lowest rate fixed on the same day.  It runs from 2005, unlike the
+      # term call rates of FM02, which only start in 2025.
+      - code: call_rate_dispersion
+        label_key: indicator.call_rate_dispersion
         direction: same
         unit: percent
         source_adapter: boj
-        source_series_id: boj.money.call_rate_term_spread
+        source_series_id: boj.money.call_rate_dispersion
         weight: 1.0
 
   - code: fx

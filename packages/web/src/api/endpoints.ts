@@ -29,6 +29,27 @@ export interface HealthPayload {
   generatedAt: string | null
 }
 
+/**
+ * The reason a resource is absent, when the API reports one.
+ *
+ * The API distinguishes "this economy has no such network by construction"
+ * from "the network could not be computed" — the two must never look the
+ * same to the user, so the reason is parsed out of the structured error
+ * detail instead of being inferred from the status code.
+ */
+function unavailableReason(error: unknown): string | null {
+  if (!(error instanceof ApiError) || error.status !== 404) {
+    return null
+  }
+  try {
+    const parsed = JSON.parse(error.body) as { detail?: { reason?: unknown } }
+    const reason = parsed.detail?.reason
+    return typeof reason === 'string' ? reason : null
+  } catch {
+    return null
+  }
+}
+
 export function createApi(client: ApiClient = apiClient) {
   return {
     async health(): Promise<HealthPayload> {
@@ -66,18 +87,48 @@ export function createApi(client: ApiClient = apiClient) {
       method = 'paper_equation',
       horizon = 10,
     ): Promise<SpilloverPayload> {
-      const raw = await client.get(`/api/v1/countries/${code}/spillover`, {
-        query: { method, horizon },
-      })
-      return normaliseSpilloverPayload(raw)
+      try {
+        const raw = await client.get(`/api/v1/countries/${code}/spillover`, {
+          query: { method, horizon },
+        })
+        return normaliseSpilloverPayload(raw)
+      } catch (error) {
+        const reason = unavailableReason(error)
+        if (!reason) {
+          throw error
+        }
+        // An economy measured by a published official index has no cross-market
+        // network.  That is a property of the economy, not a failure, so it is
+        // reported as an absent resource rather than as an error.
+        return {
+          scope: code.toUpperCase(),
+          nodes: [],
+          matrix: [],
+          totalSpillout: {},
+          totalSpillin: {},
+          net: {},
+          horizon,
+          method,
+          defaultMethod: method,
+          availableMethods: [],
+          available: false,
+          unavailableReason: reason,
+          window: null,
+          notes: [],
+          varOrder: null,
+        }
+      }
     },
 
     async countryAlerts(code: string): Promise<AlertPayload[]> {
       return normaliseAlerts(await client.get(`/api/v1/countries/${code}/alerts`))
     },
 
-    async globalSpillover(): Promise<SpilloverPayload> {
-      return normaliseSpilloverPayload(await client.get('/api/v1/global/spillover'))
+    async globalSpillover(method = 'paper_equation', horizon = 10): Promise<SpilloverPayload> {
+      const raw = await client.get('/api/v1/global/spillover', {
+        query: { method, horizon },
+      })
+      return normaliseSpilloverPayload(raw)
     },
 
     async gsib(): Promise<GsibEntry[]> {

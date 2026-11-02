@@ -62,9 +62,13 @@ the Japanese index, and the methodology pages say so rather than hiding it.
 
 The index is built from the Bank of Japan's own daily statistics:
 
-* **money** — the term structure of the call rate.  The spread between the
-  three month and the overnight rate is the classic sign that the money
-  market is under strain.
+* **money** — the dispersion of the overnight call rate, measured as the
+  highest minus the lowest rate fixed on the same day.  A wide overnight
+  dispersion is the classic sign that the money market is under strain, and
+  it is the same signal the classic three-month-minus-overnight spread
+  carries, but sourced from the series that actually has history: the
+  Bank of Japan's term call rates (FM02) only start in 2025, so a term
+  spread would have cut the Japanese index down to two years.
 * **foreign exchange** — the USD/JPY spot rate of the Tokyo market, entering
   as realised volatility and as a deviation from trend.  A sharp move in
   either direction is a risk event, which is why the exchange rate enters as a
@@ -104,6 +108,27 @@ ECB's own publication.
 
 * the profile and the markets that were actually available,
 * the quality gate outcome for every series,
-* the explicit warning when the economy has no sub-market decomposition.
+* the explicit warning when the economy has no sub-market decomposition,
+* the **capabilities** of the run — a plain list of what this run can answer.
+
+The capabilities are the part that matters for a consumer.  They are
+first-class data in the artefact (`profile` and `capabilities`), not something
+a client has to infer from a missing section:
+
+| capability | China | Japan | United States | United Kingdom | Euro Area |
+| --- | --- | --- | --- | --- | --- |
+| `composite_synthesis` | yes | yes | no | no | no |
+| `market_decomposition` | yes | yes | no | no | no |
+| `market_attribution` | yes | yes | no | no | no |
+| `spillover_network` | yes | yes | no | no | no |
+| `regime` | yes | yes | yes | yes | yes |
+| `forecast` | yes | yes | yes | yes | yes |
+
+`composite_synthesis` and `market_decomposition` are `no` for the three
+official-index economies *by construction* — they are measured by a published
+index that has no sub-market decomposition behind it.  The API and the web
+front end read those flags and render the absence as what it is, instead of
+showing a failure: there is no cross-market network for these three economies
+because there are no sub-markets, not because something went wrong.
 
 Nothing in the artefacts implies a depth of analysis that was not carried out.

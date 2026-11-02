@@ -18,11 +18,21 @@ import threading
 from pathlib import Path
 from typing import Any
 
-__all__ = ["ArtifactStore", "RunStoreError"]
+__all__ = ["ArtifactStore", "RunStoreError", "get_store"]
 
 
 class RunStoreError(RuntimeError):
     """Raised when a requested run artefact is missing."""
+
+
+def get_store() -> ArtifactStore:
+    """The FastAPI dependency that yields the artefact store.
+
+    There is exactly one of these, so a test — or a deployment that points
+    the server at a different artefact tree — overrides a single dependency
+    instead of three.
+    """
+    return ArtifactStore()
 
 
 def _default_root() -> Path:

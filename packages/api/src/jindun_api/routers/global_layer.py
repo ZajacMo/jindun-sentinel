@@ -14,16 +14,13 @@ import json
 from pathlib import Path
 from typing import Any
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 
+from jindun_api.estimators import select_estimator
 from jindun_api.schemas import SpilloverResponse
-from jindun_api.store import ArtifactStore
+from jindun_api.store import ArtifactStore, get_store
 
 router = APIRouter(prefix="/global", tags=["global"])
-
-
-def get_store() -> ArtifactStore:
-    return ArtifactStore()
 
 
 def _global_root(store: ArtifactStore) -> Path:
@@ -44,9 +41,23 @@ def _load(store: ArtifactStore, name: str) -> dict[str, Any]:
 
 
 @router.get("/spillover", response_model=SpilloverResponse)
-def global_spillover(store: ArtifactStore = Depends(get_store)) -> SpilloverResponse:
+def global_spillover(
+    method: str | None = Query(
+        None,
+        description="The estimator to read; the artefact publishes several and they are "
+        "not interchangeable.",
+    ),
+    horizon: int | None = Query(
+        None, description="The forecast horizon to read; the artefact publishes one."
+    ),
+    store: ArtifactStore = Depends(get_store),
+) -> SpilloverResponse:
     """The cross-country spillover network."""
     block = _load(store, "spillover.json")
+    default_method = block.get("default_method") or block.get("method") or "paper_equation"
+    block, selected, available = select_estimator(
+        block, scope="global", method=method, horizon=horizon
+    )
     return SpilloverResponse(
         scope=block.get("scope", "global"),
         nodes=block.get("nodes") or [],
@@ -55,7 +66,9 @@ def global_spillover(store: ArtifactStore = Depends(get_store)) -> SpilloverResp
         total_spillin=block.get("total_spillin") or {},
         net=block.get("net") or {},
         horizon=int(block.get("horizon", 10)),
-        method=block.get("method", "paper_equation"),
+        method=selected,
+        default_method=default_method,
+        available_methods=available,
         var_order=block.get("var_order"),
         window=block.get("window"),
         notes=block.get("notes") or [],

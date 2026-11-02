@@ -37,6 +37,8 @@ class HealthResponse(BaseModel):
 class CountrySummary(BaseModel):
     code: str
     name_en: str
+    profile: str = "mbsed"
+    capabilities: dict[str, bool] = Field(default_factory=dict)
     as_of: str | None = None
     markets: list[str] = Field(default_factory=list)
     latest_percentile: float | None = None
@@ -66,6 +68,8 @@ class RegimeBlock(BaseModel):
 class IndexResponse(BaseModel):
     country_code: str
     as_of: str
+    profile: str = "mbsed"
+    capabilities: dict[str, bool] = Field(default_factory=dict)
     lens: str = "percentile"
     composite: list[SeriesPoint] = Field(default_factory=list)
     percentile: list[SeriesPoint] = Field(default_factory=list)
@@ -85,6 +89,10 @@ class SpilloverResponse(BaseModel):
     net: dict[str, float] = Field(default_factory=dict)
     horizon: int = 10
     method: str = "paper_equation"
+    #: The estimator the artefact publishes as its default.
+    default_method: str = "paper_equation"
+    #: Every estimator the artefact publishes, so a client can offer a choice.
+    available_methods: list[str] = Field(default_factory=list)
     var_order: int | None = None
     window: list[str] | None = None
     notes: list[str] = Field(default_factory=list)

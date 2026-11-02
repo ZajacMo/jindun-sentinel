@@ -17,6 +17,7 @@ from typing import Any
 
 import yaml
 
+from .contagion.gvd import METHODS
 from .models import Country, Direction, Indicator, Market
 
 __all__ = [
@@ -83,6 +84,13 @@ class ContagionParams:
     criterion: str = "bic"
     max_order: int = 5
     transform: str = "level"
+    # The estimators published side by side in every artefact.  They answer
+    # different questions and are not interchangeable — the generalised
+    # decomposition is signed, the structural one depends on the variable
+    # ordering, and the legacy one is not a forecast error variance
+    # decomposition at all — so the project publishes all of them instead of
+    # quietly presenting one as "the" spillover number.
+    publish_methods: tuple[str, ...] = METHODS
     # Rolling windows used to build the spill-out history behind the surge
     # alert.  See contagion/surge.py for why they are deliberately coarse.
     surge_enabled: bool = True
@@ -319,6 +327,13 @@ def load_settings(config_dir: str | os.PathLike[str] | None = None) -> Settings:
 
     contagion_raw = global_raw.get("contagion", {})
     order_value = contagion_raw.get("var_order")
+    publish_raw = contagion_raw.get("publish_methods")
+    publish_methods = tuple(str(item) for item in publish_raw) if publish_raw else METHODS
+    unknown = [item for item in publish_methods if item not in METHODS]
+    if unknown:
+        raise ValueError(
+            f"unknown contagion estimators {unknown}; expected a subset of {list(METHODS)}"
+        )
     contagion_params = ContagionParams(
         method=str(contagion_raw.get("method", "paper_equation")),
         horizon=int(contagion_raw.get("horizon", 10)),
@@ -326,6 +341,7 @@ def load_settings(config_dir: str | os.PathLike[str] | None = None) -> Settings:
         criterion=str(contagion_raw.get("criterion", "bic")),
         max_order=int(contagion_raw.get("max_order", 5)),
         transform=str(contagion_raw.get("transform", "level")),
+        publish_methods=publish_methods,
     )
 
     regime_raw = global_raw.get("regime", {})

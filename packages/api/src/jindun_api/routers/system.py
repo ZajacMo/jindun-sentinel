@@ -9,14 +9,9 @@ from jindun_api.schemas import (
     LocaleListResponse,
     RunMetadataResponse,
 )
-from jindun_api.store import ArtifactStore
+from jindun_api.store import ArtifactStore, get_store
 
 router = APIRouter(tags=["system"])
-
-
-def get_store() -> ArtifactStore:
-    """Dependency that yields the artefact store."""
-    return ArtifactStore()
 
 
 @router.get("/health", response_model=HealthResponse)

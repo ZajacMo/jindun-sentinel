@@ -63,12 +63,12 @@ forecast error variance that is attributable to node ``j``.  Consequently
 from __future__ import annotations
 
 from collections.abc import Mapping, Sequence
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 
 import numpy as np
 import pandas as pd
 
-from ..models import SpilloverResult
+from ..models import SpilloverResult, SpilloverSet
 from .var import VARFit, fit_var, select_var_order, vma_coefficients
 
 __all__ = [
@@ -76,6 +76,7 @@ __all__ = [
     "GVDSpecError",
     "METHODS",
     "compute_spillover",
+    "compute_spillover_all",
     "sims_structural_gvd",
     "paper_equation_gvd",
     "diebold_yilmaz_generalised_gvd",
@@ -84,7 +85,6 @@ __all__ = [
     "total_spillin",
     "net_spillover",
 ]
-
 METHODS = (
     "paper_equation",
     "sims_structural",
@@ -292,13 +292,9 @@ def total_spillin(shares: np.ndarray, nodes: Sequence[str]) -> dict[str, float]:
     return result
 
 
-def net_spillover(
-    spillout: Mapping[str, float], spillin: Mapping[str, float]
-) -> dict[str, float]:
+def net_spillover(spillout: Mapping[str, float], spillin: Mapping[str, float]) -> dict[str, float]:
     """Net transmitter minus net receiver, per node."""
-    return {
-        node: float(spillout.get(node, 0.0) - spillin.get(node, 0.0)) for node in spillout
-    }
+    return {node: float(spillout.get(node, 0.0) - spillin.get(node, 0.0)) for node in spillout}
 
 
 def compute_spillover(
@@ -320,6 +316,67 @@ def compute_spillover(
         raise GVDSpecError("at least two nodes are required for a spillover decomposition")
 
     fit = _fit(frame, spec)
+    return _decompose(fit, frame, spec, scope, window)
+
+
+def compute_spillover_all(
+    data: pd.DataFrame,
+    spec: GVDSpec | None = None,
+    *,
+    scope: str = "",
+    window: tuple[str, str] | None = None,
+    methods: Sequence[str] = METHODS,
+) -> SpilloverSet:
+    """Compute the network with every estimator, from a single VAR fit.
+
+    The four estimators answer different questions and are *not*
+    interchangeable: the generalized decomposition is signed, the structural
+    one depends on the variable ordering and the legacy one is not a forecast
+    error variance decomposition at all.  Publishing one of them and calling
+    it "the" spillover number would hide that difference, so the project
+    publishes all of them side by side and lets the reader choose.
+
+    The VAR fit — by far the expensive part — is shared: only the
+    decomposition differs between the estimators.  An estimator that cannot be
+    computed is recorded as failed and the others are still published.
+    """
+    spec = spec or GVDSpec()
+    frame = _prepare(data, spec.transform)
+    if frame.shape[1] < 2:
+        raise GVDSpecError("at least two nodes are required for a spillover decomposition")
+
+    fit = _fit(frame, spec)
+    node_count = len(frame.columns)
+    results: dict[str, SpilloverResult] = {}
+    failures: dict[str, str] = {}
+
+    for method in methods:
+        try:
+            if method == "legacy_appendix":
+                # The legacy implementation used ``lag_order == H == number of
+                # markets``, so it needs a VAR fit of its own: the shared fit's
+                # order is chosen by BIC and is usually lower than the node
+                # count, and the legacy matrix product is only defined when
+                # the order is at least the horizon.
+                legacy_spec = replace(spec, method=method, horizon=node_count, var_order=node_count)
+                legacy_fit = _fit(frame, legacy_spec)
+                results[method] = _decompose(legacy_fit, frame, legacy_spec, scope, window)
+                continue
+            method_spec = replace(spec, method=method)
+            results[method] = _decompose(fit, frame, method_spec, scope, window)
+        except (GVDSpecError, KeyError) as exc:
+            failures[method] = str(exc)
+    return SpilloverSet(results=results, failures=failures)
+
+
+def _decompose(
+    fit: VARFit,
+    frame: pd.DataFrame,
+    spec: GVDSpec,
+    scope: str,
+    window: tuple[str, str] | None,
+) -> SpilloverResult:
+    """Apply one estimator to an already fitted VAR."""
     estimator = _DISPATCH[spec.method]
     raw, shares = estimator(fit, spec.horizon)
     if spec.absolute:
@@ -346,6 +403,11 @@ def compute_spillover(
         notes.append(
             "legacy appendix implementation: residual-correlation weighted index, "
             "not a forecast error variance decomposition"
+        )
+        notes.append(
+            "the legacy implementation is only defined when the horizon and the VAR "
+            f"order both equal the number of nodes, so it was computed with "
+            f"horizon={len(frame.columns)}"
         )
     if not fit.stable:
         notes.append("WARNING: the fitted VAR is not stable; the decomposition is unreliable")

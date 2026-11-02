@@ -153,14 +153,17 @@ export const useDataStore = defineStore('data', () => {
     )
   }
 
-  function loadGlobalSpillover(): Promise<SpilloverPayload | null> {
+  function loadGlobalSpillover(
+    method = 'paper_equation',
+    horizon = 10,
+  ): Promise<SpilloverPayload | null> {
     return loadResource(
-      'global-spillover',
+      `global-spillover:${method}:${horizon}`,
       () => globalSpillover.value,
       (next) => {
         globalSpillover.value = next
       },
-      () => api.globalSpillover(),
+      () => api.globalSpillover(method, horizon),
     )
   }
 

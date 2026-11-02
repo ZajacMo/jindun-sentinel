@@ -85,7 +85,9 @@ def fit_probability_model(
     )
 
 
-def legacy_probability(log_composite: pd.Series, *, bandwidth: float = LEGACY_BANDWIDTH) -> ProbabilityModel:
+def legacy_probability(
+    log_composite: pd.Series, *, bandwidth: float = LEGACY_BANDWIDTH
+) -> ProbabilityModel:
     """Reproduce the legacy hard-coded probability model."""
     return ProbabilityModel(
         means=LEGACY_MEANS,

@@ -264,9 +264,7 @@ def evaluate_series(
             )
         )
     else:
-        quality.checks.append(
-            QualityCheck(name="ordered_dates", passed=True, severity=Severity.OK)
-        )
+        quality.checks.append(QualityCheck(name="ordered_dates", passed=True, severity=Severity.OK))
 
     first, last = dates[0], dates[-1]
     first = _as_date(first)

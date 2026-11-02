@@ -164,6 +164,15 @@ The four spillover estimators are not interchangeable and each carries its own c
 
 See `docs/methodology/spillover-legacy-vs-paper.md` for the full comparison.
 
+**All four are published in every artefact**, side by side under
+`spillover.estimators`; the default one is also inlined at `spillover` itself
+for the consumers that do not need the choice.  An estimator that cannot be
+computed for a given network is listed in `spillover.failed_estimators` with
+its reason — it never removes the others.  The API takes the choice
+explicitly (`?method=…`) and refuses a method the artefact does not publish
+with a `400` that lists the ones it does, so a request can never be answered
+with a different estimator than the one asked for.
+
 ## Economies and languages
 
 Five economies are in scope.  They are **not** measured with the same instrument, and
@@ -181,7 +190,10 @@ not have.
 An economy whose index is an official published index has **no** sub-market
 decomposition, so no market attribution and no cross-market spillover network: the run
 artefact says so explicitly rather than publishing a decomposition that was never
-computed.  The cross-country network and the global cycle factor work on the country
+computed.  This is stated as **data**, not as an error: every artefact carries a
+`profile` and a `capabilities` map, and the API and the front end read them, so
+the absence is rendered as a property of the economy instead of as a failure.
+The cross-country network and the global cycle factor work on the country
 composites and are therefore available for all five.
 
 The four shipped locales are English (`en-US`), Simplified Chinese (`zh-CN`),
@@ -208,7 +220,7 @@ gaps cannot be monitored.
 | BIS statistical API — structure | `https://stats.bis.org/api/v1/dataflow/BIS` (SDMX-ML) | the full flow catalogue | requesting the JSON representation (`Accept: application/vnd.sdmx.structure+json`) answers **406**; the endpoint serves SDMX-ML XML, which is what the adapter parses |
 | BIS bulk archive — locational banking statistics | `https://data.bis.org/static/bulk/WS_LBS_D_PUB_csv_flat.zip` (365 MB, ~18 GB uncompressed) | the bilateral reporting-economy × counterparty-country matrix | **the bilateral matrix is only served by the bulk file.** Through the API the reporting-country dimension accepts the aggregate `5A` only, so a request for `L_REP_CTY=US` answers 404 although the data is published. The archive is downloaded once into `data/cache/` (never committed) and streamed into a filtered snapshot of about two megabytes under `data/snapshots/bis/` |
 | BIS SDMX v2 | `/api/v2/…` | none | the v2 paths answer **404** or **501**; only the v1 API exists |
-| Bank of Japan — Time-Series Statistics Search | `https://www.stat-search.boj.or.jp/api/v1/getMetadata`, `/getDataCode`, `/getDataLayer` | 10 databases used by this project: `IR01`, `FM01`, `FM02`, `FM08`, `FM09`, `MD01`, `MD02`, `PR01`, `CO`, `BP01` (the adapter also knows `BIS`, the Japanese slice of the BIS international banking and credit statistics), plus three derived series (the call-rate term spread, the USD/JPY volatility and the USD/JPY deviation from trend) | `getDataCode` accepts at most 250 series codes per request, `getDataLayer` at most 1 250; pagination is driven by `NEXTPOSITION`, which must be echoed back as `startPosition`; the service asks clients not to hammer it, so the adapter enforces a minimum delay between requests. The BOJ publishes no daily equity index, no daily derivatives market and no daily government bond yield curve, so the Japanese index has two markets rather than five |
+| Bank of Japan — Time-Series Statistics Search | `https://www.stat-search.boj.or.jp/api/v1/getMetadata`, `/getDataCode`, `/getDataLayer` | 10 databases used by this project: `IR01`, `FM01`, `FM02`, `FM08`, `FM09`, `MD01`, `MD02`, `PR01`, `CO`, `BP01` (the adapter also knows `BIS`, the Japanese slice of the BIS international banking and credit statistics), plus four derived series (the call-rate term spread, the call-rate dispersion, the USD/JPY volatility and the USD/JPY deviation from trend) | `getDataCode` accepts at most 250 series codes per request, `getDataLayer` at most 1 250; pagination is driven by `NEXTPOSITION`, which must be echoed back as `startPosition`; the service asks clients not to hammer it, so the adapter enforces a minimum delay between requests. The BOJ publishes no daily equity index, no daily derivatives market and no daily government bond yield curve, so the Japanese index has two markets rather than five. The Japanese index uses the call-rate **dispersion**, not the term spread: the term call rates of `FM02` only start in 2025, which would have cut the Japanese index down to two years of history |
 | FSB — G-SIB list | announcement page → linked PDF | the annual list, parsed into bank names with buckets 1–10 | the bank names are **not** in the announcement page: they live in a PDF linked from the list page, so the adapter resolves the link and parses the document's text layer. The bucket surcharge is the Basel schedule (0.5 % per bucket, 1.0 %–5.0 %) |
 | akshare — Chinese market data | `akshare` Python package | 26 registered series (14 direct reads of an upstream table + 12 deterministic derivations): SSE/SZSE/CSI 300 levels and turnover, ChinaBond government yields and curve slopes, SHIBOR fixings, margin balances, CSI 300 index futures, USD/CNY middle rate | `akshare` is an **optional** dependency (`--extra market`). Without it every Chinese indicator is reported as unavailable with a warning — never as a silent zero. Only series whose output shape was verified against the live service are registered |
 

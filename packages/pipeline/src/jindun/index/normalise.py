@@ -57,7 +57,7 @@ def normalise_panel(
         elif direction is Direction.OPPOSITE:
             normalised[column] = cdf_rank(series, ascending=False)
         elif direction is Direction.BIDIRECTIONAL:
-            deviation = (series - np.nanmean(series.values)) .abs()
+            deviation = (series - np.nanmean(series.values)).abs()
             normalised[column] = cdf_rank(deviation, ascending=True)
         else:  # pragma: no cover - Direction is exhaustive
             raise ValueError(f"unsupported direction: {direction!r}")

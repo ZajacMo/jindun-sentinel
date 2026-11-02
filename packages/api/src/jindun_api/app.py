@@ -38,9 +38,7 @@ def create_app() -> FastAPI:
         openapi_url="/api/openapi.json",
     )
 
-    origins = os.environ.get(
-        "JINDUN_CORS_ORIGINS", "http://localhost:5173,http://127.0.0.1:5173"
-    )
+    origins = os.environ.get("JINDUN_CORS_ORIGINS", "http://localhost:5173,http://127.0.0.1:5173")
     application.add_middleware(
         CORSMiddleware,
         allow_origins=[item.strip() for item in origins.split(",") if item.strip()],

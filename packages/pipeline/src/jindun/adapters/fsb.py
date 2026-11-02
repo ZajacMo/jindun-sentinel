@@ -167,10 +167,7 @@ def parse_gsib_document(
     except Exception as exc:  # noqa: BLE001
         return [], [f"the G-SIB document could not be parsed: {exc}"]
 
-    lines = [
-        re.sub(r"\s+", " ", line).strip()
-        for line in text.splitlines()
-    ]
+    lines = [re.sub(r"\s+", " ", line).strip() for line in text.splitlines()]
     lines = [line for line in lines if line]
 
     buckets: list[GsibBank] = []

@@ -1,28 +1,28 @@
 {
-  "generated_at": "2026-11-02T20:31:42.818864+00:00",
+  "generated_at": "2026-11-02T20:55:09.570769+00:00",
   "passed": true,
   "counts": {
     "total": 3,
-    "ok": 2,
-    "warning": 1,
+    "ok": 3,
+    "warning": 0,
     "failure": 0
   },
   "series": [
     {
-      "series_id": "boj.money.call_rate_term_spread",
+      "series_id": "boj.money.call_rate_dispersion",
       "adapter": "boj",
       "country_code": "JP",
-      "severity": "warning",
+      "severity": "ok",
       "passed": true,
-      "observations": 271,
-      "first_date": "2025-01-07",
+      "observations": 5341,
+      "first_date": "2005-01-04",
       "last_date": "2026-10-29",
       "checks": [
         {
           "name": "has_observations",
           "passed": true,
           "severity": "ok",
-          "measured": 271,
+          "measured": 5341,
           "threshold": 60,
           "message": ""
         },
@@ -44,11 +44,11 @@
         },
         {
           "name": "completeness",
-          "passed": false,
-          "severity": "warning",
-          "measured": 0.5742,
+          "passed": true,
+          "severity": "ok",
+          "measured": 0.9383,
           "threshold": 0.9,
-          "message": "the series has gaps relative to its own calendar"
+          "message": ""
         },
         {
           "name": "max_gap",

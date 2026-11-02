@@ -35,6 +35,15 @@ const scope = ref<ScopeName>('global')
 const sortBy = ref<string>('spillOut')
 const sortOrder = ref<'ascending' | 'descending'>('descending')
 
+/**
+ * The estimator the reader is looking at.
+ *
+ * The artefacts publish all of them side by side, because they answer
+ * different questions and are not interchangeable — so the reader picks, and
+ * the default is only the artefact's default.
+ */
+const estimator = ref<string>('')
+
 const globalResource = computed(() => data.globalSpillover)
 const countryResource = computed(() => data.spilloverByCountry[prefs.countryCode] ?? null)
 
@@ -43,6 +52,31 @@ const activeResource = computed(() =>
 )
 
 const payload = computed<SpilloverPayload | null>(() => activeResource.value?.data ?? null)
+
+const availableEstimators = computed(() => payload.value?.availableMethods ?? [])
+
+const selectedEstimator = computed({
+  get: () => estimator.value || payload.value?.defaultMethod || 'paper_equation',
+  set: (value: string) => {
+    estimator.value = value
+    reload()
+  },
+})
+
+/**
+ * The reason there is no network to show, when there is none.  An economy
+ * measured by a published official index has no sub-market decomposition by
+ * construction — that is a property of the economy, not a failure.
+ */
+const spilloverEmptyMessage = computed(() => {
+  const current = payload.value
+  if (!current || current.available) {
+    return null
+  }
+  return current.unavailableReason === 'not_applicable'
+    ? t('spillover.notAvailable')
+    : t('spillover.unavailable')
+})
 
 const nodes = computed(() => payload.value?.nodes ?? [])
 const matrix = computed(() => payload.value?.matrix ?? [])
@@ -108,19 +142,26 @@ const anchorCountry = computed(() => {
 })
 
 function reload(): void {
+  const method = estimator.value || 'paper_equation'
   if (scope.value === 'global') {
-    void data.loadGlobalSpillover()
+    void data.loadGlobalSpillover(method)
   } else {
-    void data.loadSpillover(prefs.countryCode)
+    void data.loadSpillover(prefs.countryCode, method)
   }
 }
 
 onMounted(reload)
-watch(scope, reload)
+watch(scope, () => {
+  // Each scope publishes its own set of estimators, so the selection starts
+  // again from that artefact's default.
+  estimator.value = ''
+  reload()
+})
 watch(
   () => prefs.countryCode,
   () => {
     if (scope.value === 'country') {
+      estimator.value = ''
       reload()
     }
   },
@@ -139,6 +180,20 @@ watch(
           <el-radio-button value="global">{{ t('scope.global') }}</el-radio-button>
           <el-radio-button value="country">{{ t('scope.country') }}</el-radio-button>
         </el-radio-group>
+        <el-select
+          v-if="availableEstimators.length > 1"
+          v-model="selectedEstimator"
+          size="default"
+          style="width: 280px"
+          :aria-label="t('spillover.estimator')"
+        >
+          <el-option
+            v-for="item in availableEstimators"
+            :key="item"
+            :label="labels.method(item)"
+            :value="item"
+          />
+        </el-select>
         <el-select v-model="sortBy" size="default" style="width: 170px">
           <el-option :label="t('metric.spillOut')" value="spillOut" />
           <el-option :label="t('metric.spillIn')" value="spillIn" />
@@ -158,6 +213,7 @@ watch(
       :status="activeResource?.status ?? 'idle'"
       :error="activeResource?.error ?? null"
       :empty="!payload || payload.nodes.length === 0"
+      :empty-message="spilloverEmptyMessage"
       @retry="reload"
     >
       <div class="jd-stack">

@@ -118,8 +118,10 @@ def _one(
     for result in results:
         if result.series_id.upper().endswith(code.upper()):
             return _as_frame(result)
-    return results[0] if results else _as_frame(
-        FetchResult(adapter="boj", series_id=code, country_code=country_code)
+    return (
+        results[0]
+        if results
+        else _as_frame(FetchResult(adapter="boj", series_id=code, country_code=country_code))
     )
 
 
@@ -133,6 +135,18 @@ def _build_call_rate_term_spread(adapter: BojAdapter, use_cache: bool):
         return pd.Series(dtype=float)
     joined = pd.concat([long_end.rename("long"), overnight.rename("on")], axis=1).dropna()
     return (joined["long"] - joined["on"]).rename("spread")
+
+
+def _build_call_rate_dispersion(adapter: BojAdapter, use_cache: bool):
+    """Dispersion of the overnight call rate: the highest minus the lowest."""
+    import pandas as pd
+
+    highest = _one(adapter, "FM01", "STRDCLUCONH", use_cache=use_cache)
+    lowest = _one(adapter, "FM01", "STRDCLUCONL", use_cache=use_cache)
+    if highest.empty or lowest.empty:
+        return pd.Series(dtype=float)
+    joined = pd.concat([highest.rename("high"), lowest.rename("low")], axis=1).dropna()
+    return (joined["high"] - joined["low"]).rename("dispersion")
 
 
 def _build_fx_volatility(adapter: BojAdapter, use_cache: bool, window: int = 20):
@@ -166,6 +180,15 @@ DERIVED_SERIES: dict[str, BojDerivedSeries] = {
         description="Three month call rate minus the overnight call rate",
         unit="percent",
         build=_build_call_rate_term_spread,
+    ),
+    "boj.money.call_rate_dispersion": BojDerivedSeries(
+        series_id="boj.money.call_rate_dispersion",
+        description=(
+            "Dispersion of the overnight call rate: the highest minus the lowest "
+            "rate fixed on the same day"
+        ),
+        unit="percent",
+        build=_build_call_rate_dispersion,
     ),
     "boj.fx.usdjpy_volatility": BojDerivedSeries(
         series_id="boj.fx.usdjpy_volatility",
@@ -327,9 +350,7 @@ class BojAdapter:
             )
         database = parts[1]
         code = ".".join(parts[2:])
-        results = self.fetch(
-            database, [code], country_code=country_code, use_cache=use_cache
-        )
+        results = self.fetch(database, [code], country_code=country_code, use_cache=use_cache)
         if results:
             return results[0]
         return FetchResult(

@@ -81,8 +81,7 @@ class Attribution:
                 for market, indicators in self.indicator_shares.items()
             },
             "spillover_attribution": {
-                key: round(float(value), 8)
-                for key, value in self.spillover_attribution.items()
+                key: round(float(value), 8) for key, value in self.spillover_attribution.items()
             },
             "notes": list(self.notes),
         }
@@ -175,7 +174,9 @@ def attribute_composite_move(
         )
 
     attribution = Attribution(
-        as_of=current_date.date().isoformat() if hasattr(current_date, "date") else str(current_date),
+        as_of=current_date.date().isoformat()
+        if hasattr(current_date, "date")
+        else str(current_date),
         horizon_days=horizon_days,
         composite_change=actual_change,
         composite_previous=previous_composite,
@@ -186,12 +187,10 @@ def attribute_composite_move(
     )
 
     if normalised_indicators and indicator_weights:
-        attribution.indicator_contributions, attribution.indicator_shares = (
-            attribute_market_move(
-                normalised_indicators,
-                indicator_weights,
-                horizon_days=horizon_days,
-            )
+        attribution.indicator_contributions, attribution.indicator_shares = attribute_market_move(
+            normalised_indicators,
+            indicator_weights,
+            horizon_days=horizon_days,
         )
 
     return attribution

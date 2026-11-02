@@ -1,6 +1,15 @@
 {
   "country_code": "US",
   "as_of": "2026-11-03",
+  "profile": "official_index",
+  "capabilities": {
+    "composite_synthesis": false,
+    "market_decomposition": false,
+    "market_attribution": false,
+    "spillover_network": false,
+    "regime": true,
+    "forecast": true
+  },
   "market_indices": {
     "dates": [
       "1980-01-02",

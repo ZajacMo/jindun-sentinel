@@ -41,12 +41,29 @@ __all__ = [
 ECB_CISS_BASE = "https://data-api.ecb.europa.eu/service/data/CISS"
 
 CISS_DAILY_AREAS = (
-    "AT", "BE", "CN", "DE", "ES", "FI", "FR", "GB", "IE", "IT", "NL", "PT", "U2", "US",
+    "AT",
+    "BE",
+    "CN",
+    "DE",
+    "ES",
+    "FI",
+    "FR",
+    "GB",
+    "IE",
+    "IT",
+    "NL",
+    "PT",
+    "U2",
+    "US",
 )
 CISS_MONTHLY_AREAS = ("U2", "US")
 CISS_COMPONENT_AREAS = ("U2",)
 CISS_COMPONENTS = (
-    "CREDIT", "EQUITY", "INTERBANK", "REAL_ESTATE", "SOVEREIGN",
+    "CREDIT",
+    "EQUITY",
+    "INTERBANK",
+    "REAL_ESTATE",
+    "SOVEREIGN",
 )
 
 
@@ -101,9 +118,7 @@ class EcbCissAdapter:
     ) -> str:
         parts = [
             ECB_CISS_BASE,
-            ".".join(
-                [frequency, area, "Z0Z", "4F", "EC", series, variant]
-            ),
+            ".".join([frequency, area, "Z0Z", "4F", "EC", series, variant]),
         ]
         url = "/".join(parts)
         query = "?format=csvdata&detail=dataonly"
@@ -197,9 +212,7 @@ class EcbCissAdapter:
         results: list[FetchResult] = []
         for component in CISS_COMPONENTS:
             series_id = f"ecb_ciss.con.{component.lower()}.{area.lower()}"
-            url = self.url_for(
-                area, frequency="D", series=f"{component}_CON", variant="CON"
-            )
+            url = self.url_for(area, frequency="D", series=f"{component}_CON", variant="CON")
             payload = self._read(series_id, url, use_cache=use_cache)
             warnings: list[str] = []
             if payload is None:
@@ -230,9 +243,7 @@ class EcbCissAdapter:
                     adapter=self.name,
                     series_id=series_id,
                     country_code=country_code or area,
-                    observations=tuple(
-                        Observation(date=day, value=value) for day, value in parsed
-                    ),
+                    observations=tuple(Observation(date=day, value=value) for day, value in parsed),
                     source_url=url,
                     retrieved_at=str(metadata.get("retrieved_at", "")),
                     unit="contribution",
@@ -253,7 +264,9 @@ class EcbCissAdapter:
             response = self.client.get(url)
         except Exception:  # noqa: BLE001 - a missing series must not kill the run
             return None
-        self.store.write(self.name, series_id, response.body, url=url, retrieved_at=response.retrieved_at)
+        self.store.write(
+            self.name, series_id, response.body, url=url, retrieved_at=response.retrieved_at
+        )
         return response.body
 
     @staticmethod

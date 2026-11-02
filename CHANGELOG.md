@@ -32,6 +32,19 @@ plus one npm package and a shared locale catalogue at the repository root.
   orthogonalisation), `dy_generalised` (Diebold-Yilmaz generalised FEVD, a signed
   quantity) and `legacy_appendix` (a literal transcription of the previously shipped
   code, retained so that published numbers can be regenerated).
+  All four are now **published side by side in every artefact** under
+  `spillover.estimators`, with the default one inlined at `spillover` itself.  The
+  three that share a VAR fit use one fit, so publishing all four does not multiply
+  the cost of a run; `legacy_appendix` needs a fit of its own because the shipped
+  code used `lag_order = H = number of markets`.  An estimator that cannot be
+  computed is listed in `spillover.failed_estimators` with its reason and never
+  removes the others.
+- **Capability metadata** in every run artefact: a `profile` (`mbsed` or
+  `official_index`) and a `capabilities` map stating what the run can answer
+  (`composite_synthesis`, `market_decomposition`, `market_attribution`,
+  `spillover_network`, `regime`, `forecast`).  An economy measured by a published
+  official index has no sub-market decomposition *by construction*, and this is now
+  stated as data rather than left to be inferred from a missing section.
 - **Quality gates** (`jindun.quality`): eight named policy checks per series —
   `has_observations`, `enough_observations`, `unique_dates`, `ordered_dates`,
   `completeness`, `max_gap`, `freshness` and `value_bounds` — plus a
@@ -82,6 +95,17 @@ plus one npm package and a shared locale catalogue at the repository root.
   `/api/v1/countries/{code}/alerts`, `/api/v1/countries/{code}/data-quality`,
   `/api/v1/global/spillover`, `/api/v1/global/cycle`,
   `/api/v1/global/banking-network` and `/api/v1/global/gsib`.
+- **The estimator choice is part of the contract.**  `GET /api/v1/countries/{code}/spillover`
+  and `GET /api/v1/global/spillover` take a `method` parameter, return the estimator that
+  was asked for, and refuse an estimator the artefact does not publish with a `400` that
+  lists the ones it does.  A request can never be answered with a different estimator
+  than the one requested, and an unpublished horizon is refused the same way.
+- **A designed absence is reported as one.**  An economy measured by a published
+  official index has no cross-market network; the endpoint answers `404` with a
+  structured `reason` (`not_applicable`) instead of a generic failure, so the front
+  end can tell "this economy has no network" from "the computation failed".
+- 14 tests that pin the contract against a miniature artefact tree, so the CI covers
+  the API rather than only the compute core.
 - OpenAPI documentation at `/api/docs`, the schema at `/api/openapi.json`.
 - A read-only artefact store with a small in-process cache, so the number on the
   screen is the number in the run manifest.
@@ -98,6 +122,11 @@ plus one npm package and a shared locale catalogue at the repository root.
   quality gate.  The diagrams are mechanisms, not result charts.
 - A language switcher and a theme toggle, with all four shipped locales
   left-to-right.
+- An **estimator selector** on the spillover workspaces, so the four published
+  estimators are a choice the reader makes rather than a distinction hidden in
+  the documentation.
+- The absence of a cross-market network for the three official-index economies
+  is rendered as what it is — an explanation, not a failed request.
 - 58 front-end tests, including a page-level smoke test that mounts every route and
   asserts that its diagram is present.
 
@@ -126,9 +155,9 @@ plus one npm package and a shared locale catalogue at the repository root.
   `enabled: false` because their original source is a commercial terminal or a
   research construction and no free verified feed exists for them.
 - **Japan** (`configs/countries/jp.yaml`): two sub-markets — the money market (the
-  call-rate term spread) and foreign exchange (the USD/JPY volatility and its
-  deviation from trend) — built from the Bank of Japan's daily statistics, with three
-  derived series computed in the adapter.
+  dispersion of the overnight call rate) and foreign exchange (the USD/JPY volatility
+  and its deviation from trend) — built from the Bank of Japan's daily statistics, with
+  three derived series computed in the adapter.
 - **United States, United Kingdom and euro area** (`configs/countries/{us,gb,eu}.yaml`):
   the official ECB composite stress index, with the profile `official_index`.
 - The ECB CISS daily composite is registered as China's external cross-check
@@ -143,6 +172,10 @@ plus one npm package and a shared locale catalogue at the repository root.
   the originally published matrix cannot be reproduced bit for bit.
 - `data/baseline/`: the vendored regression assets and their provenance, and
   `scripts/freeze_baseline.py` to regenerate them.
+- `scripts/set_locale_key.py`: the tool that adds a key to all four locale catalogues
+  at once.  It refuses to write a key that is present in only some of the catalogues,
+  so a half-translated key can never reach the tree.  `scripts/audit_locale_keys.py`
+  checks afterwards that the four catalogues still agree.
 
 ### Fixed
 

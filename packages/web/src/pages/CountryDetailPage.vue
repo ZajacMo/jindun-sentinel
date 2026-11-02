@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
 import DataState from '@/components/DataState.vue'
@@ -34,6 +34,40 @@ const indexPayload = computed(() => indexResource.value?.data ?? null)
 
 const spilloverResource = computed(() => data.spilloverByCountry[code.value] ?? null)
 const spillover = computed(() => spilloverResource.value?.data ?? null)
+
+/**
+ * The estimator the reader is looking at.
+ *
+ * The artefact publishes all of them side by side, because they answer
+ * different questions and are not interchangeable — so the reader picks, and
+ * the default is only the artefact's default.
+ */
+const estimator = ref<string>('')
+const availableEstimators = computed(() => spillover.value?.availableMethods ?? [])
+const selectedEstimator = computed({
+  get: () => estimator.value || spillover.value?.defaultMethod || 'paper_equation',
+  set: (value: string) => {
+    estimator.value = value
+    void data.loadSpillover(code.value, value)
+  },
+})
+
+/**
+ * The reason there is no network to show, when there is none.
+ *
+ * An economy measured by a published official index has no sub-market
+ * decomposition by construction — that is a property of the economy, and it
+ * must not be rendered as a failure.
+ */
+const spilloverEmptyMessage = computed(() => {
+  const payload = spillover.value
+  if (!payload || payload.available) {
+    return null
+  }
+  return payload.unavailableReason === 'not_applicable'
+    ? t('spillover.notAvailable')
+    : t('spillover.unavailable')
+})
 
 const lensPoints = computed(() => {
   const payload = indexPayload.value
@@ -79,6 +113,7 @@ watch(
   () => code.value,
   (value) => {
     prefs.setCountry(value)
+    estimator.value = ''
     void data.loadIndex(value, prefs.lens)
     void data.loadSpillover(value)
   },
@@ -147,11 +182,28 @@ watch(
         </section>
 
         <section class="jd-panel">
-          <h2>{{ t('nav.spillover') }}</h2>
+          <div class="jd-row jd-row--spread">
+            <h2>{{ t('nav.spillover') }}</h2>
+            <el-select
+              v-if="availableEstimators.length > 1"
+              v-model="selectedEstimator"
+              size="default"
+              style="width: 280px"
+              :aria-label="t('spillover.estimator')"
+            >
+              <el-option
+                v-for="item in availableEstimators"
+                :key="item"
+                :label="labels.method(item)"
+                :value="item"
+              />
+            </el-select>
+          </div>
           <DataState
             :status="spilloverResource?.status ?? 'idle'"
             :error="spilloverResource?.error ?? null"
-            :empty="!spillover"
+            :empty="!spillover || spillover.nodes.length === 0"
+            :empty-message="spilloverEmptyMessage"
             @retry="data.loadSpillover(code)"
           >
             <el-table :data="spilloverRows" border stripe>

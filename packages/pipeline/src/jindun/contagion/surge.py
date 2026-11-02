@@ -175,9 +175,7 @@ def surging_markets(
     for market, score in scores.items():
         if score.zscore < threshold:
             continue
-        relative = (
-            (score.latest - score.mean) / abs(score.mean) if score.mean else 0.0
-        )
+        relative = (score.latest - score.mean) / abs(score.mean) if score.mean else 0.0
         if relative < min_relative_change:
             continue
         selected.append(market)

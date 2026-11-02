@@ -114,16 +114,12 @@ def _cgb_curve(start_year: int = 2010) -> pd.DataFrame:
     frames: list[pd.DataFrame] = []
     for year in range(start_year, end_year + 1):
         with _quiet():
-            frame = ak.bond_china_yield(
-                start_date=f"{year}0101", end_date=f"{year}1231"
-            )
+            frame = ak.bond_china_yield(start_date=f"{year}0101", end_date=f"{year}1231")
         if frame is None or frame.empty:
             continue
         frame = frame.rename(columns={"日期": "date", "曲线名称": "curve"})
         frame["date"] = pd.to_datetime(frame["date"])
-        government = frame[
-            frame["curve"].astype(str).str.contains("中债国债收益率曲线")
-        ]
+        government = frame[frame["curve"].astype(str).str.contains("中债国债收益率曲线")]
         if government.empty:
             government = frame
         frames.append(government)
@@ -190,12 +186,15 @@ def _currency_boc(symbol: str) -> pd.Series:
 
 
 #: Series that map one-to-one onto an upstream table.
-BASE_SERIES: Mapping[str, tuple[AkshareSeries, Callable[[], pd.Series]]] = {    "cn.equity.sse_composite_close": (
+BASE_SERIES: Mapping[str, tuple[AkshareSeries, Callable[[], pd.Series]]] = {
+    "cn.equity.sse_composite_close": (
         AkshareSeries("cn.equity.sse_composite_close", "SSE Composite Index close", unit="index"),
         lambda: _index_close("sh000001"),
     ),
     "cn.equity.sse_composite_volume": (
-        AkshareSeries("cn.equity.sse_composite_volume", "SSE Composite Index turnover", unit="shares"),
+        AkshareSeries(
+            "cn.equity.sse_composite_volume", "SSE Composite Index turnover", unit="shares"
+        ),
         lambda: _index_volume("sh000001"),
     ),
     "cn.equity.szse_component_close": (
@@ -207,7 +206,9 @@ BASE_SERIES: Mapping[str, tuple[AkshareSeries, Callable[[], pd.Series]]] = {    
         lambda: _index_close("sh000300"),
     ),
     "cn.bond.cgb_3m_yield": (
-        AkshareSeries("cn.bond.cgb_3m_yield", "ChinaBond government yield, 3 month", unit="percent"),
+        AkshareSeries(
+            "cn.bond.cgb_3m_yield", "ChinaBond government yield, 3 month", unit="percent"
+        ),
         lambda: _cgb_tenor("3月"),
     ),
     "cn.bond.cgb_1y_yield": (
@@ -215,7 +216,9 @@ BASE_SERIES: Mapping[str, tuple[AkshareSeries, Callable[[], pd.Series]]] = {    
         lambda: _cgb_tenor("1年"),
     ),
     "cn.bond.cgb_10y_yield": (
-        AkshareSeries("cn.bond.cgb_10y_yield", "ChinaBond government yield, 10 year", unit="percent"),
+        AkshareSeries(
+            "cn.bond.cgb_10y_yield", "ChinaBond government yield, 10 year", unit="percent"
+        ),
         lambda: _cgb_tenor("10年"),
     ),
     "cn.money.shibor_on": (
@@ -231,11 +234,15 @@ BASE_SERIES: Mapping[str, tuple[AkshareSeries, Callable[[], pd.Series]]] = {    
         lambda: _shibor("3M-定价"),
     ),
     "cn.equity.margin_balance_sh": (
-        AkshareSeries("cn.equity.margin_balance_sh", "Shanghai margin financing balance", unit="CNY"),
+        AkshareSeries(
+            "cn.equity.margin_balance_sh", "Shanghai margin financing balance", unit="CNY"
+        ),
         lambda: _margin("融资余额"),
     ),
     "cn.equity.margin_short_balance_sh": (
-        AkshareSeries("cn.equity.margin_short_balance_sh", "Shanghai margin short balance", unit="CNY"),
+        AkshareSeries(
+            "cn.equity.margin_short_balance_sh", "Shanghai margin short balance", unit="CNY"
+        ),
         lambda: _margin("融券余额"),
     ),
     "cn.derivative.csi300_futures_close": (
@@ -247,7 +254,9 @@ BASE_SERIES: Mapping[str, tuple[AkshareSeries, Callable[[], pd.Series]]] = {    
         lambda: _futures_close("IF0"),
     ),
     "cn.fx.usd_cny_mid": (
-        AkshareSeries("cn.fx.usd_cny_mid", "USD/CNY middle rate (Bank of China)", unit="CNY per USD"),
+        AkshareSeries(
+            "cn.fx.usd_cny_mid", "USD/CNY middle rate (Bank of China)", unit="CNY per USD"
+        ),
         lambda: _currency_boc("美元"),
     ),
 }
@@ -289,7 +298,9 @@ def np_log_returns(series: pd.Series) -> pd.Series:
     positive = clean[clean > 0]
     if len(positive) < 2:
         return pd.Series(dtype=float)
-    return (np.log(positive / positive.shift(1)) * 100.0).replace([np.inf, -np.inf], np.nan).dropna()
+    return (
+        (np.log(positive / positive.shift(1)) * 100.0).replace([np.inf, -np.inf], np.nan).dropna()
+    )
 
 
 def _relative_to_ma(series_id: str, window: int = 250) -> pd.Series:
@@ -378,8 +389,9 @@ DERIVED_SERIES: Mapping[str, tuple[AkshareSeries, Callable[[], pd.Series]]] = {
             "Deviation of the CSI 300 index futures contract from the spot index",
             unit="percent",
         ),
-        lambda: _ratio("cn.derivative.csi300_futures_close", "cn.equity.csi300_close") * 100.0
-        - 100.0,
+        lambda: (
+            _ratio("cn.derivative.csi300_futures_close", "cn.equity.csi300_close") * 100.0 - 100.0
+        ),
     ),
     "cn.equity.margin_to_market_cap": (
         AkshareSeries(

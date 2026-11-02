@@ -68,9 +68,7 @@ def extract_cycle_factor(
 
     frame = pd.DataFrame(composites).sort_index().dropna(how="any")
     if frame.shape[1] < 2:
-        return CycleFactor(
-            notes=["at least two countries with a common calendar are required"]
-        )
+        return CycleFactor(notes=["at least two countries with a common calendar are required"])
 
     panel = frame
     if standardize:

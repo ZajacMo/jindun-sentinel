@@ -32,7 +32,7 @@ from ..adapters.fsb import FsbAdapter
 from ..config import Settings
 from ..contagion import GVDSpec
 from .banking_network import BIS_AREA_CODES, load_banking_network
-from .cross_country import cross_country_spillover
+from .cross_country import cross_country_spillover_all
 from .cycle import extract_cycle_factor
 
 __all__ = [
@@ -146,8 +146,17 @@ def run_global_layer(
                 max_order=settings.contagion.max_order,
                 transform=settings.contagion.transform,
             )
-            result = cross_country_spillover(composites, spec)
-            payload = result.to_payload()
+            networks = cross_country_spillover_all(
+                composites,
+                spec,
+                methods=settings.contagion.publish_methods,
+            )
+            default = networks.results.get(spec.method)
+            if default is None and networks.results:
+                default = next(iter(networks.results.values()))
+            payload = default.to_payload() if default is not None else {}
+            payload["default_method"] = default.method if default is not None else spec.method
+            payload.update(networks.to_payload())
         except Exception as exc:  # noqa: BLE001
             payload = {"scope": "global", "nodes": [], "matrix": [], "notes": [str(exc)]}
             warnings.append(f"the cross-country network could not be computed: {exc}")
@@ -172,14 +181,14 @@ def run_global_layer(
     cycle_payload["countries"] = sorted(composites)
     cycle_payload["generated_at"] = dt.datetime.now(dt.UTC).isoformat()
     path = root / "cycle.json"
-    path.write_text(
-        json.dumps(cycle_payload, ensure_ascii=False, indent=2), encoding="utf-8"
-    )
+    path.write_text(json.dumps(cycle_payload, ensure_ascii=False, indent=2), encoding="utf-8")
     written["cycle"] = str(path)
 
     # 3. Cross-border banking network ------------------------------------
-    snapshot = Path(banking_snapshot) if banking_snapshot else (
-        paths.snapshot_dir() / "bis" / "lbs_bilateral.csv"
+    snapshot = (
+        Path(banking_snapshot)
+        if banking_snapshot
+        else (paths.snapshot_dir() / "bis" / "lbs_bilateral.csv")
     )
     if snapshot.exists():
         try:

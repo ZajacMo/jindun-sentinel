@@ -94,6 +94,14 @@ contagion:
   criterion: bic
   max_order: 5
   transform: level
+  # The estimators published side by side in every artefact.  They are not
+  # interchangeable, so all of them are published and the one above is only
+  # the default the alerting and the regime logic read.
+  publish_methods:
+    - paper_equation
+    - sims_structural
+    - dy_generalised
+    - legacy_appendix
   # Rolling windows behind the spill-out surge alert.  The windows are wide on
   # purpose: a spill-out share is a slow structural quantity, and a daily
   # frequency would fire on noise.

@@ -163,10 +163,7 @@ def forecast_arima(
         future = [anchor + step * (index + 1) for index in range(horizon)]
         dates = [date.date().isoformat() for date in future]
     elif last_date is not None:
-        dates = [
-            (last_date + dt.timedelta(days=index + 1)).isoformat()
-            for index in range(horizon)
-        ]
+        dates = [(last_date + dt.timedelta(days=index + 1)).isoformat() for index in range(horizon)]
 
     return ArimaFit(
         order=chosen,
@@ -177,7 +174,8 @@ def forecast_arima(
         dates=dates,
         aic=float(getattr(fitted, "aic", float("nan"))),
         converged=bool(getattr(fitted, "mle_retvals", {}).get("converged", True)),
-        note="" if getattr(fitted, "mle_retvals", {}).get("converged", True)
+        note=""
+        if getattr(fitted, "mle_retvals", {}).get("converged", True)
         else "the maximum likelihood optimisation did not converge",
     )
 

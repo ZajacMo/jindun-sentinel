@@ -152,7 +152,9 @@ def test_offline_answer_contains_the_published_numbers(
     published = _numbers(run_payload) | _numbers(quality_payload) | _numbers(global_payload)
     printed = set(_NUMBER.findall(_ISO_DATETIME.sub(" ", answer.answer)))
     assert printed, "the offline answer should report at least one number"
-    assert printed <= published, f"the answer reports numbers that were not published: {printed - published}"
+    assert printed <= published, (
+        f"the answer reports numbers that were not published: {printed - published}"
+    )
 
 
 def test_offline_answer_never_invents_a_number(
@@ -216,14 +218,18 @@ def test_tool_registry_is_not_empty_and_returns_json_payloads() -> None:
 
 def test_tools_do_not_touch_the_artefacts(run_payload: dict[str, Any]) -> None:
     directory = CN_ARTEFACT.parent
-    before = {path.name: (path.stat().st_mtime_ns, path.stat().st_size) for path in directory.iterdir()}
+    before = {
+        path.name: (path.stat().st_mtime_ns, path.stat().st_size) for path in directory.iterdir()
+    }
 
     registry = build_registry()
     for tool in registry.describe():
         kwargs = {"country": "CN"} if "country" in tool["parameters"] else {}
         registry.call(tool["name"], **kwargs)
 
-    after = {path.name: (path.stat().st_mtime_ns, path.stat().st_size) for path in directory.iterdir()}
+    after = {
+        path.name: (path.stat().st_mtime_ns, path.stat().st_size) for path in directory.iterdir()
+    }
     assert before == after
 
 

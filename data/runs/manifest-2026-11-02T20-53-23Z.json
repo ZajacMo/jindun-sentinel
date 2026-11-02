@@ -1,0 +1,53 @@
+{
+  "run_id": "2026-11-02T20-53-23Z",
+  "started_at": "2026-11-02T20:53:23.742742+00:00",
+  "code_version": {
+    "git_commit": "b7499163692d01d8472ec136f989c7e0a19540d1",
+    "dirty": true
+  },
+  "data_snapshot": {},
+  "sources": [],
+  "config": {
+    "project": "jindun-sentinel"
+  },
+  "environment": {},
+  "outputs": {
+    "CN": {
+      "market_indices": "F:\\Projects\\03_projects\\jindun-sentinel\\data\\runs\\CN\\market_indices.csv",
+      "run": "F:\\Projects\\03_projects\\jindun-sentinel\\data\\runs\\CN\\run.json",
+      "quality": "F:\\Projects\\03_projects\\jindun-sentinel\\data\\runs\\CN\\quality.json"
+    },
+    "EU": {
+      "market_indices": "F:\\Projects\\03_projects\\jindun-sentinel\\data\\runs\\EU\\market_indices.csv",
+      "run": "F:\\Projects\\03_projects\\jindun-sentinel\\data\\runs\\EU\\run.json",
+      "quality": "F:\\Projects\\03_projects\\jindun-sentinel\\data\\runs\\EU\\quality.json"
+    },
+    "GB": {
+      "market_indices": "F:\\Projects\\03_projects\\jindun-sentinel\\data\\runs\\GB\\market_indices.csv",
+      "run": "F:\\Projects\\03_projects\\jindun-sentinel\\data\\runs\\GB\\run.json",
+      "quality": "F:\\Projects\\03_projects\\jindun-sentinel\\data\\runs\\GB\\quality.json"
+    },
+    "JP": {
+      "market_indices": "F:\\Projects\\03_projects\\jindun-sentinel\\data\\runs\\JP\\market_indices.csv",
+      "run": "F:\\Projects\\03_projects\\jindun-sentinel\\data\\runs\\JP\\run.json",
+      "quality": "F:\\Projects\\03_projects\\jindun-sentinel\\data\\runs\\JP\\quality.json"
+    },
+    "US": {
+      "market_indices": "F:\\Projects\\03_projects\\jindun-sentinel\\data\\runs\\US\\market_indices.csv",
+      "run": "F:\\Projects\\03_projects\\jindun-sentinel\\data\\runs\\US\\run.json",
+      "quality": "F:\\Projects\\03_projects\\jindun-sentinel\\data\\runs\\US\\quality.json"
+    }
+  },
+  "elapsed_sec": 171.163,
+  "warnings": [
+    "method=paper_equation; VAR order=2 (selected by bic); horizon=10; sample=2017-03-30..2026-10-30",
+    "CN: cn.equity.sse_composite_volume -> warning",
+    "CN: cn.equity.return_volatility -> warning",
+    "CN: cn.fx.usd_cny_volatility -> warning",
+    "CN: cn.money.shibor_term_premium -> warning",
+    "the country index is an official published stress index; this economy has no sub-market decomposition, so the market attribution and the cross-market spillover network are not available for it",
+    "the country index is an official published stress index; this economy has no sub-market decomposition, so the market attribution and the cross-market spillover network are not available for it",
+    "method=paper_equation; VAR order=5 (selected by bic); horizon=10; sample=2005-01-04..2026-10-29",
+    "the country index is an official published stress index; this economy has no sub-market decomposition, so the market attribution and the cross-market spillover network are not available for it"
+  ]
+}

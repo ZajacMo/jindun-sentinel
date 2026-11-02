@@ -14,8 +14,10 @@ withDefaults(
     status: ResourceStatus
     error?: string | null
     empty?: boolean
+    /** Explains *why* the resource is empty, when the emptiness is meaningful. */
+    emptyMessage?: string | null
   }>(),
-  { error: null, empty: false },
+  { error: null, empty: false, emptyMessage: null },
 )
 
 const emit = defineEmits<{ retry: [] }>()
@@ -46,7 +48,7 @@ const { t } = useI18n()
     </div>
 
     <div v-else-if="status === 'success' && empty" class="jd-state__empty jd-muted">
-      {{ t('common.empty') }}
+      {{ emptyMessage ?? t('common.empty') }}
     </div>
 
     <slot v-else />

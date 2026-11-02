@@ -90,8 +90,9 @@ def fallback_regimes(
     """
     clean = pd.Series(series).astype(float).dropna()
     if clean.empty:
-        return RegimeFit(labels=[], dates=[], method="fallback", converged=False,
-                         note="empty series")
+        return RegimeFit(
+            labels=[], dates=[], method="fallback", converged=False, note="empty series"
+        )
     window = max(3, smooth_window)
     smoothed = clean.rolling(window, min_periods=1).mean()
     threshold = float(smoothed.median())

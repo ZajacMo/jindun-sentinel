@@ -143,9 +143,7 @@ class Country:
 
     @property
     def indicator_codes(self) -> tuple[str, ...]:
-        return tuple(
-            indicator.code for market in self.markets for indicator in market.indicators
-        )
+        return tuple(indicator.code for market in self.markets for indicator in market.indicators)
 
 
 @dataclass(frozen=True, slots=True)
@@ -280,6 +278,26 @@ class SpilloverResult:
             "method": self.method,
             "var_order": self.var_order,
             "notes": self.notes,
+        }
+
+
+@dataclass(slots=True)
+class SpilloverSet:
+    """The networks of every estimator, computed from one VAR fit.
+
+    The estimators are not interchangeable, so they are published side by side.
+    One estimator that cannot be computed — the legacy implementation, for
+    instance, needs a horizon that equals the number of nodes — must not take
+    the others down with it: the failure is recorded per estimator instead.
+    """
+
+    results: dict[str, SpilloverResult] = field(default_factory=dict)
+    failures: dict[str, str] = field(default_factory=dict)
+
+    def to_payload(self) -> dict[str, object]:
+        return {
+            "estimators": {method: result.to_payload() for method, result in self.results.items()},
+            "failed_estimators": dict(self.failures),
         }
 
 

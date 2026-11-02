@@ -446,21 +446,18 @@ class Agent:
             )
         if pack.percentile:
             lines.append(
-                f"  {loc.text('index.percentile')}: "
-                f"{_format_number(pack.percentile.get('value'))}"
+                f"  {loc.text('index.percentile')}: {_format_number(pack.percentile.get('value'))}"
             )
         if pack.deviation:
             lines.append(
-                f"  {loc.text('index.deviation')}: "
-                f"{_format_number(pack.deviation.get('value'))}"
+                f"  {loc.text('index.deviation')}: {_format_number(pack.deviation.get('value'))}"
             )
         regime = pack.regime or {}
         if regime.get("label"):
             parts = [loc.regime_label(str(regime["label"]))]
             if regime.get("probability") is not None:
                 parts.append(
-                    f"{loc.text('regime.probability')} "
-                    f"{_format_number(regime.get('probability'))}"
+                    f"{loc.text('regime.probability')} {_format_number(regime.get('probability'))}"
                 )
             lines.append("  " + " · ".join(parts))
         if pack.market_indices:
@@ -486,8 +483,7 @@ class Agent:
                 "  "
                 + f"{loc.text('metric.net')}: "
                 + " · ".join(
-                    f"{loc.market_label(str(entry.get('node')))} "
-                    f"{_format_number(entry.get('net'))}"
+                    f"{loc.market_label(str(entry.get('node')))} {_format_number(entry.get('net'))}"
                     for entry in pack.spillover
                 )
             )

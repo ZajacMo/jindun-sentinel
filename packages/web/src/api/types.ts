@@ -49,6 +49,17 @@ export interface RegimeSeries {
 export interface CountryIndexPayload {
   countryCode: string
   asOf: string | null
+  /**
+   * How the country index is built: `mbsed` (synthesised from sub-market
+   * indices) or `official_index` (a published official stress index).
+   */
+  profile: string
+  /**
+   * What this run is able to answer.  A capability is absent either because
+   * the profile does not have that decomposition at all, or because the
+   * computation failed in this run — the run warnings tell the two apart.
+   */
+  capabilities: Record<string, boolean>
   composite: SeriesPoint[]
   percentile: SeriesPoint[]
   deviation: SeriesPoint[]
@@ -66,6 +77,14 @@ export interface SpilloverPayload {
   net: Record<string, number>
   horizon: number
   method: string
+  /** The estimator the artefact publishes as its default. */
+  defaultMethod: string
+  /** Every estimator the artefact publishes — they are not interchangeable. */
+  availableMethods: string[]
+  /** False when this economy has no spillover network by construction. */
+  available: boolean
+  /** Why the network is absent, when it is: `not_applicable` or `unavailable`. */
+  unavailableReason: string | null
   window: [string, string] | null
   notes: string[]
   varOrder: number | null
@@ -122,6 +141,9 @@ export interface CountrySummary {
   enabled: boolean
   asOf: string | null
   cissArea: string | null
+  /** `mbsed` or `official_index` — see {@link CountryIndexPayload.profile}. */
+  profile: string
+  capabilities: Record<string, boolean>
   /** The market codes the country index is built from. */
   markets: string[]
   latestPercentile: number | null
@@ -186,6 +208,17 @@ function asNumberMap(value: unknown): Record<string, number> {
     const parsed = asNumber(item, Number.NaN)
     if (Number.isFinite(parsed)) {
       result[key] = parsed
+    }
+  }
+  return result
+}
+
+/** Normalise a `{capability: boolean}` map, keeping only real booleans. */
+export function asBooleanMap(value: unknown): Record<string, boolean> {
+  const result: Record<string, boolean> = {}
+  for (const [key, item] of Object.entries(asRecord(value))) {
+    if (typeof item === 'boolean') {
+      result[key] = item
     }
   }
   return result
@@ -412,6 +445,8 @@ export function normaliseIndexPayload(raw: unknown, fallbackCode = ''): CountryI
   return {
     countryCode: asString(record.country_code) || fallbackCode,
     asOf: asString(record.as_of) || null,
+    profile: asString(record.profile, 'mbsed'),
+    capabilities: asBooleanMap(record.capabilities),
     composite: normaliseSeries(record.composite),
     percentile: normaliseSeries(record.percentile),
     deviation: normaliseSeries(record.deviation),
@@ -442,6 +477,12 @@ export function normaliseSpilloverPayload(raw: unknown): SpilloverPayload {
     net: asNumberMap(record.net),
     horizon: asNumber(record.horizon, 10),
     method: asString(record.method, 'paper_equation'),
+    defaultMethod: asString(record.default_method, asString(record.method, 'paper_equation')),
+    availableMethods: asArray(record.available_methods)
+      .map((item) => asString(item))
+      .filter(Boolean),
+    available: record.available !== false,
+    unavailableReason: asString(record.unavailable_reason) || null,
     window: window.length === 2 ? [window[0] as string, window[1] as string] : null,
     notes: asArray(record.notes).map((item) => asString(item)).filter(Boolean),
     varOrder: asNullableNumber(record.var_order),
@@ -546,6 +587,8 @@ export function normaliseCountries(raw: unknown): CountrySummary[] {
       enabled: entry.enabled !== false,
       asOf: asString(entry.as_of) || null,
       cissArea: asString(entry.ciss_area) || null,
+      profile: asString(entry.profile, 'mbsed'),
+      capabilities: asBooleanMap(entry.capabilities),
       markets: asArray(entry.markets).map((item) => asString(item)).filter(Boolean),
       latestPercentile: asNullableNumber(entry.latest_percentile),
       latestDeviation: asNullableNumber(entry.latest_deviation),

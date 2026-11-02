@@ -130,6 +130,17 @@ Notes on the individual methods:
   forecast error variance of the row node. That is a property of the
   estimator, not a numerical defect.
 * **`legacy_appendix`** exists for regression against the previous system only.
+  The shipped code used `lag_order = H = number of markets`, so the estimator
+  is computed with a VAR fit *of its own* at that order and that horizon —
+  it does not reuse the fit the other three estimators share.
+
+All four are **published side by side in every artefact**, under
+`spillover.estimators`, and the artefact's default one is also inlined at
+`spillover` itself for the consumers that do not need the choice.  An
+estimator that cannot be computed for a given network is listed in
+`spillover.failed_estimators` together with the reason — it never removes the
+others, because one estimator's precondition is not a reason to lose the
+whole network.
 
 All four share the same reporting convention (row-normalised shares, total
 spill-out as the column off-diagonal sum, total spill-in as the row
@@ -205,6 +216,10 @@ The test suite pins the *estimator* rather than the *published numbers*:
 
 ## 6. Which estimator is used where
 
+Every artefact publishes **all four** estimators, because they are not
+interchangeable and presenting one of them as *the* spillover number would
+hide that.  What differs is which one the alerting and the regime logic read:
+
 * **Country market contagion** (five sub-markets of one economy): the default
   `paper_equation` estimator, so the published specification is preserved and
   the numbers remain comparable with the paper.
@@ -213,6 +228,11 @@ The test suite pins the *estimator* rather than the *published numbers*:
   The node set changes between runs, so the ordering-sensitive
   `sims_structural` estimator is *not* used there.
 * **Legacy regression and figure reproduction**: `legacy_appendix`.
+
+The API serves the choice explicitly: `GET /api/v1/countries/{code}/spillover?method=…`
+returns the requested estimator, and refuses a method the artefact does not
+publish with a `400` listing the ones it does.  It never answers with a
+different estimator than the one that was asked for.
 
 Whenever a correction changes a published number, both the legacy and the
 corrected value are kept, the difference is quantified, and the change is

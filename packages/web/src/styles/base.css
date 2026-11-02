@@ -158,6 +158,11 @@ th.jd-numeric,
   gap: var(--jd-gap-sm);
 }
 
+/* A row whose ends are pushed apart — a heading and its control. */
+.jd-row--spread {
+  justify-content: space-between;
+}
+
 .jd-panel {
   background: var(--jd-surface);
   border: 1px solid var(--jd-border);

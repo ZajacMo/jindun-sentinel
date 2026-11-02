@@ -20,12 +20,24 @@ read:
 
 from __future__ import annotations
 
+from collections.abc import Sequence
+
 import pandas as pd
 
-from ..contagion import GVDSpec, compute_spillover
-from ..models import SpilloverResult
+from ..contagion import METHODS, GVDSpec, compute_spillover, compute_spillover_all
+from ..models import SpilloverResult, SpilloverSet
 
-__all__ = ["cross_country_spillover", "align_country_composites"]
+__all__ = [
+    "cross_country_spillover",
+    "cross_country_spillover_all",
+    "align_country_composites",
+]
+
+#: The caveat that applies to every cross-country network.
+_CROSS_COUNTRY_NOTE = (
+    "the cross-country network is computed over the country composites on the "
+    "percentile lens; only dates present in every country are used"
+)
 
 
 def align_country_composites(composites: dict[str, pd.Series]) -> pd.DataFrame:
@@ -53,15 +65,39 @@ def cross_country_spillover(
     ``composites`` maps a country code to its composite series.
     """
     spec = spec or GVDSpec()
+    frame = _aligned_frame(composites)
+    result = compute_spillover(frame, spec, scope=scope)
+    result.notes.append(_CROSS_COUNTRY_NOTE)
+    return result
+
+
+def cross_country_spillover_all(
+    composites: dict[str, pd.Series],
+    spec: GVDSpec | None = None,
+    *,
+    scope: str = "global",
+    methods: Sequence[str] = METHODS,
+) -> SpilloverSet:
+    """Compute the cross-country network with every estimator.
+
+    The estimators are not interchangeable and the ordering-sensitive one in
+    particular must not be read as "the" cross-country number, so the global
+    artefact publishes them side by side rather than silently picking one.
+    """
+    spec = spec or GVDSpec()
+    frame = _aligned_frame(composites)
+    networks = compute_spillover_all(frame, spec, scope=scope, methods=methods)
+    for result in networks.results.values():
+        result.notes.append(_CROSS_COUNTRY_NOTE)
+    return networks
+
+
+def _aligned_frame(composites: dict[str, pd.Series]) -> pd.DataFrame:
+    """The common calendar of the country composites, or an error."""
     frame = align_country_composites(composites)
     if frame.shape[1] < 2:
         raise ValueError(
             "at least two countries with a common calendar are required for a "
             "cross-country decomposition"
         )
-    result = compute_spillover(frame, spec, scope=scope)
-    result.notes.append(
-        "the cross-country network is computed over the country composites on the "
-        "percentile lens; only dates present in every country are used"
-    )
-    return result
+    return frame

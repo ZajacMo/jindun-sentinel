@@ -133,9 +133,7 @@ class BisAdapter:
         (``2025-Q4`` for quarterly flows, ``2026-10`` for monthly ones) and
         ``OBS_VALUE`` the observation.
         """
-        url = self.data_url(
-            flow, key, start_period=start_period, end_period=end_period
-        )
+        url = self.data_url(flow, key, start_period=start_period, end_period=end_period)
         identifier = series_id or f"bis.{flow.lower()}.{(key or 'all').lower().replace('.', '_')}"
 
         payload = self._read(identifier, url, use_cache=use_cache)
@@ -169,9 +167,7 @@ class BisAdapter:
             adapter=self.name,
             series_id=identifier,
             country_code=country_code,
-            observations=tuple(
-                Observation(date=day, value=value) for day, value in observations
-            ),
+            observations=tuple(Observation(date=day, value=value) for day, value in observations),
             source_url=url,
             retrieved_at=str(metadata.get("retrieved_at", "")),
             vintage=str(metadata.get("retrieved_at", "")) or None,

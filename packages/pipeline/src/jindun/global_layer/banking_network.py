@@ -57,8 +57,26 @@ BIS_AREA_CODES: Mapping[str, str] = {
 
 #: The member states of the euro area, used when the aggregate is missing.
 EURO_AREA_MEMBERS: tuple[str, ...] = (
-    "AT", "BE", "CY", "DE", "EE", "ES", "FI", "FR", "GR", "HR",
-    "IE", "IT", "LT", "LU", "LV", "MT", "NL", "PT", "SI", "SK",
+    "AT",
+    "BE",
+    "CY",
+    "DE",
+    "EE",
+    "ES",
+    "FI",
+    "FR",
+    "GR",
+    "HR",
+    "IE",
+    "IT",
+    "LT",
+    "LU",
+    "LV",
+    "MT",
+    "NL",
+    "PT",
+    "SI",
+    "SK",
 )
 
 #: The positions of the locational banking statistics.
@@ -160,9 +178,7 @@ def _aggregate_euro_area(
         new_target = "XM" if target in members else target
         if new_source == new_target:
             continue
-        bucket = folded.setdefault(
-            (new_source, new_target), {"claims": 0.0, "liabilities": 0.0}
-        )
+        bucket = folded.setdefault((new_source, new_target), {"claims": 0.0, "liabilities": 0.0})
         bucket["claims"] += values.get("claims", 0.0)
         bucket["liabilities"] += values.get("liabilities", 0.0)
     return folded
@@ -252,9 +268,7 @@ def _concentration(
     )
     concentration = {
         "hhi_bilateral": hhi,
-        "largest_bilateral_share": (
-            largest.claims / total_claims if total_claims else 0.0
-        ),
+        "largest_bilateral_share": (largest.claims / total_claims if total_claims else 0.0),
         "top_node_share": node_shares[0] if node_shares else 0.0,
         "edge_count": float(len(edges)),
         "total_claims": total_claims,

@@ -81,9 +81,7 @@ def _adapter_fetcher(settings: Settings, store: SnapshotStore, *, country: Count
             return akshare.fetch(series_id, country_code=country.code, use_cache=use_cache)
         if adapter == "ecb_ciss":
             area = country.ciss_area or country.code
-            return ecb.fetch_composite(
-                area, country_code=country.code, use_cache=use_cache
-            )
+            return ecb.fetch_composite(area, country_code=country.code, use_cache=use_cache)
         if adapter == "boj":
             return BojAdapter(store=store).fetch_series(
                 series_id, country_code=country.code, use_cache=use_cache
@@ -119,7 +117,15 @@ def _cmd_sources(args: argparse.Namespace) -> int:
         "bis_flows": list(BisAdapter.known_flows()),
         "boj_databases": sorted(
             {
-                "IR01", "FM01", "FM08", "FM09", "MD01", "MD02", "PR01", "CO", "BP01",
+                "IR01",
+                "FM01",
+                "FM08",
+                "FM09",
+                "MD01",
+                "MD02",
+                "PR01",
+                "CO",
+                "BP01",
             }
         ),
     }
@@ -271,9 +277,7 @@ def build_parser() -> argparse.ArgumentParser:
         default=None,
         help="the filtered BIS bilateral snapshot used for the banking network",
     )
-    global_parser.add_argument(
-        "--refresh", action="store_true", help="ignore the snapshot cache"
-    )
+    global_parser.add_argument("--refresh", action="store_true", help="ignore the snapshot cache")
     global_parser.set_defaults(func=_cmd_global)
 
     return parser

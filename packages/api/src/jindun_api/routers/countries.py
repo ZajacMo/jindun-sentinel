@@ -6,6 +6,7 @@ from typing import Any
 
 from fastapi import APIRouter, Depends, HTTPException, Query
 
+from jindun_api.estimators import select_estimator
 from jindun_api.schemas import (
     AlertListResponse,
     AlertResponse,
@@ -17,13 +18,9 @@ from jindun_api.schemas import (
     SeriesPoint,
     SpilloverResponse,
 )
-from jindun_api.store import ArtifactStore, RunStoreError
+from jindun_api.store import ArtifactStore, RunStoreError, get_store
 
 router = APIRouter(prefix="/countries", tags=["countries"])
-
-
-def get_store() -> ArtifactStore:
-    return ArtifactStore()
 
 
 def _require_run(store: ArtifactStore, code: str) -> dict[str, Any]:
@@ -52,6 +49,8 @@ def list_countries(store: ArtifactStore = Depends(get_store)) -> CountryListResp
             CountrySummary(
                 code=payload.get("country_code", code),
                 name_en=code,
+                profile=payload.get("profile", "mbsed"),
+                capabilities=dict(payload.get("capabilities") or {}),
                 as_of=payload.get("as_of"),
                 markets=markets,
                 latest_percentile=percentile[-1]["value"] if percentile else None,
@@ -87,6 +86,8 @@ def country_index(
     return IndexResponse(
         country_code=payload.get("country_code", code.upper()),
         as_of=payload.get("as_of", ""),
+        profile=payload.get("profile", "mbsed"),
+        capabilities=dict(payload.get("capabilities") or {}),
         lens=lens,
         composite=[
             SeriesPoint(date=item["date"], value=float(item["value"]))
@@ -116,16 +117,43 @@ def country_index(
 @router.get("/{code}/spillover", response_model=SpilloverResponse)
 def country_spillover(
     code: str,
+    method: str | None = Query(
+        None,
+        description="The estimator to read; the artefact publishes several and they are "
+        "not interchangeable.",
+    ),
+    horizon: int | None = Query(
+        None, description="The forecast horizon to read; the artefact publishes one."
+    ),
     store: ArtifactStore = Depends(get_store),
 ) -> SpilloverResponse:
     """The cross-market spillover network of one country."""
     payload = _require_run(store, code)
     block = payload.get("spillover") or {}
     if not block:
+        # A missing network has two very different causes, and the client has
+        # to be able to tell them apart: an economy measured by a published
+        # official index has no sub-market decomposition by construction, while
+        # an empty block on a decomposed economy means the computation failed
+        # in this run.  The reason is therefore part of the error.
+        capabilities = payload.get("capabilities") or {}
+        decomposed = capabilities.get("market_decomposition", True)
         raise HTTPException(
             status_code=404,
-            detail=f"the run for {code!r} contains no spillover network",
+            detail={
+                "message": f"the run for {code!r} contains no spillover network",
+                "reason": "not_applicable" if not decomposed else "unavailable",
+                "profile": payload.get("profile", "mbsed"),
+            },
         )
+
+    estimators = block.get("estimators") or {}
+    default_method = block.get("default_method") or block.get("method") or "paper_equation"
+    available = sorted(estimators) if estimators else [default_method]
+    block, selected, available = select_estimator(
+        block, scope=code.upper(), method=method, horizon=horizon
+    )
+
     return SpilloverResponse(
         scope=block.get("scope", code.upper()),
         nodes=block.get("nodes") or [],
@@ -134,7 +162,9 @@ def country_spillover(
         total_spillin=block.get("total_spillin") or {},
         net=block.get("net") or {},
         horizon=int(block.get("horizon", 10)),
-        method=block.get("method", "paper_equation"),
+        method=selected,
+        default_method=default_method,
+        available_methods=available,
         var_order=block.get("var_order"),
         window=block.get("window"),
         notes=block.get("notes") or [],
@@ -148,9 +178,7 @@ def country_alerts(
 ) -> AlertListResponse:
     """The alerts that the last run raised for one country."""
     payload = _require_run(store, code)
-    return AlertListResponse(
-        alerts=[AlertResponse(**item) for item in payload.get("alerts") or []]
-    )
+    return AlertListResponse(alerts=[AlertResponse(**item) for item in payload.get("alerts") or []])
 
 
 @router.get("/{code}/data-quality", response_model=QualityResponse)

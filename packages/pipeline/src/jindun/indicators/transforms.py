@@ -125,7 +125,9 @@ def apply_transform(
         return garch_volatility(series, scale=float(params.get("scale", 100.0)))
     if transform == "ewma":
         return ewma_volatility(
-            series, halflife=int(params.get("halflife", 20)), scale=float(params.get("scale", 100.0))
+            series,
+            halflife=int(params.get("halflife", 20)),
+            scale=float(params.get("scale", 100.0)),
         )
     if transform == "log_return":
         return log_returns(series)

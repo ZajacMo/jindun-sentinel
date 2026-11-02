@@ -34,7 +34,7 @@ from .attribution import attribute_composite_move
 from .config import Settings
 from .contagion import (
     GVDSpec,
-    compute_spillover,
+    compute_spillover_all,
     rolling_spillout_history,
     spillout_surge_scores,
     surging_markets,
@@ -64,6 +64,8 @@ class CountryRun:
 
     country_code: str
     as_of: dt.date
+    profile: str = "mbsed"
+    capabilities: dict[str, bool] = field(default_factory=dict)
     market_indices: pd.DataFrame = field(default_factory=pd.DataFrame)
     composite: pd.Series = field(default_factory=pd.Series)
     percentile: pd.Series = field(default_factory=pd.Series)
@@ -85,6 +87,8 @@ class CountryRun:
         return {
             "country_code": self.country_code,
             "as_of": self.as_of.isoformat(),
+            "profile": self.profile,
+            "capabilities": dict(self.capabilities),
             "market_indices": {
                 "dates": [date.isoformat() for date in self.market_indices.index],
                 "series": {
@@ -117,6 +121,34 @@ class CountryRun:
             "forecast": self.forecast,
             "warnings": list(self.warnings),
         }
+
+
+def _capabilities(
+    profile: str,
+    *,
+    regime: bool,
+    spillover: bool,
+    attribution: bool,
+    forecast: bool,
+) -> dict[str, bool]:
+    """What this run is able to answer, stated as data.
+
+    Two different things make a capability unavailable, and a client has to be
+    able to tell them apart: an economy measured by a published official index
+    has no sub-market decomposition *by construction*, while a computation that
+    failed is an accident of this run.  The artefact therefore carries the
+    capabilities explicitly, so a client never has to infer them from a missing
+    section — and the reason for a missing section stays in ``warnings``.
+    """
+    synthesised = profile != "official_index"
+    return {
+        "composite_synthesis": synthesised,
+        "market_decomposition": synthesised,
+        "market_attribution": attribution,
+        "spillover_network": spillover,
+        "regime": regime,
+        "forecast": forecast,
+    }
 
 
 def resolve_indicator_series(
@@ -213,16 +245,12 @@ def run_country(
         for indicator in market.indicators
     }
 
-    panel, results = resolve_indicator_series(
-        country, fetcher, use_cache=use_cache
-    )
+    panel, results = resolve_indicator_series(country, fetcher, use_cache=use_cache)
     quality = evaluate_all(results, quality_policy, today=today)
     for failure in quality.failures:
         warnings.append(
             f"quality gate failed for {failure.series_id}: "
-            + "; ".join(
-                check.message for check in failure.checks if not check.passed
-            )
+            + "; ".join(check.message for check in failure.checks if not check.passed)
         )
 
     market_series: dict[str, pd.Series] = {}
@@ -231,9 +259,7 @@ def run_country(
     indicator_weight_map: dict[str, dict[str, float]] = {}
     for market in country.markets:
         codes = [indicator.code for indicator in market.indicators]
-        series, report, normalised = _market_index(
-            panel, market.code, codes, directions, weights
-        )
+        series, report, normalised = _market_index(panel, market.code, codes, directions, weights)
         market_reports.append(report)
         if series is not None:
             market_series[market.code] = series
@@ -244,6 +270,14 @@ def run_country(
         return CountryRun(
             country_code=country.code,
             as_of=today or dt.date.today(),
+            profile=country.profile,
+            capabilities=_capabilities(
+                country.profile,
+                regime=False,
+                spillover=False,
+                attribution=False,
+                forecast=False,
+            ),
             quality=quality,
             sources=[result.to_payload() for result in results],
             warnings=[*warnings, "no market index could be built"],
@@ -303,9 +337,7 @@ def run_country(
     surge_scores: dict[str, SurgeScore] = {}
     if official_profile or market_frame.shape[1] < 2:
         if not official_profile:
-            warnings.append(
-                "the cross-market spillover network needs at least two markets"
-            )
+            warnings.append("the cross-market spillover network needs at least two markets")
     else:
         try:
             spec = GVDSpec(
@@ -316,12 +348,27 @@ def run_country(
                 max_order=settings.contagion.max_order,
                 transform=settings.contagion.transform,
             )
-            spillover = compute_spillover(
-                market_frame, spec, scope=country.code
+            networks = compute_spillover_all(
+                market_frame,
+                spec,
+                scope=country.code,
+                methods=settings.contagion.publish_methods,
             )
-            spillover_payload = spillover.to_payload()
-            if spillover.notes != []:
-                warnings.extend(spillover.notes)
+            for method, reason in networks.failures.items():
+                warnings.append(f"the {method} estimator could not be computed: {reason}")
+            default = networks.results.get(spec.method)
+            if default is None and networks.results:
+                default = next(iter(networks.results.values()))
+            if default is not None:
+                spillover_payload = default.to_payload()
+                # Every estimator is published side by side: they answer
+                # different questions, and publishing only one of them would
+                # hide the difference.  The block above stays the default one,
+                # so a consumer that ignores this key still reads a coherent
+                # network.
+                spillover_payload["default_method"] = default.method
+                spillover_payload.update(networks.to_payload())
+                warnings.extend(default.notes)
 
             # The surge alert compares a market's spill-out with its own
             # history, which needs the network recomputed over rolling windows.
@@ -342,12 +389,8 @@ def run_country(
                         "markets": [str(column) for column in history.columns],
                         "window": history.attrs.get("window"),
                         "step": history.attrs.get("step"),
-                        "values": [
-                            [float(value) for value in row] for row in history.to_numpy()
-                        ],
-                        "scores": {
-                            market: score.to_payload() for market, score in scores.items()
-                        },
+                        "values": [[float(value) for value in row] for row in history.to_numpy()],
+                        "scores": {market: score.to_payload() for market, score in scores.items()},
                     }
                 else:
                     warnings.append(
@@ -357,9 +400,7 @@ def run_country(
         except Exception as exc:  # noqa: BLE001 - contagion is optional per run
             warnings.append(f"the spillover network could not be computed: {exc}")
 
-    alerts = _evaluate_alerts(
-        country, settings, percentile, regime_fit, market_frame, surge_scores
-    )
+    alerts = _evaluate_alerts(country, settings, percentile, regime_fit, market_frame, surge_scores)
 
     attribution_payload: dict[str, Any] = {}
     if not official_profile:
@@ -390,6 +431,14 @@ def run_country(
     return CountryRun(
         country_code=country.code,
         as_of=today or dt.date.today(),
+        profile=country.profile,
+        capabilities=_capabilities(
+            country.profile,
+            regime=bool(regime_fit.labels),
+            spillover=bool(spillover_payload),
+            attribution=bool(attribution_payload),
+            forecast=bool(forecast_payload.get("values")),
+        ),
         market_indices=market_frame,
         composite=composite,
         percentile=percentile,
@@ -485,7 +534,9 @@ def _evaluate_alerts(
     for rule in settings.rules_for(country.code):
         if not rule.enabled:
             continue
-        severity = Severity(rule.severity) if rule.severity in Severity._value2member_map_ else Severity.P3
+        severity = (
+            Severity(rule.severity) if rule.severity in Severity._value2member_map_ else Severity.P3
+        )
         threshold = rule.params.get("threshold")
         fired = False
         surge_detail: dict[str, Any] = {}
@@ -499,7 +550,11 @@ def _evaluate_alerts(
             fired = latest_value >= float(threshold)
         elif rule.id == "regime.change":
             labels = regime_fit.labels
-            fired = bool(len(labels) >= 2 and labels[-1] is RegimeLabel.HIGH and labels[-2] is not RegimeLabel.HIGH)
+            fired = bool(
+                len(labels) >= 2
+                and labels[-1] is RegimeLabel.HIGH
+                and labels[-2] is not RegimeLabel.HIGH
+            )
         elif rule.id == "spillout.surge":
             # A market's total spill-out has risen far above its own rolling
             # history.  The score is a z-score over the rolling windows, so the
@@ -518,9 +573,7 @@ def _evaluate_alerts(
             }
             if surging:
                 fired = True
-                top_market, top_score = max(
-                    surging.items(), key=lambda item: item[1].zscore
-                )
+                top_market, top_score = max(surging.items(), key=lambda item: item[1].zscore)
                 surge_detail = {
                     "market": top_market,
                     "zscore": round(top_score.zscore, 6),
@@ -530,8 +583,7 @@ def _evaluate_alerts(
                     "window_end": top_score.window_end,
                     "windows": top_score.windows,
                     "markets": {
-                        market: round(score.zscore, 6)
-                        for market, score in sorted(surging.items())
+                        market: round(score.zscore, 6) for market, score in sorted(surging.items())
                     },
                 }
                 message_params["value"] = (

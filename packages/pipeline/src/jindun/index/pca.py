@@ -55,12 +55,8 @@ class PCAResult:
         return {
             "n_components": self.n_components,
             "eigenvalues": [float(value) for value in self.eigenvalues],
-            "explained_variance_ratio": [
-                float(value) for value in self.explained_variance_ratio
-            ],
-            "cumulative_variance_ratio": [
-                float(value) for value in self.cumulative_variance_ratio
-            ],
+            "explained_variance_ratio": [float(value) for value in self.explained_variance_ratio],
+            "cumulative_variance_ratio": [float(value) for value in self.cumulative_variance_ratio],
             "factor_loading": self.factor_loading.round(6).to_dict(),
             "factor_contribution": {
                 str(key): float(value) for key, value in self.factor_contribution.items()

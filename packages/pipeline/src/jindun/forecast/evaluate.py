@@ -178,9 +178,7 @@ def compare_engines(
     """Backtest several engines on the same series."""
     results: dict[str, ForecastMetrics] = {}
     for name, engine in engines.items():
-        results[name] = backtest(
-            series, engine, horizon=horizon, window=window, engine=name
-        )
+        results[name] = backtest(series, engine, horizon=horizon, window=window, engine=name)
     return results
 
 
@@ -203,9 +201,7 @@ def forecast_series(
     from .lstm import forecast_lstm
 
     if engine == "arima":
-        fit = forecast_arima(
-            series, horizon=horizon, max_p=max_p, max_d=max_d, max_q=max_q
-        )
+        fit = forecast_arima(series, horizon=horizon, max_p=max_p, max_d=max_d, max_q=max_q)
         return {
             "engine": "arima",
             "order": list(fit.order),

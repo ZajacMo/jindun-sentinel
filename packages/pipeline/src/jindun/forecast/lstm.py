@@ -86,10 +86,7 @@ def forecast_lstm(
     normalised = (values - mean) / scale
 
     windows = np.array(
-        [
-            normalised[index - look_back : index]
-            for index in range(look_back, len(normalised))
-        ],
+        [normalised[index - look_back : index] for index in range(look_back, len(normalised))],
         dtype="float32",
     )
     targets = normalised[look_back:].astype("float32")
@@ -156,9 +153,11 @@ def forecast_lstm(
     predictions: list[float] = []
     with torch.no_grad():
         for _ in range(horizon):
-            window = torch.from_numpy(
-                np.asarray(history[-look_back:], dtype="float32")
-            ).unsqueeze(0).unsqueeze(-1)
+            window = (
+                torch.from_numpy(np.asarray(history[-look_back:], dtype="float32"))
+                .unsqueeze(0)
+                .unsqueeze(-1)
+            )
             next_value = float(network(window).item())
             predictions.append(next_value)
             history.append(next_value)
@@ -171,15 +170,9 @@ def forecast_lstm(
         step = clean.index[-1] - clean.index[-2]
         if step <= pd.Timedelta(0):
             step = pd.Timedelta(days=1)
-        dates = [
-            (anchor + step * (index + 1)).date().isoformat()
-            for index in range(horizon)
-        ]
+        dates = [(anchor + step * (index + 1)).date().isoformat() for index in range(horizon)]
     elif last_date is not None:
-        dates = [
-            (last_date + dt.timedelta(days=index + 1)).isoformat()
-            for index in range(horizon)
-        ]
+        dates = [(last_date + dt.timedelta(days=index + 1)).isoformat() for index in range(horizon)]
 
     notes = [
         "the recurrent model is fitted on a normalised series and the forecast is "

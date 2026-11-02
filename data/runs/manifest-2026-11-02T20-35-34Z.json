@@ -1,0 +1,25 @@
+{
+  "run_id": "2026-11-02T20-35-34Z",
+  "started_at": "2026-11-02T20:35:34.845344+00:00",
+  "code_version": {
+    "git_commit": "b7499163692d01d8472ec136f989c7e0a19540d1",
+    "dirty": true
+  },
+  "data_snapshot": {},
+  "sources": [],
+  "config": {
+    "project": "jindun-sentinel"
+  },
+  "environment": {},
+  "outputs": {
+    "JP": {
+      "market_indices": "F:\\Projects\\03_projects\\jindun-sentinel\\data\\runs\\JP\\market_indices.csv",
+      "run": "F:\\Projects\\03_projects\\jindun-sentinel\\data\\runs\\JP\\run.json",
+      "quality": "F:\\Projects\\03_projects\\jindun-sentinel\\data\\runs\\JP\\quality.json"
+    }
+  },
+  "elapsed_sec": 41.915,
+  "warnings": [
+    "method=paper_equation; VAR order=5 (selected by bic); horizon=10; sample=2005-01-04..2026-10-29"
+  ]
+}
