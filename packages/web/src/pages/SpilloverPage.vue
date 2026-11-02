@@ -119,12 +119,27 @@ const marketList = computed(() =>
   })),
 )
 
+/**
+ * The nodes the contagion mechanism diagram draws.
+ *
+ * They follow the network that is actually on screen: the markets of the
+ * selected economy, or the countries of the global layer.  Drawing the five
+ * Chinese sub-markets while the table above lists five countries would show
+ * a mechanism that does not belong to the numbers.
+ */
 const mechanismMarkets = computed(() => {
-  const list = marketList.value
-  const shock = list[0]
+  const nodes = payload.value?.nodes ?? []
+  if (nodes.length > 0) {
+    const list = nodes.map((code) => ({ code, label: labels.node(code) }))
+    return {
+      shock: list[0] ?? { code: 'equity', label: labels.market('equity') },
+      others: list.slice(1),
+    }
+  }
+  const fallback = marketList.value
   return {
-    shock: shock ?? { code: 'equity', label: labels.market('equity') },
-    others: list.slice(1),
+    shock: fallback[0] ?? { code: 'equity', label: labels.market('equity') },
+    others: fallback.slice(1),
   }
 })
 
@@ -260,13 +275,13 @@ watch(
         </section>
 
         <section class="jd-panel">
-          <h2>{{ t('method.paper_equation') }}</h2>
+          <h2>{{ labels.method(payload?.method ?? 'paper_equation') }}</h2>
           <SpilloverMechanism
             :title="t('nav.spillover')"
             :shock="mechanismMarkets.shock"
             :others="mechanismMarkets.others"
             :shock-label="t('common.source')"
-            :response-label="t('method.paper_equation')"
+            :response-label="t('spillover.impulseResponses')"
             :horizon-label="t('time.day')"
             :share-label="t('metric.ownShare')"
             :variance-label="t('metric.spillIn')"

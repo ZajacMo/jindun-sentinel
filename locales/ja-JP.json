@@ -59,6 +59,7 @@
   "method.dy_generalised": "Diebold-Yilmaz一般化FEVD（負値を取りうる）",
   "method.legacy_appendix": "競技提出版の実装",
   "spillover.estimator": "推定量",
+  "spillover.impulseResponses": "インパルス応答",
   "spillover.notAvailable": "この経済は公的機関が公表するストレス指数で測定されるため、サブ市場分解がなく、表示できる市場間伝染ネットワークは存在しません。",
   "spillover.unavailable": "この実行では市場間伝染ネットワークを計算できませんでした。",
   "lens.percentile": "国内パーセンタイル",

@@ -179,6 +179,12 @@ plus one npm package and a shared locale catalogue at the repository root.
 
 ### Fixed
 
+- **The contagion mechanism diagram drew the wrong nodes.**  It always showed the five
+  Chinese sub-markets, even while the table above it listed five *countries* in the
+  global layer.  It now follows the network that is actually on screen.  Its heading
+  follows the selected estimator as well, and the box that holds the VAR's impulse
+  responses is labelled with the step it draws (`spillover.impulseResponses`) instead
+  of a method name.
 - **The ECB CISS adapter built its URL with slashes between the dimensions.**  The
   SDMX key is a single path segment with dots, so every request answered 404 and the
   adapter silently returned no data for every economy.  It now returns 5 236

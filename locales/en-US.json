@@ -59,6 +59,7 @@
   "method.dy_generalised": "Diebold-Yilmaz Generalized FEVD (can be negative)",
   "method.legacy_appendix": "Legacy Competition Submission",
   "spillover.estimator": "Estimator",
+  "spillover.impulseResponses": "Impulse responses",
   "spillover.notAvailable": "This economy is measured by a published official stress index. It has no sub-market decomposition, so there is no cross-market spillover network to show.",
   "spillover.unavailable": "The cross-market spillover network could not be computed for this run.",
   "lens.percentile": "Within-Country Percentile",

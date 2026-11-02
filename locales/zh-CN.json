@@ -59,6 +59,7 @@
   "method.dy_generalised": "Diebold-Yilmaz广义FEVD（可为负值）",
   "method.legacy_appendix": "竞赛提交版实现",
   "spillover.estimator": "估计量",
+  "spillover.impulseResponses": "脉冲响应",
   "spillover.notAvailable": "该经济体采用官方发布的压力指数进行度量，没有子市场分解，因此不存在可展示的跨市场传染网络。",
   "spillover.unavailable": "本次运行未能计算出跨市场传染网络。",
   "lens.percentile": "国家内百分位",
