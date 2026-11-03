@@ -42,9 +42,7 @@ def _read(path: Path) -> dict[str, str]:
 
 
 def _write(path: Path, catalogue: dict[str, str]) -> None:
-    path.write_text(
-        json.dumps(catalogue, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
-    )
+    path.write_text(json.dumps(catalogue, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
 def _insert(catalogue: dict[str, str], key: str, value: str, anchor: str | None) -> dict[str, str]:
@@ -77,9 +75,7 @@ def main(argv: list[str] | None = None) -> int:
     for locale in LOCALES:
         # The destination keeps the dash of the locale code, so the argument
         # and the catalogue file always carry the same spelling.
-        parser.add_argument(
-            f"--{locale}", dest=locale, required=True, help=f"the {locale} text"
-        )
+        parser.add_argument(f"--{locale}", dest=locale, required=True, help=f"the {locale} text")
     args = parser.parse_args(argv)
 
     values = {locale: getattr(args, locale) for locale in LOCALES}

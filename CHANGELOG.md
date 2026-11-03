@@ -176,6 +176,9 @@ plus one npm package and a shared locale catalogue at the repository root.
   at once.  It refuses to write a key that is present in only some of the catalogues,
   so a half-translated key can never reach the tree.  `scripts/audit_locale_keys.py`
   checks afterwards that the four catalogues still agree.
+- `scripts/serve_dev.py`: starts the API and the front end together, streams their
+  output with a prefix and stops both on Ctrl-C, so the application can be run with
+  one command instead of two terminals.
 
 ### Fixed
 

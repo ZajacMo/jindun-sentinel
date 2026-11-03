@@ -33,8 +33,8 @@ jobs:
 
       - name: Lint
         run: |
-          uv run ruff check packages
-          uv run ruff format --check packages
+          uv run ruff check packages scripts
+          uv run ruff format --check packages scripts
 
       - name: Test
         run: uv run pytest packages -q

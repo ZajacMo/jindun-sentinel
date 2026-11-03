@@ -44,14 +44,54 @@ META = SNAPSHOT_DIR / "lbs_bilateral.meta.json"
 #: both as the BIS aggregate (``XM``) and through its member states.
 DEFAULT_COUNTRIES: tuple[str, ...] = (
     # the five economies this project monitors
-    "CN", "US", "GB", "JP",
+    "CN",
+    "US",
+    "GB",
+    "JP",
     # euro area members (the aggregate is reported separately)
-    "AT", "BE", "DE", "ES", "FI", "FR", "GR", "IE", "IT", "LU", "NL", "PT",
+    "AT",
+    "BE",
+    "DE",
+    "ES",
+    "FI",
+    "FR",
+    "GR",
+    "IE",
+    "IT",
+    "LU",
+    "NL",
+    "PT",
     # other financial centres and large economies
-    "AU", "BR", "CA", "CH", "DK", "HK", "ID", "IN", "KR", "MX", "MY",
-    "NO", "NZ", "PL", "RU", "SA", "SE", "SG", "TH", "TR", "TW", "VN", "ZA",
+    "AU",
+    "BR",
+    "CA",
+    "CH",
+    "DK",
+    "HK",
+    "ID",
+    "IN",
+    "KR",
+    "MX",
+    "MY",
+    "NO",
+    "NZ",
+    "PL",
+    "RU",
+    "SA",
+    "SE",
+    "SG",
+    "TH",
+    "TR",
+    "TW",
+    "VN",
+    "ZA",
     # aggregates the BIS itself publishes
-    "XM", "XW", "5A", "5J", "4T", "G2",
+    "XM",
+    "XW",
+    "5A",
+    "5J",
+    "4T",
+    "G2",
 )
 
 #: Dimension -> allowed codes.
@@ -74,10 +114,24 @@ INSTRUMENTS: dict[str, str] = {
 }
 
 OUTPUT_COLUMNS = (
-    "MEASURE", "FREQ", "L_MEASURE", "L_POSITION", "L_INSTR", "L_DENOM", "L_CURR_TYPE",
-    "L_PARENT_CTY", "L_REP_BANK_TYPE", "L_REP_CTY", "L_CP_SECTOR",
-    "L_CP_COUNTRY", "L_POS_TYPE", "UNIT_MEASURE", "UNIT_MULT",
-    "OBS_STATUS", "TIME_PERIOD", "OBS_VALUE",
+    "MEASURE",
+    "FREQ",
+    "L_MEASURE",
+    "L_POSITION",
+    "L_INSTR",
+    "L_DENOM",
+    "L_CURR_TYPE",
+    "L_PARENT_CTY",
+    "L_REP_BANK_TYPE",
+    "L_REP_CTY",
+    "L_CP_SECTOR",
+    "L_CP_COUNTRY",
+    "L_POS_TYPE",
+    "UNIT_MEASURE",
+    "UNIT_MULT",
+    "OBS_STATUS",
+    "TIME_PERIOD",
+    "OBS_VALUE",
 )
 
 
@@ -118,8 +172,7 @@ def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv)
     if not args.zip.exists():
         print(
-            f"the bulk archive is missing: {args.zip}\n"
-            "run scripts/download_bis_bulk.py first",
+            f"the bulk archive is missing: {args.zip}\nrun scripts/download_bis_bulk.py first",
             file=sys.stderr,
         )
         return 1
@@ -190,9 +243,7 @@ def main(argv: list[str] | None = None) -> int:
                 value = row[value_position].strip()
                 if not value:
                     continue
-                record = {
-                    code: _cell_code(row[position]) for code, position in positions.items()
-                }
+                record = {code: _cell_code(row[position]) for code, position in positions.items()}
                 record["MEASURE"] = INSTRUMENTS[instrument]
                 kept.append(record)
                 quarters.add(_cell_code(row[period_position]))
@@ -221,7 +272,7 @@ def main(argv: list[str] | None = None) -> int:
         "rows": len(kept),
         "rows_scanned": scanned,
         "sha256": digest,
-        "extracted_at": dt.datetime.now(dt.timezone.utc).isoformat(),
+        "extracted_at": dt.datetime.now(dt.UTC).isoformat(),
     }
     with META.open("w", encoding="utf-8") as handle:
         json.dump(meta, handle, ensure_ascii=False, indent=2)

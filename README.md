@@ -327,8 +327,21 @@ JSON. Exits 1 when the report contains a failure.
 
 ### 6. Serve the API
 
+The application is two processes — this server and the front end — and they
+are easiest to start together:
+
 ```bash
-uvicorn jindun_api.app:app --reload
+python scripts/serve_dev.py
+```
+
+The launcher starts both, streams their output with a prefix, and stops them
+together when it is interrupted.  The API is then at `http://localhost:8000`
+and the front end at `http://localhost:5173/`.
+
+To run the API on its own:
+
+```bash
+uvicorn jindun_api.app:app --reload --port 8000
 ```
 
 The OpenAPI documentation is at `/api/docs` and the schema at `/api/openapi.json`.
@@ -371,8 +384,11 @@ variable is only needed when the catalogue lives somewhere else.
 
 ```bash
 cd packages/web
-VITE_API_BASE=http://localhost:8000 npm run dev
+npm run dev
 ```
+
+The front end talks to `http://localhost:8000` by default; set `VITE_API_BASE`
+to point it somewhere else.
 
 ### 8. Ask the system a question
 
@@ -422,7 +438,8 @@ jindun-sentinel/
 │   │   └── src/jindun_agent/ context, tools, prompts, agent, cli
 │   └── web/                  @jindun/web — the Vue 3 front end
 │       └── src/              api client, stores, composables, components, i18n
-└── scripts/                  the baseline freeze, the BIS download and extraction
+└── scripts/                  the baseline freeze, the BIS download and extraction,
+                             the locale tools and the local dev launcher
 ```
 
 The Python package is layered so that each stage can be tested and reused in

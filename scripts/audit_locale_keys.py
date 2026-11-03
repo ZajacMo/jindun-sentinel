@@ -8,7 +8,6 @@ from __future__ import annotations
 
 import json
 import re
-import sys
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[1]
