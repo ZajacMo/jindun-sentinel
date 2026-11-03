@@ -10,6 +10,10 @@ sections below it describe released versions.
 
 ## [Unreleased]
 
+Nothing yet.
+
+## [0.2.0] - 2026-11-03
+
 ### Added
 
 The initial monorepo: one uv workspace with the root project and three member packages,
@@ -242,6 +246,24 @@ plus one npm package and a shared locale catalogue at the repository root.
 
 ### Fixed
 
+- **The container build could not install the workspace.**  The lock file in the
+  repository was generated before the analyst-agent package joined the
+  workspace, so `uv sync --frozen` refused to run against it and the API image
+  could not be built.  CI never noticed, because it resolved the dependencies
+  without `--locked`, and a stale lock file is silently re-resolved rather than
+  reported.  The lock file now covers every workspace member, CI installs with
+  `--locked` and pins the uv version that produced it, and the image syncs
+  straight from the committed lock file instead of resolving inside the build.
+- **The build context carried the front end's dependencies.**  A pattern in
+  `.dockerignore` without a slash matches the root of the context only, so the
+  nested copies of `node_modules` and `dist` travelled into the image.  Both
+  are excluded now.
+- **A page-rendering test could fail on the clock rather than on a defect.**
+  The workspace page specs mount a whole page, and the overview page draws
+  four ECharts instances inside jsdom.  That case needs about three seconds on
+  a developer machine against a default timeout of five, so a shared CI runner
+  failed on the timeout.  The four page cases now carry an explicit timeout;
+  the rest of the suite runs in milliseconds and is unaffected.
 - **The contagion mechanism diagram drew the wrong nodes.**  It always showed the five
   Chinese sub-markets, even while the table above it listed five *countries* in the
   global layer.  It now follows the network that is actually on screen.  Its heading
@@ -294,9 +316,12 @@ plus one npm package and a shared locale catalogue at the repository root.
   findings in the pipeline — annotation precision in the adapter layer, with no known
   runtime defect among them.
 
-## [0.1.0] - 2026-11-03
+## 0.1.0 — internal milestone, never published
 
-The first release of the pipeline, the API and the front end.
+The first release of the pipeline, the API and the front end.  This version was
+never published: it existed only as an internal milestone of the work, and
+[0.2.0] is the first release that was tagged.  It is recorded here because the
+changes below were made at that milestone.
 
 ### Added
 
@@ -317,5 +342,5 @@ The first release of the pipeline, the API and the front end.
 - Optional extras: `arch`, `market` (akshare), `ml`, `dev`.
 - The package is published under the Apache License 2.0.
 
-[Unreleased]: https://github.com/ZajacMo/jindun-sentinel/compare/v0.1.0...HEAD
-[0.1.0]: https://github.com/ZajacMo/jindun-sentinel/releases/tag/v0.1.0
+[Unreleased]: https://github.com/ZajacMo/jindun-sentinel/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/ZajacMo/jindun-sentinel/releases/tag/v0.2.0
