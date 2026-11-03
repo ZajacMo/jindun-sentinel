@@ -193,6 +193,17 @@ const PAGES = [
   { name: 'methodology', route: 'methodology', path: '/methodology' },
 ]
 
+/**
+ * Mounting a workspace page builds its whole layout, and the overview page
+ * draws four ECharts instances inside jsdom, which has no canvas.  The
+ * overview case needs roughly three seconds on a developer machine, so the
+ * default five-second timeout leaves almost no margin: a shared CI runner is
+ * easily twice as slow, and the suite then fails on a timeout rather than on
+ * a defect.  The timeout below is generous enough for that, and only these
+ * page-rendering cases carry it — the rest of the suite runs in milliseconds.
+ */
+const PAGE_TIMEOUT = 20000
+
 async function renderPage(routeName: string, path: string) {
   const router = createRouter({ history: createMemoryHistory(), routes })
   await router.push(path)
@@ -227,7 +238,7 @@ describe('workspace pages', () => {
     expect(svgs.some((svg) => svg.attributes('role') === 'img')).toBe(true)
 
     wrapper.unmount()
-  })
+  }, PAGE_TIMEOUT)
 
   it('uses the mechanism diagrams of the brief', async () => {
     const titles = new Set<string>()
@@ -245,7 +256,7 @@ describe('workspace pages', () => {
 
     // The five diagrams the brief requires, plus the three additional ones.
     expect(titles.size).toBeGreaterThanOrEqual(5)
-  })
+  }, PAGE_TIMEOUT)
 
   it('shows the localised labels of the active locale', async () => {
     const wrapper = await renderPage('overview', '/')
@@ -253,12 +264,12 @@ describe('workspace pages', () => {
     expect(heading).not.toBe('nav.overview')
     expect(heading.length).toBeGreaterThan(0)
     wrapper.unmount()
-  })
+  }, PAGE_TIMEOUT)
 
   it('renders the spillover matrix of the selected country', async () => {
     const wrapper = await renderPage('spillover', '/spillover')
     const text = wrapper.text()
     expect(text).toContain('equity')
     wrapper.unmount()
-  })
+  }, PAGE_TIMEOUT)
 })
