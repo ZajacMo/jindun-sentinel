@@ -29,6 +29,11 @@ COPY packages/pipeline/pyproject.toml packages/pipeline/README.md ./packages/pip
 COPY packages/api/pyproject.toml packages/api/README.md ./packages/api/
 COPY packages/agent/pyproject.toml packages/agent/README.md ./packages/agent/
 
+# The lock file committed to the repository is the single source of truth for
+# the dependency set, so the sync is frozen against it and the image installs
+# exactly what that file records.  CI resolves the same lock file with
+# `--locked`, which fails the build when a manifest changes without `uv lock`
+# being run; that check is what keeps this layer reproducible.
 RUN uv sync --frozen --no-dev --no-install-project --no-install-workspace
 
 COPY packages ./packages

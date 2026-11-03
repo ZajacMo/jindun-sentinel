@@ -18,6 +18,18 @@ __pycache__
 *.pyo
 *.egg-info
 
+# A pattern without a slash matches the root of the build context only, so the
+# nested copies are listed as well.  Otherwise the front end's node_modules
+# and the bundle it was built into would travel into the context.
+**/node_modules
+**/dist
+**/__pycache__
+**/*.pyc
+**/*.pyo
+**/*.egg-info
+**/.pytest_cache
+**/.ruff_cache
+
 # Bulky and reproducible: the BIS bulk archive is 365 MB and the raw source
 # snapshots are fetched, never committed.
 data/cache

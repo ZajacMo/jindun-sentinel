@@ -27,9 +27,16 @@ jobs:
         uses: astral-sh/setup-uv@v5
         with:
           enable-cache: true
+          # Pinned to the version that produced uv.lock and that the container
+          # images install, so the resolution cannot drift under the assertion
+          # below.
+          version: "0.11.26"
 
       - name: Install the workspace
-        run: uv sync --all-packages --extra dev
+        # `--locked` fails the build when a manifest has changed without the
+        # lock file being refreshed.  Without it a stale lock is silently
+        # re-resolved, which is how the container build broke once already.
+        run: uv sync --all-packages --extra dev --locked
 
       - name: Lint
         run: |
