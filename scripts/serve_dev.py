@@ -32,7 +32,13 @@ API_BASE = f"http://localhost:{API_PORT}"
 def _pump(stream, prefix: str) -> None:
     """Forward one process's output, line by line, with a prefix."""
     for line in iter(stream.readline, ""):
-        sys.stdout.write(f"[{prefix}] {line}")
+        try:
+            sys.stdout.write(f"[{prefix}] {line}")
+        except UnicodeEncodeError:
+            # The console cannot represent a character the child printed.  The
+            # output is a log, not a result, so it is dropped rather than
+            # allowed to end the forwarding thread.
+            sys.stdout.write(f"[{prefix}] <unrepresentable output>\n")
     stream.close()
 
 
@@ -61,9 +67,15 @@ def main() -> int:
     # The output of the two children is forwarded to this process's stdout.
     # When that stdout is a pipe rather than a terminal it is block-buffered,
     # and the operator would see nothing until the buffer filled up.
+    #
+    # The encoding matters on Windows: the default console code page cannot
+    # represent the characters the front end prints, and a thread that fails
+    # to write one of them takes the whole log down with it.  The stream is
+    # therefore switched to UTF-8 and told to replace what it cannot encode
+    # instead of raising.
     reconfigure = getattr(sys.stdout, "reconfigure", None)
     if reconfigure is not None:
-        reconfigure(line_buffering=True)
+        reconfigure(encoding="utf-8", errors="replace", line_buffering=True)
 
     if not WEB_DIR.is_dir():
         print(f"the front end package is missing: {WEB_DIR}", file=sys.stderr)
