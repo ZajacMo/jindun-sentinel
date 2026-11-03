@@ -137,6 +137,28 @@ class ForecastParams:
 
 
 @dataclass(frozen=True, slots=True)
+class CycleParams:
+    """Parameters for the global financial cycle factor (layer L3).
+
+    The factor is estimated from BIS data, so these are the choices a
+    researcher would want to vary: which economies contribute a credit gap,
+    and which currency carries the global-funding leg.
+    """
+
+    enabled: bool = True
+    #: Every listed economy contributes its credit-to-GDP gap.  The common
+    #: window of the factor is the window all of them share, so an economy
+    #: whose series starts late sets the start of the factor.
+    credit_gap_economies: tuple[str, ...] = ("US", "CN", "JP", "GB", "XM")
+    #: The currency whose effective exchange rate carries the funding leg.
+    dollar_reference_area: str = "US"
+    #: ``B`` is the broad basket (64 economies), ``N`` the narrow one (27).
+    eer_basket: str = "B"
+    #: Fewer observations than this are not enough to estimate a factor.
+    min_observations: int = 40
+
+
+@dataclass(frozen=True, slots=True)
 class AlertRule:
     """One declarative alerting rule."""
 
@@ -163,6 +185,7 @@ class Settings:
     regime: RegimeParams
     forecast: ForecastParams
     contagion: ContagionParams
+    cycle: CycleParams
     alert_rules: tuple[AlertRule, ...]
     config_dir: Path
     raw: Mapping[str, Any] = field(default_factory=dict)
@@ -364,6 +387,18 @@ def load_settings(config_dir: str | os.PathLike[str] | None = None) -> Settings:
         backtest_window=int(forecast_raw.get("backtest_window", 120)),
     )
 
+    cycle_raw = global_raw.get("cycle", {})
+    cycle_params = CycleParams(
+        enabled=bool(cycle_raw.get("enabled", True)),
+        credit_gap_economies=tuple(
+            str(item).upper() for item in cycle_raw.get("credit_gap_economies", ())
+        )
+        or ("US", "CN", "JP", "GB", "XM"),
+        dollar_reference_area=str(cycle_raw.get("dollar_reference_area", "US")).upper(),
+        eer_basket=str(cycle_raw.get("eer_basket", "B")).upper(),
+        min_observations=int(cycle_raw.get("min_observations", 40)),
+    )
+
     countries = tuple(_parse_country(item) for item in countries_raw)
     rules = _parse_rules(global_raw.get("alert_rules", []))
 
@@ -377,6 +412,7 @@ def load_settings(config_dir: str | os.PathLike[str] | None = None) -> Settings:
         regime=regime_params,
         forecast=forecast_params,
         contagion=contagion_params,
+        cycle=cycle_params,
         alert_rules=rules,
         config_dir=base,
         raw=global_raw,

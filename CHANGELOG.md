@@ -15,6 +15,53 @@ sections below it describe released versions.
 The initial monorepo: one uv workspace with the root project and three member packages,
 plus one npm package and a shared locale catalogue at the repository root.
 
+#### Global layer — the global financial cycle factor (L3)
+
+- **The global cycle factor is now estimated from BIS data**, not from the
+  monitored economies' own indices.  A global financial cycle in the sense of
+  Bruno & Shin (2014) and Miranda-Agrippino & Rey (2020) is a global credit and
+  currency driver, and a factor built from the monitored economies cannot show
+  what happens *before* those economies are stressed.  The input block is nine
+  published series: global cross-border credit growth in total, in dollars and
+  in euros (`WS_GLI`), the credit-to-GDP gap of every monitored economy
+  (`WS_CREDIT_GAP`), and the year-on-year change of the broad nominal effective
+  exchange rate of the United States (`WS_EER`).  The factor is the first
+  principal component of the standardised block.
+  - Its sign is **oriented on the mean of the standardised credit gaps**, so a
+    higher factor means a wider credit gap and slower global credit growth.
+    The orientation is measured rather than asserted: the anchor correlates
+    0.84 with the factor and the artefact prints that correlation.  The wording
+    is derived from the estimated loadings, so it cannot drift away from what
+    the factor is.
+  - The country-panel factor is retained and published as the **cross-check**,
+    correlated against the quarterly factor carried forward onto the daily
+    calendar of the panel.
+  - The artefact names the inputs that carry the factor only weakly — the US
+    dollar's effective exchange rate is essentially orthogonal to it — and says
+    when the factor could not be produced instead of publishing an empty series.
+  - The method, its limits, and the three properties of the published BIS data
+    that change how the files have to be read are in
+    `docs/global/global-cycle-factor.md`.
+- The front end now shows the factor: the **Global** scope of the contagion
+  workspace carries the factor series, the loadings that produce it, the
+  explained variance, the cross-check against the country panel, and a native
+  mechanism diagram of the construction.
+
+#### Deployment
+
+- A **container deployment** under `deploy/`: two Dockerfiles, a compose file
+  and an nginx configuration.  The web build reads the locale catalogue and the
+  methodology documents from the repository, so the documentation on screen is
+  the documentation that is in the repository.  The repository's `data/`
+  directory is mounted into the API container, so a pipeline run on the host is
+  served without a rebuild.  A scheduled GitHub Actions workflow is
+  deliberately **not** included: the daily refresh stays a local operation.
+
+#### Documentation
+
+- `README.zh-CN.md`, the Simplified-Chinese translation of the README, written
+  alongside the English one rather than machine-converted.
+
 #### Pipeline — `packages/pipeline` (`jindun-pipeline`)
 
 - Layered compute core under `src/jindun/`: `indicators` (GARCH volatility, log
@@ -179,6 +226,19 @@ plus one npm package and a shared locale catalogue at the repository root.
 - `scripts/serve_dev.py`: starts the API and the front end together, streams their
   output with a prefix and stops both on Ctrl-C, so the application can be run with
   one command instead of two terminals.
+
+### Changed
+
+- **The raw source snapshots are no longer committed.**  `data/snapshots/` moved
+  out of the repository and into `.gitignore`, which removes 116 MB from a
+  clone: the BOJ metadata archive alone is 99 MB, and the raw series come from
+  redistributors whose redistribution terms this project cannot grant.
+  `jindun-pipeline fetch` rebuilds them from the publisher's own endpoint, so
+  the repository now carries the scripts, the fetch instructions and the
+  computed artefacts only.
+- The global cycle section of `docs/global/global-layer.md` describes the BIS
+  factor.  The earlier text described the country-panel factor that was
+  published under that name.
 
 ### Fixed
 

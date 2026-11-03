@@ -14,6 +14,7 @@ import type {
   AlertPayload,
   CountryIndexPayload,
   CountrySummary,
+  CyclePayload,
   GsibEntry,
   QualityPayload,
   SpilloverPayload,
@@ -50,6 +51,7 @@ export const useDataStore = defineStore('data', () => {
   const alertsByCountry = ref<Record<string, Resource<AlertPayload[]>>>({})
   const qualityByCountry = ref<Record<string, Resource<QualityPayload>>>({})
   const globalSpillover = ref<Resource<SpilloverPayload>>(emptyResource())
+  const globalCycle = ref<Resource<CyclePayload>>(emptyResource())
   const gsib = ref<Resource<GsibEntry[]>>(emptyResource())
 
   const inFlight = new Map<string, Promise<unknown>>()
@@ -178,6 +180,17 @@ export const useDataStore = defineStore('data', () => {
     )
   }
 
+  function loadGlobalCycle(): Promise<CyclePayload | null> {
+    return loadResource(
+      'global-cycle',
+      () => globalCycle.value,
+      (next) => {
+        globalCycle.value = next
+      },
+      () => api.globalCycle(),
+    )
+  }
+
   return {
     countries,
     indexByCountry,
@@ -185,6 +198,7 @@ export const useDataStore = defineStore('data', () => {
     alertsByCountry,
     qualityByCountry,
     globalSpillover,
+    globalCycle,
     gsib,
     loadCountries,
     loadIndex,
@@ -192,6 +206,7 @@ export const useDataStore = defineStore('data', () => {
     loadAlerts,
     loadQuality,
     loadGlobalSpillover,
+    loadGlobalCycle,
     loadGsib,
   }
 })

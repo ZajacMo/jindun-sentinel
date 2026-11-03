@@ -160,6 +160,41 @@ export interface GsibEntry {
   score: number | null
 }
 
+/** One BIS series that enters the global financial cycle factor. */
+export interface CycleInput {
+  name: string
+  flow: string
+  title: string
+  unit: string
+  transform: string
+  first: string
+  last: string
+  observations: number
+}
+
+export interface CyclePayload {
+  /** `estimated`, `unavailable` or `disabled`. */
+  status: string
+  source: string
+  frequency: string
+  orientation: string
+  dates: string[]
+  factor: number[]
+  loadings: Record<string, number>
+  explainedVarianceRatio: number[]
+  cumulativeVarianceRatio: number[]
+  factorStandardDeviation: number
+  observations: number
+  inputs: CycleInput[]
+  crossCheck: {
+    available: boolean
+    correlation: number | null
+    observations: number
+    reason: string
+  }
+  notes: string[]
+}
+
 /* ------------------------------------------------------------------ */
 /* Primitive helpers                                                   */
 /* ------------------------------------------------------------------ */
@@ -626,4 +661,62 @@ export function normaliseGsib(raw: unknown): GsibEntry[] {
     })
   }
   return result
+}
+
+/* ------------------------------------------------------------------ */
+/* The global financial cycle factor                                    */
+/* ------------------------------------------------------------------ */
+
+/** Normalise the payload of `GET /global/cycle`. */
+export function normaliseCyclePayload(raw: unknown): CyclePayload {
+  const record = asRecord(raw)
+  const loadings: Record<string, number> = {}
+  const rawLoadings = asRecord(record.loadings)
+  for (const [name, value] of Object.entries(rawLoadings)) {
+    loadings[name] = asNumber(value, 0)
+  }
+  const inputs: CycleInput[] = []
+  for (const item of asArray(record.inputs)) {
+    const entry = asRecord(item)
+    const name = asString(entry.name)
+    if (!name) {
+      continue
+    }
+    inputs.push({
+      name,
+      flow: asString(entry.flow),
+      title: asString(entry.title),
+      unit: asString(entry.unit),
+      transform: asString(entry.transform, 'level'),
+      first: asString(entry.first),
+      last: asString(entry.last),
+      observations: asNumber(entry.observations, 0),
+    })
+  }
+  const cross = asRecord(record.cross_check)
+  return {
+    status: asString(record.status, 'unknown'),
+    source: asString(record.source),
+    frequency: asString(record.frequency, 'Q'),
+    orientation: asString(record.orientation),
+    dates: asArray(record.dates).map((item) => asString(item)),
+    factor: asArray(record.factor).map((item) => asNumber(item, 0)),
+    loadings,
+    explainedVarianceRatio: asArray(record.explained_variance_ratio).map((item) =>
+      asNumber(item, 0),
+    ),
+    cumulativeVarianceRatio: asArray(record.cumulative_variance_ratio).map((item) =>
+      asNumber(item, 0),
+    ),
+    factorStandardDeviation: asNumber(record.factor_standard_deviation, 0),
+    observations: asNumber(record.observations, 0),
+    inputs,
+    crossCheck: {
+      available: cross.available === true,
+      correlation: asNullableNumber(cross.correlation),
+      observations: asNumber(cross.observations, 0),
+      reason: asString(cross.reason),
+    },
+    notes: asArray(record.notes).map((item) => asString(item)),
+  }
 }

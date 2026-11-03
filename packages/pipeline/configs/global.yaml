@@ -114,6 +114,34 @@ contagion:
   # so the surge also has to be material in relative terms.
   surge_min_relative_change: 0.20
 
+cycle:
+  # Layer L3: the global financial cycle factor.
+  #
+  # The factor is the first principal component of a standardised block of BIS
+  # series: global cross-border credit growth in total, in dollars and in
+  # euros, the credit-to-GDP gap of every listed economy, and the year-on-year
+  # change of the broad nominal effective exchange rate of the United States.
+  #
+  # It is a *conditions* factor, not a stress index: a higher value means
+  # faster credit expansion, a larger credit gap and a stronger dollar, which
+  # is the configuration that historically precedes global stress.
+  enabled: true
+  # Every listed economy contributes its credit gap.  The euro area's series
+  # starts in 2009, so it sets the start of the common window — the factor
+  # cannot start earlier than its shortest input.
+  credit_gap_economies:
+    - US
+    - CN
+    - JP
+    - GB
+    - XM
+  # The funding leg: the broad nominal effective exchange rate of the United
+  # States.  "B" is the broad basket (64 economies), "N" the narrow one (27).
+  dollar_reference_area: US
+  eer_basket: B
+  # Fewer observations than this are not enough to estimate a factor.
+  min_observations: 40
+
 alert_rules:
   - id: composite.p1
     severity: P1

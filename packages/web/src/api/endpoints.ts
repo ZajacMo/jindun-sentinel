@@ -9,6 +9,7 @@ import type { ApiClient } from './client'
 import {
   normaliseAlerts,
   normaliseCountries,
+  normaliseCyclePayload,
   normaliseGsib,
   normaliseIndexPayload,
   normaliseQualityPayload,
@@ -18,6 +19,7 @@ import type {
   AlertPayload,
   CountryIndexPayload,
   CountrySummary,
+  CyclePayload,
   GsibEntry,
   QualityPayload,
   SpilloverPayload,
@@ -133,6 +135,10 @@ export function createApi(client: ApiClient = apiClient) {
 
     async gsib(): Promise<GsibEntry[]> {
       return normaliseGsib(await client.get('/api/v1/global/gsib'))
+    },
+
+    async globalCycle(): Promise<CyclePayload> {
+      return normaliseCyclePayload(await client.get('/api/v1/global/cycle'))
     },
 
     async dataQuality(code: string): Promise<QualityPayload> {

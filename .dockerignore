@@ -1,0 +1,28 @@
+# Keep the build context small and the images reproducible.
+#
+# The context is the repository root, because the web build reads the locale
+# catalogue and the methodology documents from there.
+
+.git
+.github
+.venv
+venv
+node_modules
+dist
+.scratch
+.pytest_cache
+.ruff_cache
+.mypy_cache
+__pycache__
+*.pyc
+*.pyo
+*.egg-info
+
+# Bulky and reproducible: the BIS bulk archive is 365 MB and the raw source
+# snapshots are fetched, never committed.
+data/cache
+data/snapshots
+
+# The artefacts are mounted at run time, not baked into the image.
+data/runs
+data/baseline

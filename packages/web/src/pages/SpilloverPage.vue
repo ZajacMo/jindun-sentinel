@@ -4,6 +4,8 @@ import { useI18n } from 'vue-i18n'
 import { SortDown, SortUp } from '@element-plus/icons-vue'
 import DataState from '@/components/DataState.vue'
 import SpilloverNetwork from '@/components/charts/SpilloverNetwork.vue'
+import CycleFactorChart from '@/components/charts/CycleFactorChart.vue'
+import CycleMechanism from '@/components/diagrams/CycleMechanism.vue'
 import GlobalNetwork from '@/components/diagrams/GlobalNetwork.vue'
 import SpilloverMechanism from '@/components/diagrams/SpilloverMechanism.vue'
 import { usePrefsStore } from '@/stores/prefs'
@@ -156,10 +158,55 @@ const anchorCountry = computed(() => {
   return anchored?.code ?? 'EU'
 })
 
+/**
+ * The global financial cycle factor.
+ *
+ * It is a global object, so it belongs to the global scope only.  The
+ * artefact carries the loadings, the explained variance and the cross-check
+ * against the country panel, and all three are shown: a factor that is read
+ * without them is a number without a meaning.
+ */
+const cycleResource = computed(() => data.globalCycle)
+const cycle = computed(() => cycleResource.value.data)
+
+const cycleLoadings = computed(() => {
+  const current = cycle.value
+  if (!current) {
+    return []
+  }
+  return Object.entries(current.loadings)
+    .map(([name, value]) => ({ name, value }))
+    .sort((left, right) => Math.abs(right.value) - Math.abs(left.value))
+})
+
+/** The BIS flows the factor is built from, with the series each one carries. */
+const cycleFlows = computed(() => {
+  const groups = new Map<string, string[]>()
+  for (const input of cycle.value?.inputs ?? []) {
+    const list = groups.get(input.flow) ?? []
+    list.push(input.name)
+    groups.set(input.flow, list)
+  }
+  return [...groups.entries()].map(([code, series]) => ({ code, label: code, series }))
+})
+
+const cycleExplained = computed(() => {
+  const ratio = cycle.value?.explainedVarianceRatio?.[0] ?? 0
+  return format.percent(ratio, 1)
+})
+
+const cycleCorrelation = computed(() => {
+  const correlation = cycle.value?.crossCheck?.correlation
+  return correlation === null || correlation === undefined
+    ? null
+    : format.number(correlation, 3)
+})
+
 function reload(): void {
   const method = estimator.value || 'paper_equation'
   if (scope.value === 'global') {
     void data.loadGlobalSpillover(method)
+    void data.loadGlobalCycle()
   } else {
     void data.loadSpillover(prefs.countryCode, method)
   }
@@ -302,6 +349,74 @@ watch(
             :layers-label="t('metric.sector')"
           />
         </section>
+
+        <template v-if="scope === 'global'">
+          <section class="jd-panel">
+            <h2>{{ t('cycle.title') }}</h2>
+            <DataState
+              :status="cycleResource.status"
+              :error="cycleResource.error"
+              :empty="!cycle || cycle.factor.length === 0"
+              :empty-message="t('cycle.unavailable')"
+              @retry="data.loadGlobalCycle()"
+            >
+              <div class="jd-stack">
+                <p>{{ cycle?.orientation }}</p>
+                <div class="jd-row jd-row--spread">
+                  <span>
+                    {{ t('cycle.explained') }}:
+                    <strong class="jd-numeric">{{ cycleExplained }}</strong>
+                  </span>
+                  <span>
+                    {{ t('cycle.crossCheck') }}:
+                    <strong class="jd-numeric">{{ cycleCorrelation ?? '—' }}</strong>
+                  </span>
+                </div>
+                <CycleFactorChart
+                  :dates="cycle?.dates ?? []"
+                  :factor="cycle?.factor ?? []"
+                  :title="t('cycle.factor')"
+                />
+                <ul v-if="cycle && cycle.notes.length > 0" class="jd-notes">
+                  <li v-for="(note, index) in cycle.notes" :key="index">{{ note }}</li>
+                </ul>
+              </div>
+            </DataState>
+          </section>
+
+          <section class="jd-grid jd-grid-2">
+            <div class="jd-panel">
+              <h2>{{ t('cycle.loadings') }}</h2>
+              <el-table :data="cycleLoadings" border stripe>
+                <el-table-column :label="t('cycle.inputs')" min-width="180">
+                  <template #default="scope">{{ scope.row.name }}</template>
+                </el-table-column>
+                <el-table-column
+                  :label="t('cycle.loading')"
+                  width="140"
+                  class-name="jd-numeric"
+                >
+                  <template #default="scope">
+                    <span class="jd-numeric">{{ format.number(scope.row.value, 3) }}</span>
+                  </template>
+                </el-table-column>
+              </el-table>
+            </div>
+            <div class="jd-panel">
+              <h2>{{ t('cycle.mechanism') }}</h2>
+              <CycleMechanism
+                :title="t('cycle.mechanism')"
+                :flows="cycleFlows"
+                :standardise-label="t('cycle.standardise')"
+                :component-label="t('cycle.component')"
+                :factor-label="t('cycle.factor')"
+                :cross-check-label="t('cycle.crossCheck')"
+                :country-panel-label="t('cycle.countryPanel')"
+                :note="t('cycle.note')"
+              />
+            </div>
+          </section>
+        </template>
       </div>
     </DataState>
   </div>

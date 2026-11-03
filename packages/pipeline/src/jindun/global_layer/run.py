@@ -11,7 +11,9 @@ The four artefacts are exactly the ones the API serves:
 ``spillover.json``
     The cross-country contagion network.
 ``cycle.json``
-    The global cycle factor with its loadings and explained variance.
+    The global financial cycle factor estimated from the BIS global liquidity,
+    credit-gap and exchange-rate data, with the country-panel factor kept as
+    its cross-check.
 ``banking_network.json``
     The cross-border banking network from the BIS locational statistics.
 ``gsib.json``
@@ -22,7 +24,7 @@ from __future__ import annotations
 
 import datetime as dt
 import json
-from collections.abc import Iterable, Sequence
+from collections.abc import Iterable, Mapping, Sequence
 from pathlib import Path
 from typing import Any
 
@@ -32,8 +34,9 @@ from ..adapters.fsb import FsbAdapter
 from ..config import Settings
 from ..contagion import GVDSpec
 from .banking_network import BIS_AREA_CODES, load_banking_network
+from .bis_cycle import build_cycle_inputs
 from .cross_country import cross_country_spillover_all
-from .cycle import extract_cycle_factor
+from .cycle import build_global_cycle, extract_cycle_factor
 
 __all__ = [
     "load_country_composites",
@@ -93,6 +96,72 @@ def _banking_network_payload(
         "BIS locational banking statistics (WS_LBS_D_PUB): loans and deposits, "
         "US dollars, all counterparty sectors"
     )
+    return payload
+
+
+def _cycle_payload(
+    settings: Settings,
+    composites: Mapping[str, pd.Series],
+    *,
+    use_cache: bool = True,
+) -> dict[str, Any]:
+    """Build the global financial cycle factor and its cross-check.
+
+    The factor comes from the BIS inputs.  When they cannot be read the
+    artefact still carries the country-panel factor, but the failure is
+    stated rather than hidden: a missing factor must never look like a
+    factor that happens to be flat.
+    """
+    params = settings.cycle
+    source = (
+        "BIS global liquidity indicators (WS_GLI), credit-to-GDP gaps "
+        "(WS_CREDIT_GAP) and effective exchange rates (WS_EER)"
+    )
+    if not params.enabled:
+        return {
+            "dates": [],
+            "factor": [],
+            "status": "disabled",
+            "notes": ["the global cycle factor is disabled in the configuration"],
+        }
+
+    try:
+        inputs = build_cycle_inputs(
+            credit_gap_economies=params.credit_gap_economies,
+            dollar_reference_area=params.dollar_reference_area,
+            eer_basket=params.eer_basket,
+            use_cache=use_cache,
+        )
+    except Exception as exc:  # noqa: BLE001
+        panel = extract_cycle_factor(composites)
+        payload = panel.to_payload()
+        payload["status"] = "unavailable"
+        payload["source"] = source
+        payload["notes"] = [
+            f"the BIS cycle inputs could not be read: {exc}",
+            "the country-panel factor is published instead; it is a different object",
+            *panel.notes,
+        ]
+        return payload
+
+    if inputs.observations < params.min_observations:
+        panel = extract_cycle_factor(composites)
+        payload = panel.to_payload()
+        payload["status"] = "unavailable"
+        payload["source"] = source
+        payload["notes"] = [
+            f"only {inputs.observations} common quarters were available; "
+            f"at least {params.min_observations} are required to estimate a factor",
+            "the country-panel factor is published instead; it is a different object",
+            *inputs.notes,
+            *panel.notes,
+        ]
+        return payload
+
+    cycle = build_global_cycle(inputs, composites)
+    payload = cycle.to_payload()
+    payload["status"] = "estimated"
+    payload["source"] = source
     return payload
 
 
@@ -175,9 +244,8 @@ def run_global_layer(
     path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
     written["spillover"] = str(path)
 
-    # 2. Global cycle factor ---------------------------------------------
-    cycle = extract_cycle_factor(composites)
-    cycle_payload = cycle.to_payload()
+    # 2. Global financial cycle factor ------------------------------------
+    cycle_payload = _cycle_payload(settings, composites, use_cache=use_cache)
     cycle_payload["countries"] = sorted(composites)
     cycle_payload["generated_at"] = dt.datetime.now(dt.UTC).isoformat()
     path = root / "cycle.json"

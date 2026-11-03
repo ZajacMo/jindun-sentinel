@@ -15,7 +15,7 @@ Four artefacts are produced by `python -m jindun.cli global`:
 | Artefact | Content |
 | --- | --- |
 | `spillover.json` | the cross-country contagion network |
-| `cycle.json` | the global cycle factor with its loadings |
+| `cycle.json` | the global financial cycle factor and its country-panel cross-check |
 | `banking_network.json` | the cross-border banking network |
 | `gsib.json` | the FSB list of global systemically important banks |
 
@@ -42,25 +42,53 @@ Only the dates on which **every** country has an observation are used.  A
 variance decomposition over a ragged panel would silently attribute the
 missing days to whichever country happened to be present.
 
-## The global cycle factor
+## The global financial cycle factor
 
-The global cycle is the component of the country stress indices that moves
-together.  It is the first principal component of the aligned country
-composites — the same construction the country layer uses for its sub-market
-indices.
+`cycle.json` carries two different objects, and they must not be confused.
 
-The factor is reported with its loadings and its explained variance, because
-a factor that explains a tenth of the variance is a different statement from
-one that explains half of it.
+**The factor (layer L3).**  The first principal component of a standardised
+block of BIS series:
 
-The sign of a principal component is arbitrary, so the factor is oriented to
-correlate positively with the mean of the country composites.  Without that,
-two runs of the same data could report opposite signs and a reader would have
-to guess which direction is "more stress".
+| Input | Flow | What it measures |
+| --- | --- | --- |
+| `global_credit_yoy` | `WS_GLI` | year-on-year growth of cross-border bank claims on non-bank borrowers, all currencies |
+| `usd_credit_yoy` | `WS_GLI` | the same for US dollar credit outside the United States |
+| `eur_credit_yoy` | `WS_GLI` | the same for euro credit outside the euro area |
+| `credit_gap_*` | `WS_CREDIT_GAP` | the credit-to-GDP gap of every monitored economy, in percentage points |
+| `eer_us_yoy` | `WS_EER` | year-on-year change of the broad nominal effective exchange rate of the United States |
 
-When the first component explains less than 30 % of the common variance the
-artefact says so explicitly: the country stress indices are then not dominated
-by a single global driver, and the factor should not be read as one.
+A global financial cycle in the sense of Bruno & Shin (2014) and
+Miranda-Agrippino & Rey (2020) is a *global credit and currency* driver, so
+the factor is estimated from those published flows rather than from the
+monitored economies' own indices.
+
+**The cross-check (layer L1).**  The first principal component of the aligned
+country composites — the aggregate of the monitored stress indices, built the
+same way the country layer builds its sub-market indices.  It is the natural
+check on the first: the quarterly factor is carried forward onto the daily
+calendar of the panel and the two are correlated over the overlap.
+
+Three properties of the factor decide how it may be read, and all three are
+stated in the artefact itself:
+
+* **Its sign is anchored on the credit gap.**  The sign of a principal
+  component is arbitrary, so the factor is oriented to correlate positively
+  with the mean of the standardised credit-to-GDP gaps.  A higher factor then
+  means credit is further above its own trend — the configuration that
+  precedes financial stress.  It does **not** mean that stress is already
+  present.
+* **Its window is the window its shortest input allows.**  The euro area's
+  credit gap starts in 2009, so the factor starts in 2009 even though the
+  credit series themselves go back to the 1950s.
+* **Its explained variance is reported.**  The first component explains about
+  a third of the variance of the input block, and the artefact says so: these
+  flows do not move as one driver, and the factor must not be read as one.
+  The loadings are published as well, so a reader can see exactly which
+  series carry the component — and which do not.
+
+The full description, including how the BIS files are read and the two
+properties of the published data that change how they have to be read, is in
+`global-cycle-factor.md`.
 
 ## The cross-border banking network
 

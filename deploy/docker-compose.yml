@@ -1,0 +1,47 @@
+# The JinDun Sentinel application: the API and the web front end.
+#
+# The API serves the artefacts the pipeline produced, and the front end is a
+# static bundle served by nginx that proxies the API on the same origin.
+#
+#   docker compose -f deploy/docker-compose.yml up --build
+#
+# The artefacts are mounted from the repository, so a run of the pipeline on
+# the host is visible to the container without a rebuild.
+
+name: jindun-sentinel
+
+services:
+  api:
+    build:
+      context: ..
+      dockerfile: deploy/api.Dockerfile
+    image: jindun-sentinel/api:local
+    environment:
+      # The API resolves the repository root at runtime; the artefact root
+      # follows it, so the mounted data directory is found without a path
+      # that only exists on one machine.
+      JINDUN_ROOT: /app
+      # The front end calls the API through nginx on its own origin, so no
+      # cross-origin request is made.  These origins are for a front end that
+      # is served from somewhere else, such as the Vite dev server.
+      JINDUN_CORS_ORIGINS: http://localhost:5173,http://127.0.0.1:5173
+    volumes:
+      - ../data:/app/data
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+
+  web:
+    build:
+      context: ..
+      dockerfile: deploy/web.Dockerfile
+      args:
+        # The front end calls the API on its own origin and nginx proxies it.
+        VITE_API_BASE: /
+    image: jindun-sentinel/web:local
+    depends_on:
+      api:
+        condition: service_healthy
+    ports:
+      - "5173:80"
+    restart: unless-stopped

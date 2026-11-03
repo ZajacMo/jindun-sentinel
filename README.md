@@ -151,7 +151,7 @@ runnable pipeline.
 | Country index | one stress index per sub-market (equity, bond, fx, money, derivative) and the MBSED composite, reported on two lenses | `cdf_rank` normalisation by direction, sub-market PCA (`numpy.linalg.eigh`, smallest component count reaching 80 % cumulative explained variance), CRITIC or configured weights, composite `sqrt((W ⊙ s) P (W ⊙ s)' × 2)`, percentile and deviation-from-trend lenses | `data/runs/<CC>/market_indices.csv`, `run.json`; `GET /api/v1/countries/{code}/index` |
 | Regime | the stress regime (moderate / high) per observation and the probability of each | Markov-switching autoregression on the log composite (2 states, order 5, switching variance, trend `c`) using **filtered** posterior probabilities, with a deterministic two-cluster fallback; two-component normal mixture whose locations and dispersions are estimated from the fit | `run.json` → `regime` block; `GET /api/v1/countries/{code}/index` |
 | Contagion | the directed cross-market spillover network: own risk share, total spill-out, total spill-in, net transmitter | VAR with BIC order selection (max order 5) and one of four generalisations of the forecast error variance decomposition; row-normalised shares | `run.json` → `spillover` block; `GET /api/v1/countries/{code}/spillover` |
-| Global | cross-country contagion, the global cycle factor, the cross-border banking network and the G-SIB list | the same generalised variance decomposition applied to the country composites (common calendar only), the first principal component of the aligned country composites, BIS locational banking statistics, the FSB G-SIB document | `data/runs/global/*.json`; `GET /api/v1/global/spillover`, `/global/cycle`, `/global/banking-network`, `/global/gsib` |
+| Global | cross-country contagion, the global financial cycle factor, the cross-border banking network and the G-SIB list | the same generalised variance decomposition applied to the country composites (common calendar only), the first principal component of a standardised block of BIS global liquidity, credit-gap and exchange-rate series (with the country-panel principal component published as its cross-check), BIS locational banking statistics, the FSB G-SIB document | `data/runs/global/*.json`; `GET /api/v1/global/spillover`, `/global/cycle`, `/global/banking-network`, `/global/gsib` |
 
 The four spillover estimators are not interchangeable and each carries its own caveat:
 
@@ -218,7 +218,8 @@ gaps cannot be monitored.
 | ECB CISS — Japan | any Japanese reference area | **nothing** | every Japanese reference area returns 404 on both the daily and the monthly frequency. Japan therefore has **no CISS cross-check anchor**; the Bank of Japan API is used instead and the methodology states this explicitly |
 | BIS statistical API — data | `https://stats.bis.org/api/v1/data/{flow}/{key}?startPeriod=…&endPeriod=…&format=csvfile` | 10 of the 56 published flows are used: `WS_LBS_D_PUB`, `WS_LBS_PUB`, `WS_CBS_PUB`, `WS_GLI`, `WS_CREDIT_GAP`, `WS_DSR`, `WS_EER`, `WS_XRU`, `WS_OTC_DERIV2`, `WS_CPP` | **the key must be part of the URL path.** A request of the form `/api/v1/data/WS_LBS_D_PUB?key=…` silently ignores the key and returns the entire flow — 25 MB for a single quarter of the locational banking statistics, against 358 bytes for the same query in path form |
 | BIS statistical API — structure | `https://stats.bis.org/api/v1/dataflow/BIS` (SDMX-ML) | the full flow catalogue | requesting the JSON representation (`Accept: application/vnd.sdmx.structure+json`) answers **406**; the endpoint serves SDMX-ML XML, which is what the adapter parses |
-| BIS bulk archive — locational banking statistics | `https://data.bis.org/static/bulk/WS_LBS_D_PUB_csv_flat.zip` (365 MB, ~18 GB uncompressed) | the bilateral reporting-economy × counterparty-country matrix | **the bilateral matrix is only served by the bulk file.** Through the API the reporting-country dimension accepts the aggregate `5A` only, so a request for `L_REP_CTY=US` answers 404 although the data is published. The archive is downloaded once into `data/cache/` (never committed) and streamed into a filtered snapshot of about two megabytes under `data/snapshots/bis/` |
+| BIS bulk archive — locational banking statistics | `https://data.bis.org/static/bulk/WS_LBS_D_PUB_csv_flat.zip` (365 MB, ~18 GB uncompressed) | the bilateral reporting-economy × counterparty-country matrix | **the bilateral matrix is only served by the bulk file.** Through the API the reporting-country dimension accepts the aggregate `5A` only, so a request for `L_REP_CTY=US` answers 404 although the data is published. The archive is downloaded once into `data/cache/` (never committed) and streamed into a filtered snapshot of about two megabytes under `data/snapshots/bis/` (fetched, never committed) |
+| BIS bulk archive — global liquidity, credit gap and exchange rates | `https://data.bis.org/static/bulk/{WS_GLI,WS_CREDIT_GAP,WS_EER}_csv_flat.zip` (0.2 MB, 0.2 MB and 6.3 MB) | the inputs of the global financial cycle factor | the SDMX API serves the aggregates of these flows but not the dimension combinations the factor needs, so a narrow key answers 404 and the bulk file is the only practical route. `WS_EER` carries a **daily block and a monthly block at the same time**, and the two overlap in calendar time: only the daily block may be read, or a monthly average and a daily observation end up in the same quarter. The last quarter of every flow is half published and is excluded |
 | BIS SDMX v2 | `/api/v2/…` | none | the v2 paths answer **404** or **501**; only the v1 API exists |
 | Bank of Japan — Time-Series Statistics Search | `https://www.stat-search.boj.or.jp/api/v1/getMetadata`, `/getDataCode`, `/getDataLayer` | 10 databases used by this project: `IR01`, `FM01`, `FM02`, `FM08`, `FM09`, `MD01`, `MD02`, `PR01`, `CO`, `BP01` (the adapter also knows `BIS`, the Japanese slice of the BIS international banking and credit statistics), plus four derived series (the call-rate term spread, the call-rate dispersion, the USD/JPY volatility and the USD/JPY deviation from trend) | `getDataCode` accepts at most 250 series codes per request, `getDataLayer` at most 1 250; pagination is driven by `NEXTPOSITION`, which must be echoed back as `startPosition`; the service asks clients not to hammer it, so the adapter enforces a minimum delay between requests. The BOJ publishes no daily equity index, no daily derivatives market and no daily government bond yield curve, so the Japanese index has two markets rather than five. The Japanese index uses the call-rate **dispersion**, not the term spread: the term call rates of `FM02` only start in 2025, which would have cut the Japanese index down to two years of history |
 | FSB — G-SIB list | announcement page → linked PDF | the annual list, parsed into bank names with buckets 1–10 | the bank names are **not** in the announcement page: they live in a PDF linked from the list page, so the adapter resolves the link and parses the document's text layer. The bucket surcharge is the Basel schedule (0.5 % per bucket, 1.0 %–5.0 %) |
@@ -310,9 +311,11 @@ jindun-pipeline global
 ```
 
 Writes `data/runs/global/spillover.json` (the cross-country network),
-`cycle.json` (the global cycle factor), `banking_network.json` (the BIS cross-border
-banking network) and `gsib.json` (the FSB G-SIB list).  The banking network is read
-from the BIS snapshot; to create that snapshot see
+`cycle.json` (the global financial cycle factor), `banking_network.json` (the BIS
+cross-border banking network) and `gsib.json` (the FSB G-SIB list).  The cycle
+factor is estimated from the BIS global liquidity, credit-gap and exchange-rate
+series; its method and its limits are in `docs/global/global-cycle-factor.md`.
+The banking network is read from the BIS snapshot; to create that snapshot see
 `docs/global/banking-network.md`.
 
 ### 5. Re-check the gates without recomputing
@@ -359,7 +362,7 @@ The OpenAPI documentation is at `/api/docs` and the schema at `/api/openapi.json
 | `GET /api/v1/countries/{code}/alerts` | the alerts the last run raised |
 | `GET /api/v1/countries/{code}/data-quality` | the quality verdicts of the last run |
 | `GET /api/v1/global/spillover` | the cross-country network |
-| `GET /api/v1/global/cycle` | the global cycle factor |
+| `GET /api/v1/global/cycle` | the global financial cycle factor with its loadings and its cross-check |
 | `GET /api/v1/global/banking-network` | the cross-border banking network |
 | `GET /api/v1/global/gsib` | the G-SIB list with buckets |
 
@@ -390,6 +393,17 @@ npm run dev
 The front end talks to `http://localhost:8000` by default; set `VITE_API_BASE`
 to point it somewhere else.
 
+### 7b. Or run both in containers
+
+```bash
+docker compose -f deploy/docker-compose.yml up --build
+```
+
+The same two services, as images: the API on <http://localhost:8000> and the
+front end on <http://localhost:5173/>.  The repository's `data/` directory is
+mounted into the API container, so a pipeline run on the host is served without
+a rebuild.  `deploy/README.md` has the details.
+
 ### 8. Ask the system a question
 
 ```bash
@@ -418,14 +432,15 @@ jindun-sentinel/
 ├── CODE_OF_CONDUCT.md        Contributor Covenant v2.1
 ├── SECURITY.md               vulnerability reporting
 ├── locales/                  shared message catalogues: en-US, zh-CN, zh-TW, ja-JP
+├── deploy/                   the container setup: Dockerfiles, compose file, nginx
 ├── data/
 │   ├── runs/                 published artefacts and run manifests
-│   ├── snapshots/            raw source snapshots, including the BIS slice
+│   ├── snapshots/            raw source snapshots (fetched, not committed)
 │   ├── baseline/             vendored regression baselines and their provenance
 │   └── cache/                bulky reproducible downloads (not committed)
 ├── docs/
 │   ├── methodology/          the spillover estimators, the country profiles
-│   ├── global/               the global layer and the banking network
+│   ├── global/               the global layer, the cycle factor and the banking network
 │   └── user-guide/           the quick start
 ├── packages/
 │   ├── pipeline/             jindun-pipeline — the computation core
@@ -462,7 +477,7 @@ Stated plainly, because a monitoring system that hides its gaps is not monitorab
 | Japanese index | the Bank of Japan publishes no daily equity index, no daily derivatives market and no daily government bond yield curve, so the Japanese index has **two** markets instead of five and the Japanese cross-market spillover network has two nodes. The monthly and quarterly BOJ price databases are not mixed into the daily panel |
 | sub-market decomposition of the United States, the United Kingdom and the euro area | these economies are measured with the official ECB composite stress index, so they have **no** sub-market decomposition, no market attribution and no cross-market spillover network. Every run artefact says so |
 | global layer artefacts | `jindun-pipeline global` writes the four artefacts into `data/runs/global/`; the `/api/v1/global/*` endpoints answer 404 until that command has been run |
-| the BIS archive | the bilateral matrix is only served by the bulk archive, which is downloaded once into `data/cache/` (365 MB, not committed) and streamed into a filtered snapshot of about two megabytes under `data/snapshots/bis/` |
+| the BIS archive | the bilateral matrix is only served by the bulk archive, which is downloaded once into `data/cache/` (365 MB, not committed) and streamed into a filtered snapshot of about two megabytes under `data/snapshots/bis/` (not committed) |
 | the published table 5-2 of the source specification | it **cannot** be reproduced to the digit: the original input workbook was never published, and an exhaustive search over 4 696 candidate specifications did not find a single one that reproduces it. `docs/methodology/spillover-legacy-vs-paper.md` states the evidence and the regression strategy that replaced it |
 | static analysis | `ruff check` is clean for all three Python packages. `mypy` still reports 22 findings in the pipeline — mostly annotation precision in the adapter layer, no known runtime defect among them |
 | continuous integration | `.github/workflows/ci.yml` runs the linter, the test suite, the locale-catalogue audit and the front-end build and test on every push and pull request |

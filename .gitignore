@@ -18,8 +18,16 @@ dist/
 
 # Bulky, reproducible source downloads.
 # The BIS bulk archive is 365 MB; the *filtered* snapshot it produces is
-# committed under data/snapshots instead.
+# written under data/snapshots instead.
 data/cache/
+
+# Raw source snapshots are fetched, never committed.
+#
+# `jindun-pipeline fetch` rebuilds them from the publisher's own endpoint, so
+# the repository only carries the scripts, the fetch instructions and the
+# computed artefacts.  The BOJ metadata archive alone is 99 MB, and the raw
+# series come from redistributors whose redistribution terms we cannot grant.
+data/snapshots/
 
 # Scratch space of the development scripts
 .scratch/
