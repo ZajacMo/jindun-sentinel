@@ -124,7 +124,7 @@ watch(
                 </ul>
               </template>
             </el-table-column>
-            <el-table-column prop="series_id" :label="t('common.source')" min-width="260" />
+            <el-table-column prop="seriesId" :label="t('common.source')" min-width="260" />
             <el-table-column prop="adapter" :label="t('metric.bucket')" width="160" />
             <el-table-column :label="t('nav.dataQuality')" width="140">
               <template #default="scope">

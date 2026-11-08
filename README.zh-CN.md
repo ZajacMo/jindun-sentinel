@@ -4,6 +4,36 @@
 
 金盾哨兵（JinDun Sentinel）是一个开源系统，用于同时监测多个经济体的系统性金融风险。它把公开的日频统计序列转换成每个经济体可复现的压力指数，判断该经济体当前处于平静区制（calm regime）还是压力区制（stressed regime）以及各自的概率，估计压力由哪些子市场、哪些国家向哪些对象传导，并在越过预先声明的阈值时发出少量分级预警（graded alerts）。它要解决的问题是：系统性风险的度量通常被拆散成互不兼容的几块——只有指数却没有解释它的区制模型，只有区制模型却没有说明谁在污染谁的网络，以及无法复现的仪表盘，因为它展示的数字没人能追溯到来源。金盾哨兵把整条链路作为一条流水线交付：每个对外发布的数字前面都有明确的质量门禁（quality gate），后面都有运行清单（run manifest）。
 
+## 界面
+
+流水线的每一层都能在前端看到，屏幕上的每一个数字都能追溯回 `data/runs/` 里的产物。下面的图片是从参考构建实际跑起来的应用截取的真实界面，不是画出来的示意图；文件放在 `docs/images/`。除最后一张外，截图均为英文界面。
+
+| ![总览：综合压力指数、国内百分位与区制标签](docs/images/overview.png) | ![国家与地区：子市场表格与百分位机制](docs/images/countries.png) |
+| :---: | :---: |
+| **总览**——所选经济体的综合压力指数、国内百分位与区制标签。 | **国家与地区**——子市场表格，以及把源序列转成行业得分的机制。 |
+
+| ![国家详情：百分位历史、区制概率与分行业贡献](docs/images/country-detail.png) | ![区制模型：概率密度与状态机](docs/images/regime-mechanism.png) |
+| :---: | :---: |
+| **国家详情**——百分位历史、区制概率与分行业贡献。 | **区制**——概率模型，以及给出平静/压力区制的状态机。 |
+
+| ![全球溢出网络与行业表格](docs/images/spillover-network.png) | ![溢出量的度量方式](docs/images/spillover-mechanism.png) |
+| :---: | :---: |
+| **全球溢出**——谁把压力传导给谁，以及其中有多大比例是其自身固有风险。 | **溢出如何度量**——来源、脉冲响应、自身风险占比、传入量。 |
+
+| ![全球金融周期因子](docs/images/global-cycle.png) | ![承载该因子的载荷](docs/images/factor-loadings.png) |
+| :---: | :---: |
+| **全球金融周期**——BIS 输入块的第一个主成分，以及被丢弃的季度。 | **因子由什么承载**——每个输入对因子的载荷。 |
+
+| ![每条已抓取序列的质量门禁结论](docs/images/data-quality.png) | ![研究方法：估计量与它喂入的分桶](docs/images/methodology.png) |
+| :---: | :---: |
+| **数据质量**——每条已抓取序列的门禁结论，以及背后的各项检查。 | **研究方法**——估计量、它喂入的分桶，以及产出的自身风险占比。 |
+
+同一份词表同时驱动服务端与前端，因此同一屏可以读四种语言，不需要第二套实现。图表下方的说明是在运行时由词表渲染的，而不是写死在产物里：
+
+![同一页面的简体中文界面](docs/images/interface-zh.png)
+
+*溢出效应页面的简体中文界面。说明文字由词表键与其参数组装而成，因此译文不会与它所描述的数据脱节。*
+
 ## 每日运行链路
 
 下面每个阶段都由 `jindun-pipeline run` 执行。质量门禁位于计算的*前面*而不是后面：门禁不通过就会驳回该序列并阻断本次运行，因此不可用的输入永远不可能进入对外发布的指数。
@@ -356,6 +386,7 @@ jindun-sentinel/
 │   ├── baseline/             vendored regression baselines and their provenance
 │   └── cache/                bulky reproducible downloads (not committed)
 ├── docs/
+│   ├── images/               the interface screenshots used in this file
 │   ├── methodology/          the spillover estimators, the country profiles
 │   ├── global/               the global layer, the cycle factor and the banking network
 │   └── user-guide/           the quick start

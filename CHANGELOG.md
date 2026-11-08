@@ -10,7 +10,23 @@ sections below it describe released versions.
 
 ## [Unreleased]
 
-Nothing yet.
+### Added
+
+- **Interface screenshots in `docs/images/`.** Eleven captures of the running front
+  end are now part of the repository and are shown in both READMEs: the overview,
+  the country table, a country page, the regime model, the global spillover network
+  together with the mechanism behind it, the global cycle factor and its loadings,
+  the quality gate, the methodology page, and the same page in Simplified Chinese.
+  They are captures of the reference build, not mock-ups, and every number in them
+  traces back to an artefact in `data/runs/`.
+
+### Fixed
+
+- **The `Source` column of the data quality table was always empty.** The page bound
+  the table column to `series_id`, the snake_case key of the API payload, while the
+  API client normalises every field to camelCase before the table sees it. The
+  column now binds `seriesId`, and the identifier of every fetched series is shown
+  next to the adapter that fetched it.
 
 ## [0.2.1] - 2026-11-08
 

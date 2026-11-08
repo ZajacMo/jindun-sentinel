@@ -13,6 +13,42 @@ numbers nobody can trace back to a source. JinDun Sentinel ships the whole chain
 one pipeline, with an explicit quality gate in front of every published number and a
 run manifest behind it.
 
+## The interface
+
+Every layer of the pipeline is visible in the front end, and every number on a screen
+traces back to an artefact in `data/runs/`. The pictures below are captures of the
+running application, taken from the reference build rather than drawn; they live in
+`docs/images/`.
+
+| ![The overview: the composite stress index, the within-country percentile and the regime badge](docs/images/overview.png) | ![The countries page: the sub-market table and the percentile mechanism](docs/images/countries.png) |
+| :---: | :---: |
+| **Overview** — the composite stress index, the within-country percentile and the regime badge of the selected economy. | **Countries** — the sub-market table and the mechanism that turns a source series into a sector score. |
+
+| ![The country detail: the percentile history, the regime probability and the per-sector contribution](docs/images/country-detail.png) | ![The regime model: the probability density and the state machine](docs/images/regime-mechanism.png) |
+| :---: | :---: |
+| **Country detail** — the percentile history, the regime probability and the per-sector contribution. | **Regime** — the probability model and the state machine that assigns the moderate or high regime. |
+
+| ![The global spillover network and the sector table](docs/images/spillover-network.png) | ![How a spillover is measured](docs/images/spillover-mechanism.png) |
+| :---: | :---: |
+| **Global spillover** — who transmits stress to whom, and how much of it is their own. | **How a spillover is measured** — source, impulse responses, own risk share, spill-in. |
+
+| ![The global financial cycle factor](docs/images/global-cycle.png) | ![The loadings that carry the factor](docs/images/factor-loadings.png) |
+| :---: | :---: |
+| **Global financial cycle** — the first principal component of the BIS input block, with the quarters that were dropped. | **What carries the factor** — the loading of every input on the factor. |
+
+| ![The quality gate verdict for every fetched series](docs/images/data-quality.png) | ![The methodology: the estimators and the buckets they feed](docs/images/methodology.png) |
+| :---: | :---: |
+| **Data quality** — the verdict of the quality gate for every fetched series, with the individual checks behind it. | **Methodology** — the estimators, the buckets they feed and the own risk share they produce. |
+
+One catalogue serves the server and the front end, so the same screen reads in four
+languages without a second implementation. The notes under the charts are rendered from
+the catalogue at run time, not baked into the artefact:
+
+![The same page in Simplified Chinese](docs/images/interface-zh.png)
+
+*The spillover page in Simplified Chinese. The notes are assembled from the catalogue key
+and its parameters, so a translated sentence never drifts from the data it describes.*
+
 ## The daily chain
 
 Every stage below is executed by `jindun-pipeline run`. The quality gate sits *in front*
@@ -445,6 +481,7 @@ jindun-sentinel/
 │   ├── baseline/             vendored regression baselines and their provenance
 │   └── cache/                bulky reproducible downloads (not committed)
 ├── docs/
+│   ├── images/               the interface screenshots used in this file
 │   ├── methodology/          the spillover estimators, the country profiles
 │   ├── global/               the global layer, the cycle factor and the banking network
 │   └── user-guide/           the quick start

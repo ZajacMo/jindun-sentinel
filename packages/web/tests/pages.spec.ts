@@ -314,6 +314,18 @@ describe('workspace pages', () => {
   }, PAGE_TIMEOUT)
 
   /**
+   * The quality table bound its `Source` column to the snake_case key of the API
+   * payload, while the API client normalises every field to camelCase before the
+   * table sees it.  The column was therefore empty on every row and the reader
+   * could not tell which series the verdict belonged to.
+   */
+  it('shows the identifier of every fetched series in the quality table', async () => {
+    const wrapper = await renderPage('data-quality', '/data-quality')
+    expect(wrapper.text()).toContain('equity.pe_ratio')
+    wrapper.unmount()
+  }, PAGE_TIMEOUT)
+
+  /**
    * The artefact carries a catalogue key and the facts that fill it, never a
    * finished sentence.  This is the regression test for the defect where the
    * server's English prose reached the screen in every locale: a note must be
