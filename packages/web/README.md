@@ -26,6 +26,11 @@ Vite serves the application on <http://localhost:5173>.  The dev server is
 allowed to read the repository root, because the locale catalogue and the
 methodology notes live outside this package.
 
+**Restart the dev server after you change the locale catalogue.**  The
+catalogue is read once, when the server starts, and served as a virtual module;
+a reload of the page serves the wording that was in the files at that moment.
+A translation that appears not to have changed is almost always this.
+
 ## Point it at the API
 
 The API base URL is read from `VITE_API_BASE` and defaults to
