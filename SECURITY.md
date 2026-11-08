@@ -110,8 +110,8 @@ vulnerability.
 | default browser origins allowed by CORS | `http://localhost:5173,http://127.0.0.1:5173` — set `JINDUN_CORS_ORIGINS` to narrow or widen it |
 | HTTP methods accepted | `GET` and `OPTIONS` only |
 | artefact directory the API reads | `JINDUN_RUNS_DIR`, default the repository's `data/runs` |
-| locale catalogue the API reads | `JINDUN_LOCALE_DIR`, default the empty `packages/pipeline/locales` in a source checkout |
-| user agent sent to the external services | `jindun-sentinel/0.1` |
+| locale catalogue the API reads | `JINDUN_LOCALE_DIR`, default the repository's `locales/` — the same four catalogues the front end reads; a packaged install falls back to `packages/pipeline/locales` |
+| user agent sent to the external services | `jindun-sentinel/0.1 (+https://github.com/ZajacMo/jindun-sentinel)` |
 | outbound request timeout | 30 s, with 3 attempts and exponential backoff |
 | write access | the pipeline writes only under the snapshot directory and the run output directory; the API never writes |
 

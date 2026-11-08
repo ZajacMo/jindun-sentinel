@@ -26,17 +26,9 @@ cd jindun-sentinel
 uv sync --extra dev --extra market --all-packages
 ```
 
-The root `pyproject.toml` declares `packages/*` as workspace members and depends on
-`jindun-pipeline` and `jindun-api` from the workspace, so a single `uv sync`
-installs everything.
-
-> **Known issue on the current tree.** The workspace member glob `packages/*` also
-> matches `packages/data` — the snapshot store's default directory, which is not a
-> Python package — so `uv` aborts with
-> `Workspace member …/packages/data is missing a pyproject.toml (matches: packages/*)`.
-> Narrow the glob to the two Python packages (`members = ["packages/pipeline",
-> "packages/api"]`) or move the snapshot directory out of `packages/`. Nothing else
-> needs to change.
+The root `pyproject.toml` declares `packages/pipeline`, `packages/api` and
+`packages/agent` as workspace members and depends on `jindun-pipeline` and
+`jindun-api` from the workspace, so a single `uv sync` installs everything.
 
 The front end is not part of the uv workspace:
 
@@ -57,7 +49,11 @@ Extras on `jindun-pipeline`:
 
 `jindun-api` has a `dev` extra with `pytest`, `httpx`, `ruff` and `mypy`.
 
-Point the server at the shared locale catalogue when running from a source checkout:
+The locale catalogue is discovered, not guessed: `jindun.paths` finds the
+repository root by looking for the workspace manifest and a populated `locales`
+directory, so the server and the front end read the same four files without any
+configuration. The environment variable is only needed when the catalogue lives
+somewhere else:
 
 ```bash
 export JINDUN_LOCALE_DIR="$PWD/locales"
