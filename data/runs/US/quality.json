@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-11-02T20:55:50.524948+00:00",
+  "generated_at": "2026-11-07T20:13:27.541485+00:00",
   "passed": true,
   "counts": {
     "total": 1,
-    "ok": 1,
-    "warning": 0,
+    "ok": 0,
+    "warning": 1,
     "failure": 0
   },
   "series": [
@@ -12,7 +12,7 @@
       "series_id": "ecb_ciss.ss_cin.us",
       "adapter": "ecb_ciss",
       "country_code": "US",
-      "severity": "ok",
+      "severity": "warning",
       "passed": true,
       "observations": 12226,
       "first_date": "1980-01-02",
@@ -60,11 +60,11 @@
         },
         {
           "name": "freshness",
-          "passed": true,
-          "severity": "ok",
-          "measured": 4,
+          "passed": false,
+          "severity": "warning",
+          "measured": 9,
           "threshold": 5,
-          "message": ""
+          "message": "the latest observation is stale"
         }
       ]
     }

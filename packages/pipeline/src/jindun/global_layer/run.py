@@ -33,6 +33,7 @@ import pandas as pd
 from ..adapters.fsb import FsbAdapter
 from ..config import Settings
 from ..contagion import GVDSpec
+from ..models import Message
 from .banking_network import BIS_AREA_CODES, load_banking_network
 from .bis_cycle import build_cycle_inputs
 from .cross_country import cross_country_spillover_all
@@ -122,7 +123,7 @@ def _cycle_payload(
             "dates": [],
             "factor": [],
             "status": "disabled",
-            "notes": ["the global cycle factor is disabled in the configuration"],
+            "notes": [Message("cycle.note.disabled").to_payload()],
         }
 
     try:
@@ -138,9 +139,9 @@ def _cycle_payload(
         payload["status"] = "unavailable"
         payload["source"] = source
         payload["notes"] = [
-            f"the BIS cycle inputs could not be read: {exc}",
-            "the country-panel factor is published instead; it is a different object",
-            *panel.notes,
+            Message("cycle.note.inputsUnreadable", {"reason": str(exc)}).to_payload(),
+            Message("cycle.note.panelPublishedInstead").to_payload(),
+            *[note.to_payload() for note in panel.notes],
         ]
         return payload
 
@@ -150,11 +151,13 @@ def _cycle_payload(
         payload["status"] = "unavailable"
         payload["source"] = source
         payload["notes"] = [
-            f"only {inputs.observations} common quarters were available; "
-            f"at least {params.min_observations} are required to estimate a factor",
-            "the country-panel factor is published instead; it is a different object",
-            *inputs.notes,
-            *panel.notes,
+            Message(
+                "cycle.note.tooFewQuarters",
+                {"have": inputs.observations, "need": params.min_observations},
+            ).to_payload(),
+            Message("cycle.note.panelPublishedInstead").to_payload(),
+            *[note.to_payload() for note in inputs.notes],
+            *[note.to_payload() for note in panel.notes],
         ]
         return payload
 
@@ -199,7 +202,6 @@ def run_global_layer(
     root.mkdir(parents=True, exist_ok=True)
     source_runs = Path(runs_dir) if runs_dir else paths.runs_dir()
     written: dict[str, str] = {}
-    warnings: list[str] = []
 
     codes = list(countries) if countries else [c.code for c in settings.enabled_countries()]
     composites = load_country_composites(source_runs, codes)
@@ -227,19 +229,21 @@ def run_global_layer(
             payload["default_method"] = default.method if default is not None else spec.method
             payload.update(networks.to_payload())
         except Exception as exc:  # noqa: BLE001
-            payload = {"scope": "global", "nodes": [], "matrix": [], "notes": [str(exc)]}
-            warnings.append(f"the cross-country network could not be computed: {exc}")
+            payload = {
+                "scope": "global",
+                "nodes": [],
+                "matrix": [],
+                "notes": [Message("spillover.note.failed", {"reason": str(exc)}).to_payload()],
+            }
     else:
         payload = {
             "scope": "global",
             "nodes": [],
             "matrix": [],
             "notes": [
-                "at least two country runs are required for a cross-country network; "
-                f"found {len(composites)}"
+                Message("spillover.note.needTwoCountries", {"count": len(composites)}).to_payload()
             ],
         }
-        warnings.append("the cross-country network needs at least two country runs")
     path = root / "spillover.json"
     path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
     written["spillover"] = str(path)
@@ -262,18 +266,17 @@ def run_global_layer(
         try:
             payload = _banking_network_payload(snapshot, countries=codes)
         except Exception as exc:  # noqa: BLE001
-            payload = {"edges": [], "nodes": {}, "notes": [str(exc)]}
-            warnings.append(f"the banking network could not be built: {exc}")
+            payload = {
+                "edges": [],
+                "nodes": {},
+                "notes": [Message("banking.note.failed", {"reason": str(exc)}).to_payload()],
+            }
     else:
         payload = {
             "edges": [],
             "nodes": {},
-            "notes": [
-                "the BIS bilateral snapshot is missing; run "
-                "scripts/extract_bis_network.py to create it"
-            ],
+            "notes": [Message("banking.note.snapshotMissing").to_payload()],
         }
-        warnings.append("the BIS bilateral snapshot is missing")
     path = root / "banking_network.json"
     path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
     written["banking_network"] = str(path)
@@ -281,12 +284,8 @@ def run_global_layer(
     # 4. G-SIB list --------------------------------------------------------
     try:
         payload = _gsib_payload(FsbAdapter(), use_cache=use_cache)
-        extra = payload.get("warnings")
-        if isinstance(extra, list):
-            warnings.extend(str(item) for item in extra)
     except Exception as exc:  # noqa: BLE001
         payload = {"banks": [], "count": 0, "warnings": [str(exc)]}
-        warnings.append(f"the G-SIB list could not be fetched: {exc}")
     path = root / "gsib.json"
     path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
     written["gsib"] = str(path)

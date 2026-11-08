@@ -9,7 +9,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator
 
 __all__ = [
     "HealthResponse",
@@ -17,6 +17,7 @@ __all__ = [
     "CountryListResponse",
     "SeriesPoint",
     "IndexResponse",
+    "MessageRef",
     "RegimeBlock",
     "SpilloverResponse",
     "AlertResponse",
@@ -65,6 +66,33 @@ class RegimeBlock(BaseModel):
     params: dict[str, Any] = Field(default_factory=dict)
 
 
+class MessageRef(BaseModel):
+    """A sentence the reader sees: a catalogue key and the facts that fill it.
+
+    The wording lives in the shared locale catalogue and the computation owns
+    the facts, so the payload stays language neutral while every reader still
+    gets a sentence in their own language.  This is the shape the alerting
+    rules already use for their ``message_key`` and ``message_params``.
+    """
+
+    key: str
+    params: dict[str, Any] = Field(default_factory=dict)
+
+    @model_validator(mode="before")
+    @classmethod
+    def accept_a_legacy_sentence(cls, value: Any) -> Any:
+        """Read an artefact written before the notes became structured.
+
+        An older artefact carries the note as a finished English sentence.  It
+        cannot be translated, because there is no key behind it, but it must
+        not take the endpoint down either: the text is passed through and the
+        catalogue says that it is a verbatim note.
+        """
+        if isinstance(value, str):
+            return {"key": "common.legacyNote", "params": {"text": value}}
+        return value
+
+
 class IndexResponse(BaseModel):
     country_code: str
     as_of: str
@@ -77,7 +105,7 @@ class IndexResponse(BaseModel):
     market_indices: dict[str, list[SeriesPoint]] = Field(default_factory=dict)
     market_dates: list[str] = Field(default_factory=list)
     regime: RegimeBlock = Field(default_factory=RegimeBlock)
-    warnings: list[str] = Field(default_factory=list)
+    warnings: list[MessageRef] = Field(default_factory=list)
 
 
 class SpilloverResponse(BaseModel):
@@ -95,7 +123,7 @@ class SpilloverResponse(BaseModel):
     available_methods: list[str] = Field(default_factory=list)
     var_order: int | None = None
     window: list[str] | None = None
-    notes: list[str] = Field(default_factory=list)
+    notes: list[MessageRef] = Field(default_factory=list)
 
 
 class AlertResponse(BaseModel):

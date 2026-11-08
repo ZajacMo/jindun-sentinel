@@ -65,7 +65,7 @@ export interface CountryIndexPayload {
   deviation: SeriesPoint[]
   marketIndices: MarketIndexSeries[]
   regime: RegimeSeries
-  warnings: string[]
+  warnings: MessageRef[]
 }
 
 export interface SpilloverPayload {
@@ -86,7 +86,7 @@ export interface SpilloverPayload {
   /** Why the network is absent, when it is: `not_applicable` or `unavailable`. */
   unavailableReason: string | null
   window: [string, string] | null
-  notes: string[]
+  notes: MessageRef[]
   varOrder: number | null
 }
 
@@ -172,12 +172,36 @@ export interface CycleInput {
   observations: number
 }
 
+/**
+ * A sentence the reader sees: a catalogue key and the facts that fill it.
+ *
+ * The wording lives in the shared locale catalogue and the computation owns
+ * the facts, so the payload stays language neutral while the screen shows a
+ * sentence in the reader's own language.  This is the shape the alerting
+ * rules already use.
+ */
+export interface MessageRef {
+  key: string
+  params: Record<string, unknown>
+}
+
+/** What a higher factor means, read off the estimated loadings. */
+export interface CycleOrientation {
+  /** `credit_gap_mean` or `input_mean`. */
+  anchor: string
+  correlation: number
+  /** `wider` or `narrower`, or absent when no gap entered the factor. */
+  gapDirection: string | null
+  /** `slower` or `faster`, or absent when no growth rate entered it. */
+  growthDirection: string | null
+}
+
 export interface CyclePayload {
   /** `estimated`, `unavailable` or `disabled`. */
   status: string
   source: string
   frequency: string
-  orientation: string
+  orientation: CycleOrientation | null
   dates: string[]
   factor: number[]
   loadings: Record<string, number>
@@ -192,7 +216,7 @@ export interface CyclePayload {
     observations: number
     reason: string
   }
-  notes: string[]
+  notes: MessageRef[]
 }
 
 /* ------------------------------------------------------------------ */
@@ -235,6 +259,54 @@ export function asNumber(value: unknown, fallback = Number.NaN): number {
 export function asNullableNumber(value: unknown): number | null {
   const parsed = asNumber(value, Number.NaN)
   return Number.isFinite(parsed) ? parsed : null
+}
+
+/**
+ * Normalise one note into a catalogue key and its parameters.
+ *
+ * An artefact written before the notes became structured carries the note as
+ * a finished sentence.  It cannot be translated — there is no key behind it —
+ * but it must not take the screen down either, so it is passed through as a
+ * verbatim note.
+ */
+export function asMessageRef(value: unknown): MessageRef | null {
+  if (typeof value === 'string') {
+    return value.trim() === '' ? null : { key: 'common.legacyNote', params: { text: value } }
+  }
+  const record = asRecord(value)
+  const key = asString(record.key)
+  if (!key) {
+    return null
+  }
+  return { key, params: asRecord(record.params) }
+}
+
+/**
+ * Normalise a list of notes, dropping the ones that carry nothing at all.
+ */
+export function asMessageRefs(value: unknown): MessageRef[] {
+  return asArray(value)
+    .map((item) => asMessageRef(item))
+    .filter((item): item is MessageRef => item !== null)
+}
+
+/** Normalise the orientation facts of the global cycle factor. */
+export function asOrientation(value: unknown): CycleOrientation | null {
+  if (typeof value === 'string') {
+    // An older artefact carries the orientation as one English sentence.
+    return null
+  }
+  const record = asRecord(value)
+  const anchor = asString(record.anchor)
+  if (!anchor) {
+    return null
+  }
+  return {
+    anchor,
+    correlation: asNumber(record.correlation, 0),
+    gapDirection: asString(record.gap_direction) || null,
+    growthDirection: asString(record.growth_direction) || null,
+  }
 }
 
 function asNumberMap(value: unknown): Record<string, number> {
@@ -487,7 +559,7 @@ export function normaliseIndexPayload(raw: unknown, fallbackCode = ''): CountryI
     deviation: normaliseSeries(record.deviation),
     marketIndices: normaliseMarketIndices(marketBlock),
     regime: normaliseRegime(record.regime),
-    warnings: asArray(record.warnings).map((item) => asString(item)).filter(Boolean),
+    warnings: asMessageRefs(record.warnings),
   }
 }
 
@@ -519,7 +591,7 @@ export function normaliseSpilloverPayload(raw: unknown): SpilloverPayload {
     available: record.available !== false,
     unavailableReason: asString(record.unavailable_reason) || null,
     window: window.length === 2 ? [window[0] as string, window[1] as string] : null,
-    notes: asArray(record.notes).map((item) => asString(item)).filter(Boolean),
+    notes: asMessageRefs(record.notes),
     varOrder: asNullableNumber(record.var_order),
   }
 }
@@ -698,7 +770,7 @@ export function normaliseCyclePayload(raw: unknown): CyclePayload {
     status: asString(record.status, 'unknown'),
     source: asString(record.source),
     frequency: asString(record.frequency, 'Q'),
-    orientation: asString(record.orientation),
+    orientation: asOrientation(record.orientation),
     dates: asArray(record.dates).map((item) => asString(item)),
     factor: asArray(record.factor).map((item) => asNumber(item, 0)),
     loadings,
@@ -717,6 +789,6 @@ export function normaliseCyclePayload(raw: unknown): CyclePayload {
       observations: asNumber(cross.observations, 0),
       reason: asString(cross.reason),
     },
-    notes: asArray(record.notes).map((item) => asString(item)),
+    notes: asMessageRefs(record.notes),
   }
 }

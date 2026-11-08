@@ -1,6 +1,6 @@
 {
   "country_code": "JP",
-  "as_of": "2026-11-03",
+  "as_of": "2026-11-08",
   "profile": "mbsed",
   "capabilities": {
     "composite_synthesis": true,
@@ -99227,7 +99227,17 @@
     "method": "paper_equation",
     "var_order": 5,
     "notes": [
-      "method=paper_equation; VAR order=5 (selected by bic); horizon=10; sample=2005-01-04..2026-10-29"
+      {
+        "key": "spillover.note.method",
+        "params": {
+          "method": "paper_equation",
+          "order": 5,
+          "criterion": "bic",
+          "horizon": 10,
+          "start": "2005-01-04",
+          "end": "2026-10-29"
+        }
+      }
     ],
     "default_method": "paper_equation",
     "estimators": {
@@ -99264,7 +99274,17 @@
         "method": "paper_equation",
         "var_order": 5,
         "notes": [
-          "method=paper_equation; VAR order=5 (selected by bic); horizon=10; sample=2005-01-04..2026-10-29"
+          {
+            "key": "spillover.note.method",
+            "params": {
+              "method": "paper_equation",
+              "order": 5,
+              "criterion": "bic",
+              "horizon": 10,
+              "start": "2005-01-04",
+              "end": "2026-10-29"
+            }
+          }
         ]
       },
       "sims_structural": {
@@ -99300,7 +99320,17 @@
         "method": "sims_structural",
         "var_order": 5,
         "notes": [
-          "method=sims_structural; VAR order=5 (selected by bic); horizon=10; sample=2005-01-04..2026-10-29"
+          {
+            "key": "spillover.note.method",
+            "params": {
+              "method": "sims_structural",
+              "order": 5,
+              "criterion": "bic",
+              "horizon": 10,
+              "start": "2005-01-04",
+              "end": "2026-10-29"
+            }
+          }
         ]
       },
       "dy_generalised": {
@@ -99336,8 +99366,21 @@
         "method": "dy_generalised",
         "var_order": 5,
         "notes": [
-          "method=dy_generalised; VAR order=5 (selected by bic); horizon=10; sample=2005-01-04..2026-10-29",
-          "the generalized decomposition is signed: negative entries mean the column node reduces the row node's forecast error variance"
+          {
+            "key": "spillover.note.method",
+            "params": {
+              "method": "dy_generalised",
+              "order": 5,
+              "criterion": "bic",
+              "horizon": 10,
+              "start": "2005-01-04",
+              "end": "2026-10-29"
+            }
+          },
+          {
+            "key": "spillover.note.signed",
+            "params": {}
+          }
         ]
       },
       "legacy_appendix": {
@@ -99373,9 +99416,27 @@
         "method": "legacy_appendix",
         "var_order": 2,
         "notes": [
-          "method=legacy_appendix; VAR order=2 (selected by bic); horizon=2; sample=2005-01-04..2026-10-29",
-          "legacy appendix implementation: residual-correlation weighted index, not a forecast error variance decomposition",
-          "the legacy implementation is only defined when the horizon and the VAR order both equal the number of nodes, so it was computed with horizon=2"
+          {
+            "key": "spillover.note.method",
+            "params": {
+              "method": "legacy_appendix",
+              "order": 2,
+              "criterion": "bic",
+              "horizon": 2,
+              "start": "2005-01-04",
+              "end": "2026-10-29"
+            }
+          },
+          {
+            "key": "spillover.note.legacy",
+            "params": {}
+          },
+          {
+            "key": "spillover.note.legacyHorizon",
+            "params": {
+              "horizon": 2
+            }
+          }
         ]
       }
     },
@@ -99744,6 +99805,16 @@
     ]
   },
   "warnings": [
-    "method=paper_equation; VAR order=5 (selected by bic); horizon=10; sample=2005-01-04..2026-10-29"
+    {
+      "key": "spillover.note.method",
+      "params": {
+        "method": "paper_equation",
+        "order": 5,
+        "criterion": "bic",
+        "horizon": 10,
+        "start": "2005-01-04",
+        "end": "2026-10-29"
+      }
+    }
   ]
 }

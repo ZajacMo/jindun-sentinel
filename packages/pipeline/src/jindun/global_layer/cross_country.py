@@ -25,7 +25,7 @@ from collections.abc import Sequence
 import pandas as pd
 
 from ..contagion import METHODS, GVDSpec, compute_spillover, compute_spillover_all
-from ..models import SpilloverResult, SpilloverSet
+from ..models import Message, SpilloverResult, SpilloverSet
 
 __all__ = [
     "cross_country_spillover",
@@ -34,10 +34,7 @@ __all__ = [
 ]
 
 #: The caveat that applies to every cross-country network.
-_CROSS_COUNTRY_NOTE = (
-    "the cross-country network is computed over the country composites on the "
-    "percentile lens; only dates present in every country are used"
-)
+_CROSS_COUNTRY_NOTE = Message("spillover.note.crossCountry")
 
 
 def align_country_composites(composites: dict[str, pd.Series]) -> pd.DataFrame:

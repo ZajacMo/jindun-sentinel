@@ -162,6 +162,8 @@
 
 随附的四种语言为英语（`en-US`）、简体中文（`zh-CN`）、繁体中文（`zh-TW`）和日语（`ja-JP`）。简体与繁体中文均为人工撰写而非机器转换，因为两者的金融术语确实存在差异。`locales/` 下的语言目录文件是唯一事实来源：Python 服务端通过 `jindun.i18n` 读取它们，前端在构建时通过一个 Vite 插件读取完全相同的文件。
 
+产物在同样的意义上也是语言中立的：运行产物与全球层产物中的一条说明是「词表键 + 填充它的事实」，而不是一句写好的句子——措辞归词表所有，因而可以被翻译；计算只负责事实，因而可以被核验。界面按读者所用的语言渲染这条说明。
+
 ## 数据覆盖
 
 下表中每一条覆盖范围说明，都来自对应适配器自己文档字符串中的记录，即当时对在线服务核验的结果。“已知缺口”一列最为关键：一个隐藏自身缺口的实现是无法被监测的。
@@ -287,10 +289,10 @@ OpenAPI 文档位于 `/api/docs`，schema 位于 `/api/openapi.json`。
 | `GET /api/v1/messages?locale=&key=` | 一条渲染后的消息，或整个语言目录 |
 | `GET /api/v1/countries` | 存储中每个国家的一条摘要 |
 | `GET /api/v1/countries/{code}/index?lens=percentile\|deviation\|composite` | 综合指数、两种口径、市场指数与区制块 |
-| `GET /api/v1/countries/{code}/spillover` | 跨市场网络：节点、矩阵、溢出量、传入量、净溢出 |
+| `GET /api/v1/countries/{code}/spillover?method=&horizon=` | 跨市场网络：节点、矩阵、溢出量、传入量、净溢出、实际读取的估计量以及产物发布的全部估计量 |
 | `GET /api/v1/countries/{code}/alerts` | 最近一次运行发出的预警 |
 | `GET /api/v1/countries/{code}/data-quality` | 最近一次运行的质量结论 |
-| `GET /api/v1/global/spillover` | 跨国网络 |
+| `GET /api/v1/global/spillover?method=&horizon=` | 跨国网络 |
 | `GET /api/v1/global/cycle` | 全球金融周期因子，附带其载荷与交叉验证 |
 | `GET /api/v1/global/banking-network` | 跨境银行网络 |
 | `GET /api/v1/global/gsib` | 带分组的 G-SIB 名单 |

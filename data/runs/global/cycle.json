@@ -176,7 +176,12 @@
   ],
   "observations": 69,
   "frequency": "Q",
-  "orientation": "the sign is oriented on the mean of the standardised credit gaps, which correlates 0.84 with the factor: a higher factor means a wider credit-to-GDP gap and slower global credit growth",
+  "orientation": {
+    "anchor": "credit_gap_mean",
+    "correlation": 0.841655,
+    "gap_direction": "wider",
+    "growth_direction": "slower"
+  },
   "factor_standard_deviation": 1.77230817,
   "inputs": [
     {
@@ -4768,14 +4773,39 @@
       "notes": []
     },
     "notes": [
-      "the BIS factor is quarterly and is carried forward onto the daily calendar of the country panel; it does not move between publications"
+      {
+        "key": "cycle.note.carriedForward",
+        "params": {}
+      }
     ]
   },
   "notes": [
-    "207 quarter(s) were dropped because at least one input was missing",
-    "the common window is 2009-03-31 to 2026-03-31 (69 quarters)",
-    "the first principal component explains 34.9 % of the variance of the BIS input block",
-    "these inputs are essentially orthogonal to the first component and carry it only weakly: eer_us_yoy"
+    {
+      "key": "cycle.note.droppedQuarters",
+      "params": {
+        "count": 207
+      }
+    },
+    {
+      "key": "cycle.note.commonWindow",
+      "params": {
+        "start": "2009-03-31",
+        "end": "2026-03-31",
+        "count": 69
+      }
+    },
+    {
+      "key": "cycle.note.variance",
+      "params": {
+        "value": 34.9
+      }
+    },
+    {
+      "key": "cycle.note.weakInputs",
+      "params": {
+        "names": "eer_us_yoy"
+      }
+    }
   ],
   "status": "estimated",
   "source": "BIS global liquidity indicators (WS_GLI), credit-to-GDP gaps (WS_CREDIT_GAP) and effective exchange rates (WS_EER)",
@@ -4786,5 +4816,5 @@
     "JP",
     "US"
   ],
-  "generated_at": "2026-11-03T04:46:50.178084+00:00"
+  "generated_at": "2026-11-07T20:17:40.465149+00:00"
 }

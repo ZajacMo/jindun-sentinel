@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-11-02T20:55:09.570769+00:00",
+  "generated_at": "2026-11-07T20:12:50.468101+00:00",
   "passed": true,
   "counts": {
     "total": 3,
-    "ok": 3,
-    "warning": 0,
+    "ok": 0,
+    "warning": 3,
     "failure": 0
   },
   "series": [
@@ -12,7 +12,7 @@
       "series_id": "boj.money.call_rate_dispersion",
       "adapter": "boj",
       "country_code": "JP",
-      "severity": "ok",
+      "severity": "warning",
       "passed": true,
       "observations": 5341,
       "first_date": "2005-01-04",
@@ -60,11 +60,11 @@
         },
         {
           "name": "freshness",
-          "passed": true,
-          "severity": "ok",
-          "measured": 5,
+          "passed": false,
+          "severity": "warning",
+          "measured": 10,
           "threshold": 5,
-          "message": ""
+          "message": "the latest observation is stale"
         }
       ]
     },
@@ -72,7 +72,7 @@
       "series_id": "boj.fx.usdjpy_volatility",
       "adapter": "boj",
       "country_code": "JP",
-      "severity": "ok",
+      "severity": "warning",
       "passed": true,
       "observations": 6797,
       "first_date": "1999-02-02",
@@ -120,11 +120,11 @@
         },
         {
           "name": "freshness",
-          "passed": true,
-          "severity": "ok",
-          "measured": 5,
+          "passed": false,
+          "severity": "warning",
+          "measured": 10,
           "threshold": 5,
-          "message": ""
+          "message": "the latest observation is stale"
         }
       ]
     },
@@ -132,7 +132,7 @@
       "series_id": "boj.fx.usdjpy_deviation",
       "adapter": "boj",
       "country_code": "JP",
-      "severity": "ok",
+      "severity": "warning",
       "passed": true,
       "observations": 6568,
       "first_date": "2000-01-11",
@@ -180,11 +180,11 @@
         },
         {
           "name": "freshness",
-          "passed": true,
-          "severity": "ok",
-          "measured": 5,
+          "passed": false,
+          "severity": "warning",
+          "measured": 10,
           "threshold": 5,
-          "message": ""
+          "message": "the latest observation is stale"
         }
       ]
     }

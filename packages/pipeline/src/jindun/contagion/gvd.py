@@ -68,7 +68,7 @@ from dataclasses import dataclass, replace
 import numpy as np
 import pandas as pd
 
-from ..models import SpilloverResult, SpilloverSet
+from ..models import Message, SpilloverResult, SpilloverSet
 from .var import VARFit, fit_var, select_var_order, vma_coefficients
 
 __all__ = [
@@ -109,7 +109,7 @@ class GVDSpec:
     require_stable: bool = True
     transform: str = "level"
     absolute: bool = False
-    notes: tuple[str, ...] = ()
+    notes: tuple[Message, ...] = ()
 
     def __post_init__(self) -> None:
         if self.method not in METHODS:
@@ -391,26 +391,30 @@ def _decompose(
     notes = list(spec.notes)
     sample = fit.sample or ("", "")
     notes.append(
-        f"method={spec.method}; VAR order={fit.order} (selected by {spec.criterion}); "
-        f"horizon={spec.horizon}; sample={sample[0]}..{sample[1]}"
+        Message(
+            "spillover.note.method",
+            {
+                "method": spec.method,
+                "order": fit.order,
+                "criterion": spec.criterion,
+                "horizon": spec.horizon,
+                "start": sample[0],
+                "end": sample[1],
+            },
+        )
     )
     if spec.method == "dy_generalised":
-        notes.append(
-            "the generalized decomposition is signed: negative entries mean the "
-            "column node reduces the row node's forecast error variance"
-        )
+        notes.append(Message("spillover.note.signed"))
     if spec.method == "legacy_appendix":
+        notes.append(Message("spillover.note.legacy"))
         notes.append(
-            "legacy appendix implementation: residual-correlation weighted index, "
-            "not a forecast error variance decomposition"
-        )
-        notes.append(
-            "the legacy implementation is only defined when the horizon and the VAR "
-            f"order both equal the number of nodes, so it was computed with "
-            f"horizon={len(frame.columns)}"
+            Message(
+                "spillover.note.legacyHorizon",
+                {"horizon": len(frame.columns)},
+            )
         )
     if not fit.stable:
-        notes.append("WARNING: the fitted VAR is not stable; the decomposition is unreliable")
+        notes.append(Message("spillover.note.unstable"))
 
     return SpilloverResult(
         scope=scope or "unspecified",

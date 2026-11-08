@@ -1,6 +1,6 @@
 {
   "country_code": "EU",
-  "as_of": "2026-11-03",
+  "as_of": "2026-11-08",
   "profile": "official_index",
   "capabilities": {
     "composite_synthesis": false,
@@ -200500,6 +200500,9 @@
     "notes": []
   },
   "warnings": [
-    "the country index is an official published stress index; this economy has no sub-market decomposition, so the market attribution and the cross-market spillover network are not available for it"
+    {
+      "key": "run.warning.officialIndex",
+      "params": {}
+    }
   ]
 }

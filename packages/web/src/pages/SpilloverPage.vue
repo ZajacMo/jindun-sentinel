@@ -12,7 +12,7 @@ import { usePrefsStore } from '@/stores/prefs'
 import { useDataStore } from '@/stores/data'
 import { useFormat } from '@/composables/useFormat'
 import { useLabels } from '@/composables/useLabels'
-import type { SpilloverPayload } from '@/api/types'
+import type { MessageRef, SpilloverPayload } from '@/api/types'
 
 /**
  * The contagion network.
@@ -202,6 +202,67 @@ const cycleCorrelation = computed(() => {
     : format.number(correlation, 3)
 })
 
+/**
+ * Render one note through the shared catalogue.
+ *
+ * The artefact carries a catalogue key and the facts that fill it, never a
+ * finished sentence, so the reader gets the note in their own language.
+ */
+function renderNote(note: MessageRef): string {
+  return t(note.key, note.params)
+}
+
+/**
+ * What a higher factor means.
+ *
+ * The directions are read off the estimated loadings, so the wording cannot
+ * drift away from the factor.  The catalogue owns the sentence; the artefact
+ * owns the facts.
+ */
+const cycleMeaning = computed(() => {
+  const orientation = cycle.value?.orientation
+  if (!orientation) {
+    return ''
+  }
+  const gap = orientation.gapDirection ? t(`cycle.direction.${orientation.gapDirection}`) : ''
+  const growth = orientation.growthDirection
+    ? t(`cycle.direction.${orientation.growthDirection}`)
+    : ''
+  if (gap && growth) {
+    return t('cycle.meaning.both', { gap, growth })
+  }
+  if (gap) {
+    return t('cycle.meaning.gap', { gap })
+  }
+  if (growth) {
+    return t('cycle.meaning.growth', { growth })
+  }
+  return t('cycle.meaning.none')
+})
+
+/**
+ * The full orientation sentence.
+ *
+ * The artefact carries the facts — the anchor the sign was oriented on, how
+ * strongly it correlates with the factor and which way each driver points —
+ * and the catalogue turns them into a sentence.
+ */
+const cycleOrientation = computed(() => {
+  const orientation = cycle.value?.orientation
+  if (!orientation) {
+    return ''
+  }
+  const anchor =
+    orientation.anchor === 'input_mean'
+      ? t('cycle.anchor.inputMean')
+      : t('cycle.anchor.creditGapMean')
+  return t('cycle.orientation', {
+    anchor,
+    correlation: format.number(orientation.correlation, 2),
+    meaning: cycleMeaning.value,
+  })
+})
+
 function reload(): void {
   const method = estimator.value || 'paper_equation'
   if (scope.value === 'global') {
@@ -282,7 +343,7 @@ watch(
         <section v-if="payload && payload.notes.length > 0" class="jd-panel">
           <h2>{{ t('common.notes') }}</h2>
           <ul class="jd-notes">
-            <li v-for="(note, index) in payload.notes" :key="index">{{ note }}</li>
+            <li v-for="(note, index) in payload.notes" :key="index">{{ renderNote(note) }}</li>
           </ul>
         </section>
 
@@ -361,7 +422,7 @@ watch(
               @retry="data.loadGlobalCycle()"
             >
               <div class="jd-stack">
-                <p>{{ cycle?.orientation }}</p>
+                <p>{{ cycleOrientation }}</p>
                 <div class="jd-row jd-row--spread">
                   <span>
                     {{ t('cycle.explained') }}:
@@ -378,7 +439,7 @@ watch(
                   :title="t('cycle.factor')"
                 />
                 <ul v-if="cycle && cycle.notes.length > 0" class="jd-notes">
-                  <li v-for="(note, index) in cycle.notes" :key="index">{{ note }}</li>
+                  <li v-for="(note, index) in cycle.notes" :key="index">{{ renderNote(note) }}</li>
                 </ul>
               </div>
             </DataState>
@@ -412,7 +473,7 @@ watch(
                 :factor-label="t('cycle.factor')"
                 :cross-check-label="t('cycle.crossCheck')"
                 :country-panel-label="t('cycle.countryPanel')"
-                :note="t('cycle.note')"
+                :note="cycleMeaning"
               />
             </div>
           </section>

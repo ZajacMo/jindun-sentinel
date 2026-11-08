@@ -48,6 +48,7 @@ from .models import (
     AlertState,
     Country,
     Direction,
+    Message,
     RegimeLabel,
     Severity,
 )
@@ -81,7 +82,7 @@ class CountryRun:
     forecast: dict[str, Any] = field(default_factory=dict)
     quality: QualityReport | None = None
     sources: list[dict[str, Any]] = field(default_factory=list)
-    warnings: list[str] = field(default_factory=list)
+    warnings: list[Message] = field(default_factory=list)
 
     def to_payload(self) -> dict[str, Any]:
         return {
@@ -119,7 +120,7 @@ class CountryRun:
             "alerts": [alert.to_payload() for alert in self.alerts],
             "attribution": self.attribution,
             "forecast": self.forecast,
-            "warnings": list(self.warnings),
+            "warnings": [warning.to_payload() for warning in self.warnings],
         }
 
 
@@ -249,8 +250,15 @@ def run_country(
     quality = evaluate_all(results, quality_policy, today=today)
     for failure in quality.failures:
         warnings.append(
-            f"quality gate failed for {failure.series_id}: "
-            + "; ".join(check.message for check in failure.checks if not check.passed)
+            Message(
+                "run.warning.qualityGate",
+                {
+                    "series": failure.series_id,
+                    "reasons": "; ".join(
+                        check.message for check in failure.checks if not check.passed
+                    ),
+                },
+            )
         )
 
     market_series: dict[str, pd.Series] = {}
@@ -280,7 +288,7 @@ def run_country(
             ),
             quality=quality,
             sources=[result.to_payload() for result in results],
-            warnings=[*warnings, "no market index could be built"],
+            warnings=[*warnings, Message("run.warning.noMarketIndex")],
         )
 
     market_frame = pd.DataFrame(market_series).sort_index()
@@ -305,11 +313,7 @@ def run_country(
     official_profile = country.profile == "official_index"
     if official_profile:
         composite = market_frame.iloc[:, 0].copy()
-        warnings.append(
-            "the country index is an official published stress index; this economy "
-            "has no sub-market decomposition, so the market attribution and the "
-            "cross-market spillover network are not available for it"
-        )
+        warnings.append(Message("run.warning.officialIndex"))
     else:
         composite, _ = synthesise_composite(
             market_frame, market_weights, scale=settings.composite.scale
@@ -337,7 +341,7 @@ def run_country(
     surge_scores: dict[str, SurgeScore] = {}
     if official_profile or market_frame.shape[1] < 2:
         if not official_profile:
-            warnings.append("the cross-market spillover network needs at least two markets")
+            warnings.append(Message("run.warning.needsTwoMarkets"))
     else:
         try:
             spec = GVDSpec(
@@ -355,7 +359,12 @@ def run_country(
                 methods=settings.contagion.publish_methods,
             )
             for method, reason in networks.failures.items():
-                warnings.append(f"the {method} estimator could not be computed: {reason}")
+                warnings.append(
+                    Message(
+                        "run.warning.estimatorFailed",
+                        {"method": method, "reason": reason},
+                    )
+                )
             default = networks.results.get(spec.method)
             if default is None and networks.results:
                 default = next(iter(networks.results.values()))
@@ -393,12 +402,9 @@ def run_country(
                         "scores": {market: score.to_payload() for market, score in scores.items()},
                     }
                 else:
-                    warnings.append(
-                        "the rolling spill-out history could not be built; "
-                        "the surge alert stays silent for this run"
-                    )
+                    warnings.append(Message("run.warning.noSurgeHistory"))
         except Exception as exc:  # noqa: BLE001 - contagion is optional per run
-            warnings.append(f"the spillover network could not be computed: {exc}")
+            warnings.append(Message("run.warning.spilloverFailed", {"reason": str(exc)}))
 
     alerts = _evaluate_alerts(country, settings, percentile, regime_fit, market_frame, surge_scores)
 

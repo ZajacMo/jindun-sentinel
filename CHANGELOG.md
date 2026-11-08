@@ -12,6 +12,85 @@ sections below it describe released versions.
 
 Nothing yet.
 
+## [0.2.1] - 2026-11-08
+
+### Added
+
+- **`docs/methodology/README.md`** — the index of the methodology documentation.
+  It states what each document covers, which step of the pipeline each document
+  owns, and the order in which a researcher should read them. The three
+  documents it indexes that do not exist yet — the composite index construction,
+  the regime identification and the risk probability model, and the comparability
+  note on the percentile and deviation lenses — are listed with their scope
+  fixed, so the plan is a contract rather than a wish.
+- **`docs/user-guide/README.md`** — the operating reference: the five commands of
+  `jindun-pipeline`, a worked cycle from the raw sources to the number on the
+  screen, the shape of every published artefact, and a table of every API
+  endpoint with its method, its path, its query parameters and its response.
+- **`docs/research/README.md`** — the research record: the lineage of the method
+  and the three dimensions of the source research, the peer-reviewed literature
+  the method is built on, the Chinese-language source literature, the data
+  sources with the terms their publishers allow, and an explicit statement of
+  the limitations of the result.
+- **Forty-nine new catalogue keys in all four locales.** Every note the pipeline
+  can raise and every fact the screen needs to state a fact about the global
+  cycle factor now has a hand-written translation in en-US, zh-CN, zh-TW and
+  ja-JP. The Traditional Chinese is written, not converted: the same sentence
+  uses 欄/列 for the column and the row of a matrix where Simplified Chinese
+  uses 列/行, because that is what the two conventions actually are.
+
+### Changed
+
+- **The artefacts carry a catalogue key and its facts, never a finished
+  sentence.** `notes` and `warnings` in the run and global artefacts are now
+  `{"key": ..., "params": {...}}` entries, and the API publishes them as
+  `MessageRef`. The wording lives in the shared catalogue, where it can be
+  translated; the computation owns the facts, where they can be verified. This
+  is the shape the alerting rules already used for their `message_key` and
+  `message_params`, so the project now has one way to say something rather than
+  two. An artefact written before this change still reads: its bare English
+  sentence is passed through under `common.legacyNote` instead of taking the
+  endpoint down.
+- **The orientation of the global cycle factor is a set of facts.** The artefact
+  publishes the anchor the sign was oriented on, the correlation with that
+  anchor and the direction of every driver; the catalogue turns them into the
+  sentence. The direction of each driver is still *read off the estimated
+  loadings*, so the wording cannot drift away from what the factor is — but the
+  wording is no longer asserted in one language and merely translated.
+- **The reference list of the research record was verified entry by entry against
+  the Crossref REST API.** Eight of the eighteen DOIs of the research-phase list
+  resolved to unrelated articles or to nothing at all, and one DOI was listed
+  twice. Each entry was corrected to a verified record or dropped, and the
+  verification record — what every DOI actually is, and what was done with it —
+  is in `docs/research/README.md`.
+- **The command line renders a warning as an English sentence.** The artefacts
+  stay language neutral; the operator's surface has always spoken English, so
+  the sentence is assembled from the English catalogue at print time.
+
+### Fixed
+
+- **English prose no longer reaches a screen in another language.** The spillover
+  network, the global cycle factor and the run warnings were rendered on the
+  screen exactly as the server had written them, so a reader in Simplified
+  Chinese, Traditional Chinese or Japanese saw twenty-seven English sentences
+  inside an otherwise translated interface. They are now rendered from the
+  catalogue in the reader's own language.
+- **The global cycle artefact could not be written.** The cross-check carried
+  its notes as objects rather than as payloads, so `json.dumps` raised and the
+  whole global layer failed. A test now writes the payload, cross-check
+  included, before it is published.
+- **The sample window of the global network carried a midnight timestamp.** The
+  country layer indexes by date and the global layer by a `DatetimeIndex`, so
+  one layer printed `2017-03-30` and the other `2017-03-30 00:00:00`. The
+  window is a date, not an instant, and is now printed as one.
+
+### Removed
+
+- **The `cycle.note` catalogue key.** It asserted in three languages what a
+  higher factor means — a sentence that could drift away from the factor it
+  described. The mechanism diagram now states the same thing from the loadings
+  the pipeline just estimated.
+
 ## [0.2.0] - 2026-11-03
 
 ### Added
@@ -318,10 +397,15 @@ plus one npm package and a shared locale catalogue at the repository root.
 
 ## 0.1.0 — internal milestone, never published
 
-The first release of the pipeline, the API and the front end.  This version was
-never published: it existed only as an internal milestone of the work, and
-[0.2.0] is the first release that was tagged.  It is recorded here because the
-changes below were made at that milestone.
+The initial monorepo release: the computation pipeline, the API server, the web
+front end, four locale catalogues, the China country configuration, the spillover
+estimators, the quality gates and the run manifest.
+
+The repository's first **tag** is `v0.2.0`; it carries this same package set
+and adds the analyst-agent layer, the global cycle factor estimated from BIS
+data, the container deployment and the Simplified-Chinese README on top of it.
+The entry below records the state the packages themselves carry, whose version
+metadata is `0.1.0` in all three `pyproject.toml` files.
 
 ### Added
 
@@ -342,5 +426,6 @@ changes below were made at that milestone.
 - Optional extras: `arch`, `market` (akshare), `ml`, `dev`.
 - The package is published under the Apache License 2.0.
 
-[Unreleased]: https://github.com/ZajacMo/jindun-sentinel/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/ZajacMo/jindun-sentinel/compare/v0.2.1...HEAD
+[0.2.1]: https://github.com/ZajacMo/jindun-sentinel/releases/tag/v0.2.1
 [0.2.0]: https://github.com/ZajacMo/jindun-sentinel/releases/tag/v0.2.0

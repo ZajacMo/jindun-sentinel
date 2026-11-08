@@ -62,6 +62,20 @@ def is_stable(coefficients: np.ndarray, order: int) -> bool:
     return bool(np.all(eigenvalues < 1.0 - 1e-8))
 
 
+def _iso_date(label: object) -> str:
+    """Return the calendar date of an index label as an ISO-8601 string.
+
+    The country layer indexes by ``datetime.date`` and the global layer by a
+    ``DatetimeIndex``, so the raw label would otherwise be printed with a
+    midnight timestamp in one layer and without one in the other.  The sample
+    window is shown to the reader; it is a date, not an instant.
+    """
+    isoformat = getattr(label, "isoformat", None)
+    if callable(isoformat):
+        return str(isoformat())[:10]
+    return str(label)
+
+
 def _fit_single(data: pd.DataFrame, order: int) -> VARFit | None:
     from statsmodels.tsa.api import VAR
 
@@ -85,7 +99,7 @@ def _fit_single(data: pd.DataFrame, order: int) -> VARFit | None:
         bic = float("nan")
 
     stable = is_stable(coefficients, order)
-    dates = [str(index) for index in data.index]
+    dates = [_iso_date(index) for index in data.index]
     return VARFit(
         order=order,
         coefficients=coefficients,

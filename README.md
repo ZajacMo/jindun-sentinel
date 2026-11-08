@@ -203,6 +203,12 @@ genuinely differs between them. The catalogue files under `locales/` are the sin
 source of truth: the Python server reads them through `jindun.i18n`, the front end
 reads the very same files at build time through a Vite plugin.
 
+The artefacts are language neutral in the same sense. A note in a run or a global
+artefact is a catalogue key and the facts that fill it, never a finished sentence:
+the wording belongs to the catalogue, where it can be translated, and the
+computation owns the facts, where they can be verified. The screen renders the note
+in the reader's own language.
+
 ## Data coverage
 
 Every coverage statement in this table is the one the corresponding adapter records in
@@ -358,10 +364,10 @@ The OpenAPI documentation is at `/api/docs` and the schema at `/api/openapi.json
 | `GET /api/v1/messages?locale=&key=` | one rendered message, or the whole catalogue |
 | `GET /api/v1/countries` | one summary per country in the store |
 | `GET /api/v1/countries/{code}/index?lens=percentile\|deviation\|composite` | composite, both lenses, the market indices and the regime block |
-| `GET /api/v1/countries/{code}/spillover` | the cross-market network: nodes, matrix, spill-out, spill-in, net |
+| `GET /api/v1/countries/{code}/spillover?method=&horizon=` | the cross-market network: nodes, matrix, spill-out, spill-in, net, the estimator that was read and the ones the artefact publishes |
 | `GET /api/v1/countries/{code}/alerts` | the alerts the last run raised |
 | `GET /api/v1/countries/{code}/data-quality` | the quality verdicts of the last run |
-| `GET /api/v1/global/spillover` | the cross-country network |
+| `GET /api/v1/global/spillover?method=&horizon=` | the cross-country network |
 | `GET /api/v1/global/cycle` | the global financial cycle factor with its loadings and its cross-check |
 | `GET /api/v1/global/banking-network` | the cross-border banking network |
 | `GET /api/v1/global/gsib` | the G-SIB list with buckets |

@@ -38,7 +38,19 @@ def _spillover_block(method: str, *, nodes: list[str], horizon: int) -> dict[str
         "window": None,
         "method": method,
         "var_order": 2,
-        "notes": [f"method={method}"],
+        "notes": [
+            {
+                "key": "spillover.note.method",
+                "params": {
+                    "method": method,
+                    "order": 2,
+                    "criterion": "bic",
+                    "horizon": horizon,
+                    "start": "2024-01-01",
+                    "end": "2024-12-31",
+                },
+            }
+        ],
     }
 
 

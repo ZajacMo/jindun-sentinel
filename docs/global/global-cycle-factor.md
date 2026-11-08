@@ -77,8 +77,10 @@ rising factor as a rising stress index will read it backwards.
 
 The orientation is not asserted; it is measured.  The mean of the
 standardised credit gaps correlates **0.84** with the first component, and
-the artefact prints that correlation.  The wording itself is derived from
-the estimated loadings, so it cannot drift away from what the factor
+the artefact carries that correlation, the anchor the sign was oriented on and
+the direction of every driver.  The screen turns those facts into a sentence
+with the shared locale catalogue, and the directions themselves are read off
+the estimated loadings, so the wording cannot drift away from what the factor
 actually is.
 
 ## What the loadings say

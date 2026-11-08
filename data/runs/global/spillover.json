@@ -70,8 +70,21 @@
   "method": "paper_equation",
   "var_order": 2,
   "notes": [
-    "method=paper_equation; VAR order=2 (selected by bic); horizon=10; sample=2017-03-30 00:00:00..2026-10-29 00:00:00",
-    "the cross-country network is computed over the country composites on the percentile lens; only dates present in every country are used"
+    {
+      "key": "spillover.note.method",
+      "params": {
+        "method": "paper_equation",
+        "order": 2,
+        "criterion": "bic",
+        "horizon": 10,
+        "start": "2017-03-30",
+        "end": "2026-10-29"
+      }
+    },
+    {
+      "key": "spillover.note.crossCountry",
+      "params": {}
+    }
   ],
   "default_method": "paper_equation",
   "estimators": {
@@ -147,8 +160,21 @@
       "method": "paper_equation",
       "var_order": 2,
       "notes": [
-        "method=paper_equation; VAR order=2 (selected by bic); horizon=10; sample=2017-03-30 00:00:00..2026-10-29 00:00:00",
-        "the cross-country network is computed over the country composites on the percentile lens; only dates present in every country are used"
+        {
+          "key": "spillover.note.method",
+          "params": {
+            "method": "paper_equation",
+            "order": 2,
+            "criterion": "bic",
+            "horizon": 10,
+            "start": "2017-03-30",
+            "end": "2026-10-29"
+          }
+        },
+        {
+          "key": "spillover.note.crossCountry",
+          "params": {}
+        }
       ]
     },
     "sims_structural": {
@@ -223,8 +249,21 @@
       "method": "sims_structural",
       "var_order": 2,
       "notes": [
-        "method=sims_structural; VAR order=2 (selected by bic); horizon=10; sample=2017-03-30 00:00:00..2026-10-29 00:00:00",
-        "the cross-country network is computed over the country composites on the percentile lens; only dates present in every country are used"
+        {
+          "key": "spillover.note.method",
+          "params": {
+            "method": "sims_structural",
+            "order": 2,
+            "criterion": "bic",
+            "horizon": 10,
+            "start": "2017-03-30",
+            "end": "2026-10-29"
+          }
+        },
+        {
+          "key": "spillover.note.crossCountry",
+          "params": {}
+        }
       ]
     },
     "dy_generalised": {
@@ -299,9 +338,25 @@
       "method": "dy_generalised",
       "var_order": 2,
       "notes": [
-        "method=dy_generalised; VAR order=2 (selected by bic); horizon=10; sample=2017-03-30 00:00:00..2026-10-29 00:00:00",
-        "the generalized decomposition is signed: negative entries mean the column node reduces the row node's forecast error variance",
-        "the cross-country network is computed over the country composites on the percentile lens; only dates present in every country are used"
+        {
+          "key": "spillover.note.method",
+          "params": {
+            "method": "dy_generalised",
+            "order": 2,
+            "criterion": "bic",
+            "horizon": 10,
+            "start": "2017-03-30",
+            "end": "2026-10-29"
+          }
+        },
+        {
+          "key": "spillover.note.signed",
+          "params": {}
+        },
+        {
+          "key": "spillover.note.crossCountry",
+          "params": {}
+        }
       ]
     },
     "legacy_appendix": {
@@ -376,10 +431,31 @@
       "method": "legacy_appendix",
       "var_order": 5,
       "notes": [
-        "method=legacy_appendix; VAR order=5 (selected by bic); horizon=5; sample=2017-03-30 00:00:00..2026-10-29 00:00:00",
-        "legacy appendix implementation: residual-correlation weighted index, not a forecast error variance decomposition",
-        "the legacy implementation is only defined when the horizon and the VAR order both equal the number of nodes, so it was computed with horizon=5",
-        "the cross-country network is computed over the country composites on the percentile lens; only dates present in every country are used"
+        {
+          "key": "spillover.note.method",
+          "params": {
+            "method": "legacy_appendix",
+            "order": 5,
+            "criterion": "bic",
+            "horizon": 5,
+            "start": "2017-03-30",
+            "end": "2026-10-29"
+          }
+        },
+        {
+          "key": "spillover.note.legacy",
+          "params": {}
+        },
+        {
+          "key": "spillover.note.legacyHorizon",
+          "params": {
+            "horizon": 5
+          }
+        },
+        {
+          "key": "spillover.note.crossCountry",
+          "params": {}
+        }
       ]
     }
   },

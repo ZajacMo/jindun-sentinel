@@ -44,6 +44,7 @@ from typing import Any
 import numpy as np
 import pandas as pd
 
+from ..models import Message
 from .bis_cycle import CycleInputs
 
 __all__ = [
@@ -64,7 +65,7 @@ class CycleFactor:
     explained_variance_ratio: list[float] = field(default_factory=list)
     cumulative_variance_ratio: list[float] = field(default_factory=list)
     observations: int = 0
-    notes: list[str] = field(default_factory=list)
+    notes: list[Message] = field(default_factory=list)
 
     def to_payload(self) -> dict[str, object]:
         return {
@@ -78,7 +79,7 @@ class CycleFactor:
                 round(float(value), 8) for value in self.cumulative_variance_ratio
             ],
             "observations": self.observations,
-            "notes": list(self.notes),
+            "notes": [note.to_payload() for note in self.notes],
         }
 
 
@@ -93,11 +94,11 @@ class GlobalCycle:
     cumulative_variance_ratio: list[float] = field(default_factory=list)
     observations: int = 0
     frequency: str = "Q"
-    orientation: str = ""
+    orientation: dict[str, Any] = field(default_factory=dict)
     factor_standard_deviation: float = 0.0
     inputs: list[dict[str, Any]] = field(default_factory=list)
     cross_check: dict[str, Any] = field(default_factory=dict)
-    notes: list[str] = field(default_factory=list)
+    notes: list[Message] = field(default_factory=list)
 
     def to_payload(self) -> dict[str, object]:
         return {
@@ -112,11 +113,11 @@ class GlobalCycle:
             ],
             "observations": self.observations,
             "frequency": self.frequency,
-            "orientation": self.orientation,
+            "orientation": dict(self.orientation),
             "factor_standard_deviation": round(float(self.factor_standard_deviation), 8),
             "inputs": [dict(entry) for entry in self.inputs],
             "cross_check": dict(self.cross_check),
-            "notes": list(self.notes),
+            "notes": [note.to_payload() for note in self.notes],
         }
 
 
@@ -134,18 +135,18 @@ def extract_cycle_factor(
     would have to guess which direction is "more stress".
     """
     if not composites:
-        return CycleFactor(notes=["no country composites were supplied"])
+        return CycleFactor(notes=[Message("cycle.note.noComposites")])
 
     frame = pd.DataFrame(composites).sort_index().dropna(how="any")
     if frame.shape[1] < 2:
-        return CycleFactor(notes=["at least two countries with a common calendar are required"])
+        return CycleFactor(notes=[Message("cycle.note.needTwoCountries")])
 
     panel = frame
     if standardize:
         panel = (frame - frame.mean()) / frame.std(ddof=0).replace(0.0, np.nan)
     panel = panel.dropna(how="any")
     if panel.empty:
-        return CycleFactor(notes=["the country composites share no usable dates"])
+        return CycleFactor(notes=[Message("cycle.note.noUsableDates")])
 
     values, vectors = np.linalg.eigh(panel.cov().to_numpy(dtype=float))
     order = np.argsort(values)[::-1]
@@ -161,12 +162,13 @@ def extract_cycle_factor(
         factor = -factor
         loadings = {key: -value for key, value in loadings.items()}
 
-    notes: list[str] = []
+    notes: list[Message] = []
     if ratios[0] < 0.30:
         notes.append(
-            f"the first principal component explains only "
-            f"{ratios[0] * 100:.1f} % of the common variance; the country stress "
-            "indices are not dominated by a single global driver"
+            Message(
+                "cycle.note.panelLowVariance",
+                {"value": round(ratios[0] * 100, 1)},
+            )
         )
 
     return CycleFactor(
@@ -201,28 +203,25 @@ def _orientation_anchor(panel: pd.DataFrame) -> tuple[pd.Series | None, str]:
     """
     gaps = [name for name in panel.columns if name.startswith("credit_gap_")]
     if gaps:
-        return panel[gaps].mean(axis=1), "the mean of the standardised credit gaps"
-    return panel.mean(axis=1), "the mean of the standardised inputs"
+        return panel[gaps].mean(axis=1), "credit_gap_mean"
+    return panel.mean(axis=1), "input_mean"
 
 
-def _describe_loadings(loadings: Mapping[str, float]) -> str:
-    """Describe what a higher factor means, from the loadings themselves.
+def _loading_directions(loadings: Mapping[str, float]) -> dict[str, str]:
+    """Read the direction of each driver off the estimated loadings.
 
-    The wording is derived from the estimated loadings rather than written by
-    hand, so it cannot drift away from what the factor actually is.
+    The directions are derived from the loadings rather than written by hand,
+    so they cannot drift away from what the factor actually is.  What each
+    direction means is the catalogue's business; this returns the facts.
     """
     gaps = {name: value for name, value in loadings.items() if name.startswith("credit_gap_")}
     growth = {name: value for name, value in loadings.items() if name.endswith("_credit_yoy")}
-    parts: list[str] = []
+    directions: dict[str, str] = {}
     if gaps:
-        direction = "a wider" if sum(gaps.values()) > 0 else "a narrower"
-        parts.append(f"{direction} credit-to-GDP gap")
+        directions["gap"] = "wider" if sum(gaps.values()) > 0 else "narrower"
     if growth:
-        direction = "slower" if sum(growth.values()) < 0 else "faster"
-        parts.append(f"{direction} global credit growth")
-    if not parts:
-        return "the sign follows the first principal component"
-    return "a higher factor means " + " and ".join(parts)
+        directions["growth"] = "slower" if sum(growth.values()) < 0 else "faster"
+    return directions
 
 
 def build_global_cycle(
@@ -238,10 +237,10 @@ def build_global_cycle(
     is carried forward onto the daily calendar of the panel and the two are
     correlated over the overlap.
     """
-    notes: list[str] = list(inputs.notes)
+    notes: list[Message] = list(inputs.notes)
     frame = inputs.frame
     if frame.empty or frame.shape[1] < 2:
-        notes.append("the global cycle factor could not be estimated")
+        notes.append(Message("cycle.note.notEstimated"))
         return GlobalCycle(inputs=list(inputs.metadata), notes=notes)
 
     panel = frame
@@ -249,7 +248,7 @@ def build_global_cycle(
         panel = (frame - frame.mean()) / frame.std(ddof=0).replace(0.0, np.nan)
     panel = panel.dropna(how="any")
     if panel.empty:
-        notes.append("the BIS input block has no complete quarter")
+        notes.append(Message("cycle.note.noCompleteQuarter"))
         return GlobalCycle(inputs=list(inputs.metadata), notes=notes)
 
     values, vectors = np.linalg.eigh(panel.cov().to_numpy(dtype=float))
@@ -268,28 +267,35 @@ def build_global_cycle(
     # the anchor that both correlates strongly with the first component and
     # says something a reader can act on — a higher factor means credit is
     # further above its own trend.
-    anchor, anchor_name = _orientation_anchor(panel)
-    orientation = ""
+    anchor, anchor_code = _orientation_anchor(panel)
+    orientation: dict[str, Any] = {}
     if anchor is not None:
         correlation = float(np.corrcoef(factor, anchor.to_numpy())[0, 1])
         if correlation < 0:
             factor = -factor
             loadings = {key: -value for key, value in loadings.items()}
             correlation = -correlation
-        orientation = (
-            f"the sign is oriented on {anchor_name}, which correlates "
-            f"{correlation:.2f} with the factor: {_describe_loadings(loadings)}"
-        )
+        directions = _loading_directions(loadings)
+        orientation = {
+            "anchor": anchor_code,
+            "correlation": round(correlation, 6),
+            "gap_direction": directions.get("gap"),
+            "growth_direction": directions.get("growth"),
+        }
 
     if ratios[0] < 0.30:
         notes.append(
-            f"the first principal component explains only {ratios[0] * 100:.1f} % of the "
-            "variance of the BIS input block; the inputs do not move as one driver"
+            Message(
+                "cycle.note.lowVariance",
+                {"value": round(ratios[0] * 100, 1)},
+            )
         )
     else:
         notes.append(
-            f"the first principal component explains {ratios[0] * 100:.1f} % of the "
-            "variance of the BIS input block"
+            Message(
+                "cycle.note.variance",
+                {"value": round(ratios[0] * 100, 1)},
+            )
         )
 
     weak = sorted(
@@ -298,8 +304,10 @@ def build_global_cycle(
     )
     if weak:
         notes.append(
-            "these inputs are essentially orthogonal to the first component and "
-            f"carry it only weakly: {', '.join(weak)}"
+            Message(
+                "cycle.note.weakInputs",
+                {"names": ", ".join(weak)},
+            )
         )
 
     cycle = GlobalCycle(
@@ -322,7 +330,7 @@ def build_global_cycle(
 def _cross_check(
     cycle: GlobalCycle,
     composites: Mapping[str, pd.Series],
-    notes: list[str],
+    notes: list[Message],
 ) -> dict[str, Any]:
     """Correlate the cycle factor with the country-panel factor.
 
@@ -363,8 +371,7 @@ def _cross_check(
         "observations": int(len(joined)),
         "panel_factor": panel.to_payload(),
         "notes": [
-            "the BIS factor is quarterly and is carried forward onto the daily "
-            "calendar of the country panel; it does not move between publications",
-            *panel.notes,
+            Message("cycle.note.carriedForward").to_payload(),
+            *[note.to_payload() for note in panel.notes],
         ],
     }

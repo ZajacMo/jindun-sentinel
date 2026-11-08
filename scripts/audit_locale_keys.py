@@ -14,10 +14,17 @@ REPO = Path(__file__).resolve().parents[1]
 LOCALES = REPO / "locales"
 WEB = REPO / "packages" / "web" / "src"
 PIPELINE = REPO / "packages" / "pipeline" / "src"
+API = REPO / "packages" / "api" / "src"
+AGENT = REPO / "packages" / "agent" / "src"
 
 CALL = re.compile(r"""(?<![\w.])t\(\s*['"]([a-zA-Z0-9_.\-]+)['"]""")
 DYNAMIC = re.compile(r"""(?<![\w.])t\(\s*`([^`]+)`""")
 PY_KEY = re.compile(r"""message_key\s*=\s*['"]([a-zA-Z0-9_.\-]+)['"]""")
+#: The pipeline hands the catalogue a key instead of a sentence.
+PY_MESSAGE = re.compile(r"""(?<![\w.])Message\(\s*['"]([a-zA-Z0-9_.\-]+)['"]""")
+#: The one key the API names directly, for an artefact written before the
+#: notes became structured.
+PY_LEGACY = re.compile(r"""['"](common\.legacyNote)['"]""")
 
 
 def _is_pattern(text: str) -> bool:
@@ -63,7 +70,9 @@ def main() -> int:
             print(f"  {name}: missing {sorted(missing)} extra {sorted(extra)}")
 
     used = collect(WEB, [CALL, DYNAMIC])
-    used |= collect(PIPELINE, [PY_KEY])
+    used |= collect(PIPELINE, [PY_KEY, PY_MESSAGE])
+    used |= collect(AGENT, [PY_KEY])
+    used |= collect(API, [PY_LEGACY])
     # The composite/plural messages are assembled with .text() on the server side.
     used |= {
         "alert.composite_p1",

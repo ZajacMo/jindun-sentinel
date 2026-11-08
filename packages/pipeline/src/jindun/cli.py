@@ -42,7 +42,7 @@ from .adapters import (
 )
 from .config import Settings, load_settings
 from .manifest import RunManifest, git_version, new_run_id
-from .models import Country
+from .models import Country, Message
 from .pipeline import run_country, write_run_artifacts
 from .quality import QualityPolicy, evaluate_all
 
@@ -158,6 +158,19 @@ def _cmd_fetch(args: argparse.Namespace) -> int:
     return 0 if failed == 0 else 1
 
 
+def _render(message: Message) -> str:
+    """Render one structured warning as an English sentence.
+
+    The artefacts stay language neutral: a warning is a catalogue key and the
+    facts that fill it.  The command line is the operator's surface and has
+    always spoken English, so the sentence is assembled from the English
+    catalogue here — the same files the screen reads in the reader's language.
+    """
+    from .i18n import get_translator
+
+    return get_translator("en-US").text(message.key, **message.params)
+
+
 def _cmd_run(args: argparse.Namespace) -> int:
     settings = _settings(args)
     store = SnapshotStore(args.snapshot_dir)
@@ -184,7 +197,7 @@ def _cmd_run(args: argparse.Namespace) -> int:
         )
         paths = write_run_artifacts(result, out_dir)
         manifest.outputs[country.code] = paths
-        manifest.warnings.extend(result.warnings)
+        manifest.warnings.extend(_render(warning) for warning in result.warnings)
         if result.quality is not None:
             manifest.warnings.extend(
                 f"{country.code}: {item.series_id} -> {item.severity.value}"
@@ -196,7 +209,7 @@ def _cmd_run(args: argparse.Namespace) -> int:
             f"{len(result.alerts)} alerts"
         )
         for warning in result.warnings[:10]:
-            print(f"       warning: {warning}")
+            print(f"       warning: {_render(warning)}")
         if result.quality is not None and not result.quality.passed:
             exit_code = 1
 

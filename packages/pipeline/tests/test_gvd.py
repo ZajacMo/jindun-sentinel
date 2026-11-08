@@ -48,7 +48,7 @@ def test_dy_generalised_is_signed_but_row_sums_hold(market_indices: pd.DataFrame
     )
     sums = _row_sums(result.matrix)
     assert np.allclose(sums, 1.0, atol=1e-10)
-    assert any("signed" in note for note in result.notes)
+    assert any(note.key == "spillover.note.signed" for note in result.notes)
 
 
 def test_unknown_method_is_rejected() -> None:
@@ -99,7 +99,7 @@ def test_the_legacy_estimator_is_published_with_the_node_count_as_horizon(
     )
     legacy = networks.results["legacy_appendix"]
     assert legacy.horizon == len(legacy.nodes)
-    assert any("horizon" in note for note in legacy.notes)
+    assert any(note.key == "spillover.note.legacyHorizon" for note in legacy.notes)
 
 
 def test_a_failing_estimator_does_not_remove_the_others(
@@ -217,3 +217,11 @@ def test_result_payload_is_language_neutral(market_indices: pd.DataFrame) -> Non
     assert payload["var_order"] == 3
     assert isinstance(payload["nodes"], list)
     assert all(isinstance(value, float) for value in payload["total_spillout"].values())
+    # The notes are catalogue keys and their parameters, not sentences.  A
+    # payload that carried prose would have to be translated downstream, and
+    # the whole point of the shared catalogue is that it does not have to be.
+    assert payload["notes"]
+    for note in payload["notes"]:
+        assert set(note) == {"key", "params"}
+        assert isinstance(note["key"], str)
+        assert isinstance(note["params"], dict)

@@ -3,7 +3,7 @@ import { mount, flushPromises } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
 import { createRouter, createMemoryHistory } from 'vue-router'
 import ElementPlus from 'element-plus'
-import { i18n } from '@/i18n'
+import { i18n, setActiveLocale } from '@/i18n'
 import { routes } from '@/router'
 
 /**
@@ -101,8 +101,45 @@ const fixtures = vi.hoisted(() => ({
     horizon: 10,
     method: 'paper_equation',
     window: null,
-    notes: [],
+    notes: [
+      {
+        key: 'spillover.note.method',
+        params: {
+          method: 'paper_equation',
+          order: 5,
+          criterion: 'bic',
+          horizon: 10,
+          start: '2011-11-07',
+          end: '2024-10-18',
+        },
+      },
+    ],
     var_order: 5,
+  },
+  cycle: {
+    status: 'estimated',
+    source: 'BIS',
+    frequency: 'Q',
+    orientation: {
+      anchor: 'credit_gap_mean',
+      correlation: 0.8412,
+      gap_direction: 'wider',
+      growth_direction: 'slower',
+    },
+    dates: ['2020-01-01', '2020-04-01', '2020-07-01'],
+    factor: [0.1, -0.2, 0.35],
+    loadings: { credit_gap_cn: 0.42, global_credit_yoy: -0.31 },
+    explained_variance_ratio: [0.349, 0.21],
+    cumulative_variance_ratio: [0.349, 0.559],
+    factor_standard_deviation: 1.0,
+    observations: 3,
+    inputs: [],
+    cross_check: {
+      available: true,
+      correlation: 0.42,
+      observations: 3,
+    },
+    notes: [],
   },
   alerts: [
     {
@@ -158,6 +195,9 @@ vi.mock('@/api/client', async () => {
     }
     if (path.includes('/spillover')) {
       return fixtures.spillover
+    }
+    if (path.includes('/cycle')) {
+      return fixtures.cycle
     }
     if (path.includes('/alerts')) {
       return fixtures.alerts
@@ -271,5 +311,50 @@ describe('workspace pages', () => {
     const text = wrapper.text()
     expect(text).toContain('equity')
     wrapper.unmount()
+  }, PAGE_TIMEOUT)
+
+  /**
+   * The artefact carries a catalogue key and the facts that fill it, never a
+   * finished sentence.  This is the regression test for the defect where the
+   * server's English prose reached the screen in every locale: a note must be
+   * rendered from the catalogue in the reader's language, and the key must
+   * never be what the reader sees.
+   */
+  it('renders the notes of the artefact in the active locale', async () => {
+    setActiveLocale('en-US')
+    const english = await renderPage('spillover', '/spillover')
+    expect(english.text()).toContain('horizon 10')
+    expect(english.text()).not.toContain('spillover.note.method')
+    english.unmount()
+
+    setActiveLocale('zh-CN')
+    const chinese = await renderPage('spillover', '/spillover')
+    expect(chinese.text()).toContain('预测期 10')
+    expect(chinese.text()).not.toContain('spillover.note.method')
+    chinese.unmount()
+
+    setActiveLocale('en-US')
+  }, PAGE_TIMEOUT)
+
+  /**
+   * The orientation of the factor used to be one English sentence written by
+   * the pipeline.  It is now the facts — the anchor, the correlation and the
+   * direction of each driver — and the catalogue turns them into a sentence in
+   * the reader's language.
+   */
+  it('renders the orientation of the cycle factor in the active locale', async () => {
+    setActiveLocale('en-US')
+    const english = await renderPage('spillover', '/spillover')
+    expect(english.text()).toContain('the mean of the standardised credit gaps')
+    expect(english.text()).toContain('a wider credit-to-GDP gap and slower global credit growth')
+    english.unmount()
+
+    setActiveLocale('zh-CN')
+    const chinese = await renderPage('spillover', '/spillover')
+    expect(chinese.text()).toContain('标准化后的信用缺口均值')
+    expect(chinese.text()).toContain('信用缺口更宽、全球信贷增速更慢')
+    chinese.unmount()
+
+    setActiveLocale('en-US')
   }, PAGE_TIMEOUT)
 })

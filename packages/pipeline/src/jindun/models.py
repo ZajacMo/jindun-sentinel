@@ -27,6 +27,7 @@ __all__ = [
     "Country",
     "Observation",
     "Series",
+    "Message",
     "RegimeLabel",
     "CountryIndexResult",
     "SpilloverResult",
@@ -197,6 +198,27 @@ class Series:
 
 
 @dataclass(slots=True)
+class Message:
+    """A sentence the reader sees: a catalogue key and the facts that fill it.
+
+    The wording lives in the shared locale catalogue and the computation owns
+    the facts, so a payload can stay language neutral while every reader still
+    gets a sentence in their own language.  This is the shape the alerting
+    rules already use for their ``message_key`` and ``message_params``.
+
+    A message that carries a piece of machine text — a method name, an
+    exception string — passes that text as a parameter.  The frame around it
+    is localised; the identifier inside it is not, and is not meant to be.
+    """
+
+    key: str
+    params: dict[str, Any] = field(default_factory=dict)
+
+    def to_payload(self) -> dict[str, Any]:
+        return {"key": self.key, "params": dict(self.params)}
+
+
+@dataclass(slots=True)
 class RegimeSeries:
     """Regime labels and risk probabilities for one country."""
 
@@ -260,7 +282,7 @@ class SpilloverResult:
     total_spillin: dict[str, float] = field(default_factory=dict)
     horizon: int = 10
     window: tuple[str, str] | None = None
-    notes: list[str] = field(default_factory=list)
+    notes: list[Message] = field(default_factory=list)
     net: dict[str, float] = field(default_factory=dict)
     var_order: int | None = None
     method: str = "paper_equation"
@@ -277,7 +299,7 @@ class SpilloverResult:
             "window": list(self.window) if self.window else None,
             "method": self.method,
             "var_order": self.var_order,
-            "notes": self.notes,
+            "notes": [note.to_payload() for note in self.notes],
         }
 
 

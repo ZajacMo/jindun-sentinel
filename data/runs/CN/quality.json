@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-11-02T20:53:24.047979+00:00",
+  "generated_at": "2026-11-07T20:11:14.283707+00:00",
   "passed": true,
   "counts": {
     "total": 11,
-    "ok": 7,
-    "warning": 4,
+    "ok": 0,
+    "warning": 11,
     "failure": 0
   },
   "series": [
@@ -60,11 +60,11 @@
         },
         {
           "name": "freshness",
-          "passed": true,
-          "severity": "ok",
-          "measured": 1,
+          "passed": false,
+          "severity": "warning",
+          "measured": 6,
           "threshold": 5,
-          "message": ""
+          "message": "the latest observation is stale"
         }
       ]
     },
@@ -72,7 +72,7 @@
       "series_id": "cn.equity.margin_to_market_cap",
       "adapter": "akshare",
       "country_code": "CN",
-      "severity": "ok",
+      "severity": "warning",
       "passed": true,
       "observations": 4023,
       "first_date": "2010-03-31",
@@ -120,11 +120,11 @@
         },
         {
           "name": "freshness",
-          "passed": true,
-          "severity": "ok",
-          "measured": 4,
+          "passed": false,
+          "severity": "warning",
+          "measured": 9,
           "threshold": 5,
-          "message": ""
+          "message": "the latest observation is stale"
         }
       ]
     },
@@ -180,11 +180,11 @@
         },
         {
           "name": "freshness",
-          "passed": true,
-          "severity": "ok",
-          "measured": 1,
+          "passed": false,
+          "severity": "warning",
+          "measured": 6,
           "threshold": 5,
-          "message": ""
+          "message": "the latest observation is stale"
         }
       ]
     },
@@ -192,7 +192,7 @@
       "series_id": "cn.bond.cgb_yield_slope_10y_1y",
       "adapter": "akshare",
       "country_code": "CN",
-      "severity": "ok",
+      "severity": "warning",
       "passed": true,
       "observations": 4205,
       "first_date": "2010-01-04",
@@ -240,11 +240,11 @@
         },
         {
           "name": "freshness",
-          "passed": true,
-          "severity": "ok",
-          "measured": 1,
+          "passed": false,
+          "severity": "warning",
+          "measured": 6,
           "threshold": 5,
-          "message": ""
+          "message": "the latest observation is stale"
         }
       ]
     },
@@ -302,7 +302,7 @@
           "name": "freshness",
           "passed": true,
           "severity": "ok",
-          "measured": 0,
+          "measured": 5,
           "threshold": 5,
           "message": ""
         }
@@ -360,11 +360,11 @@
         },
         {
           "name": "freshness",
-          "passed": true,
-          "severity": "ok",
-          "measured": 1,
+          "passed": false,
+          "severity": "warning",
+          "measured": 6,
           "threshold": 5,
-          "message": ""
+          "message": "the latest observation is stale"
         }
       ]
     },
@@ -372,7 +372,7 @@
       "series_id": "cn.money.shibor_on_volatility",
       "adapter": "akshare",
       "country_code": "CN",
-      "severity": "ok",
+      "severity": "warning",
       "passed": true,
       "observations": 2386,
       "first_date": "2017-03-30",
@@ -420,11 +420,11 @@
         },
         {
           "name": "freshness",
-          "passed": true,
-          "severity": "ok",
-          "measured": 1,
+          "passed": false,
+          "severity": "warning",
+          "measured": 6,
           "threshold": 5,
-          "message": ""
+          "message": "the latest observation is stale"
         }
       ]
     },
@@ -432,7 +432,7 @@
       "series_id": "cn.money.shibor_1w_volatility",
       "adapter": "akshare",
       "country_code": "CN",
-      "severity": "ok",
+      "severity": "warning",
       "passed": true,
       "observations": 2386,
       "first_date": "2017-03-30",
@@ -480,11 +480,11 @@
         },
         {
           "name": "freshness",
-          "passed": true,
-          "severity": "ok",
-          "measured": 1,
+          "passed": false,
+          "severity": "warning",
+          "measured": 6,
           "threshold": 5,
-          "message": ""
+          "message": "the latest observation is stale"
         }
       ]
     },
@@ -492,7 +492,7 @@
       "series_id": "cn.money.shibor_3m_volatility",
       "adapter": "akshare",
       "country_code": "CN",
-      "severity": "ok",
+      "severity": "warning",
       "passed": true,
       "observations": 2386,
       "first_date": "2017-03-30",
@@ -540,11 +540,11 @@
         },
         {
           "name": "freshness",
-          "passed": true,
-          "severity": "ok",
-          "measured": 1,
+          "passed": false,
+          "severity": "warning",
+          "measured": 6,
           "threshold": 5,
-          "message": ""
+          "message": "the latest observation is stale"
         }
       ]
     },
@@ -552,7 +552,7 @@
       "series_id": "cn.derivative.csi300_futures_deviation",
       "adapter": "akshare",
       "country_code": "CN",
-      "severity": "ok",
+      "severity": "warning",
       "passed": true,
       "observations": 2374,
       "first_date": "2017-01-17",
@@ -600,11 +600,11 @@
         },
         {
           "name": "freshness",
-          "passed": true,
-          "severity": "ok",
-          "measured": 1,
+          "passed": false,
+          "severity": "warning",
+          "measured": 6,
           "threshold": 5,
-          "message": ""
+          "message": "the latest observation is stale"
         }
       ]
     },
@@ -612,7 +612,7 @@
       "series_id": "cn.derivative.csi300_futures_volatility",
       "adapter": "akshare",
       "country_code": "CN",
-      "severity": "ok",
+      "severity": "warning",
       "passed": true,
       "observations": 2364,
       "first_date": "2017-02-07",
@@ -660,11 +660,11 @@
         },
         {
           "name": "freshness",
-          "passed": true,
-          "severity": "ok",
-          "measured": 1,
+          "passed": false,
+          "severity": "warning",
+          "measured": 6,
           "threshold": 5,
-          "message": ""
+          "message": "the latest observation is stale"
         }
       ]
     }

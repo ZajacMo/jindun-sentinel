@@ -56,6 +56,7 @@ from typing import Any
 import pandas as pd
 
 from ..adapters.base import HttpClient
+from ..models import Message
 
 __all__ = [
     "BIS_BULK_BASE",
@@ -114,7 +115,7 @@ class CycleInputs:
 
     frame: pd.DataFrame = field(default_factory=pd.DataFrame)
     metadata: list[dict[str, Any]] = field(default_factory=list)
-    notes: list[str] = field(default_factory=list)
+    notes: list[Message] = field(default_factory=list)
 
     @property
     def observations(self) -> int:
@@ -469,12 +470,14 @@ def build_cycle_inputs(
 
     series: list[pd.Series] = []
     metadata: list[dict[str, Any]] = []
-    notes: list[str] = []
+    notes: list[Message] = []
 
     for selection in selections:
         rows = select_rows(archives[selection.flow], selection.selectors)
         if not rows:
-            notes.append(f"the {selection.flow} series {selection.name!r} matched no published row")
+            notes.append(
+                Message("cycle.note.seriesNoRow", {"flow": selection.flow, "name": selection.name})
+            )
             continue
         if selection.frequency == "D":
             daily, title = _daily_series(rows, selection)
@@ -487,7 +490,11 @@ def build_cycle_inputs(
             raw_first = values.index[0].date().isoformat() if not values.empty else ""
             raw_last = values.index[-1].date().isoformat() if not values.empty else ""
         if values.dropna().empty:
-            notes.append(f"the {selection.flow} series {selection.name!r} carries no usable value")
+            notes.append(
+                Message(
+                    "cycle.note.seriesNoValue", {"flow": selection.flow, "name": selection.name}
+                )
+            )
             continue
         series.append(values)
         metadata.append(
@@ -506,22 +513,26 @@ def build_cycle_inputs(
         )
 
     if not series:
-        return CycleInputs(metadata=metadata, notes=notes + ["no BIS input could be read"])
+        return CycleInputs(metadata=metadata, notes=[*notes, Message("cycle.note.noBisInput")])
 
     frame = pd.concat(series, axis=1).sort_index()
     complete = frame.dropna(how="any")
     if complete.empty:
-        notes.append(
-            "the selected BIS series share no common quarter; the factor cannot be estimated"
-        )
+        notes.append(Message("cycle.note.noCommonQuarter"))
         return CycleInputs(frame=frame, metadata=metadata, notes=notes)
 
     dropped = len(frame) - len(complete)
     if dropped:
-        notes.append(f"{dropped} quarter(s) were dropped because at least one input was missing")
+        notes.append(Message("cycle.note.droppedQuarters", {"count": dropped}))
     notes.append(
-        f"the common window is {complete.index[0].date().isoformat()} to "
-        f"{complete.index[-1].date().isoformat()} ({len(complete)} quarters)"
+        Message(
+            "cycle.note.commonWindow",
+            {
+                "start": complete.index[0].date().isoformat(),
+                "end": complete.index[-1].date().isoformat(),
+                "count": len(complete),
+            },
+        )
     )
 
     return CycleInputs(frame=complete, metadata=metadata, notes=notes)

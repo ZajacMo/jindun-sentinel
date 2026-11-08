@@ -5,6 +5,7 @@ from __future__ import annotations
 import csv
 import datetime as dt
 import io
+import json
 import zipfile
 from pathlib import Path
 
@@ -203,7 +204,18 @@ def test_the_factor_is_oriented_on_the_credit_gap() -> None:
     anchor = frame[[name for name in frame.columns if name.startswith("credit_gap_")]].mean(axis=1)
     correlation = float(np.corrcoef(cycle.factor, anchor.to_numpy())[0, 1])
     assert correlation > 0
-    assert "credit" in cycle.orientation
+    # The orientation is a set of facts, not a sentence: the wording belongs to
+    # the catalogue, the direction is read off the estimated loadings.  The
+    # anchor the factor is oriented on is the mean of the *standardised* gaps,
+    # which is not the same series as the mean of the raw ones.
+    standardised = (frame - frame.mean()) / frame.std(ddof=0).replace(0.0, np.nan)
+    standardised_anchor = standardised[
+        [name for name in standardised.columns if name.startswith("credit_gap_")]
+    ].mean(axis=1)
+    expected = float(np.corrcoef(cycle.factor, standardised_anchor.to_numpy())[0, 1])
+    assert cycle.orientation["anchor"] == "credit_gap_mean"
+    assert cycle.orientation["correlation"] == pytest.approx(expected, abs=1e-6)
+    assert cycle.orientation["gap_direction"] in {"wider", "narrower"}
 
 
 def test_the_loadings_are_reported_for_every_input() -> None:
@@ -223,17 +235,17 @@ def test_an_orthogonal_input_is_reported_as_such() -> None:
 
     cycle = build_global_cycle(inputs, {})
 
-    assert any("orthogonal" in note for note in cycle.notes)
+    assert any(note.key == "cycle.note.weakInputs" for note in cycle.notes)
 
 
 def test_an_empty_input_block_is_reported_not_raised() -> None:
-    inputs = CycleInputs(frame=pd.DataFrame(), metadata=[], notes=["nothing was read"])
+    inputs = CycleInputs(frame=pd.DataFrame(), metadata=[], notes=[])
 
     cycle = build_global_cycle(inputs, {})
 
     assert cycle.factor == []
     assert cycle.observations == 0
-    assert any("could not be estimated" in note for note in cycle.notes)
+    assert any(note.key == "cycle.note.notEstimated" for note in cycle.notes)
 
 
 def test_the_cross_check_correlates_with_the_country_panel() -> None:
@@ -262,3 +274,29 @@ def test_the_cross_check_states_its_absence() -> None:
 
     assert cycle.cross_check["available"] is False
     assert cycle.cross_check["reason"]
+
+
+def test_the_artefact_is_writable_as_json() -> None:
+    """Every note of the payload must already be a payload, not an object.
+
+    The global layer writes the cycle artefact with ``json.dumps``.  A note
+    that stayed a ``Message`` object would take the whole layer down, so the
+    payload is written once here, with the cross-check included — that is
+    where a note was missed.
+    """
+    frame = _input_frame()
+    inputs = CycleInputs(frame=frame, metadata=[], notes=[])
+    index = pd.date_range("2015-01-01", periods=800, freq="B")
+    composites = {
+        "CN": pd.Series(np.linspace(0, 1, 800), index=index),
+        "US": pd.Series(np.linspace(1, 0, 800), index=index),
+    }
+
+    cycle = build_global_cycle(inputs, composites)
+    payload = cycle.to_payload()
+
+    json.dumps(payload)
+    for note in payload["notes"]:
+        assert set(note) == {"key", "params"}
+    for note in payload["cross_check"]["notes"]:
+        assert set(note) == {"key", "params"}
